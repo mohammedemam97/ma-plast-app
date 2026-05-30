@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Notifications | MA PLAST GROUP</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="robots" content="noindex,nofollow">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="notifications-backend">
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-glass">
+            <a href="index.html#home" class="logo">
+                <i class="fas fa-faucet"></i>
+                <span>MA PLAST GROUP</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#products">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                
+                <button type="button" class="notification-toggle navbar-notification-link" title="Notifications" aria-label="Notifications" onclick="toggleNotificationPanel()">
+                    <i class="fas fa-bell notification-bell-icon"></i>
+                    <span class="notification-count" id="notificationCount">0</span>
+                </button>
+                <a href="index.html#products" class="cart-toggle" title="Shop"><i class="fas fa-shopping-cart"></i></a>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="page-hero-content">
+            <span class="hero-tag">Private Backend</span>
+            <h1>Notification Settings</h1>
+            <p>This private page is not linked on the user app. Open it directly when you need to manage notifications.</p>
+        </div>
+    </section>
+
+    <section class="notification-admin-section">
+        <div class="container notification-admin-grid">
+            <div class="notification-admin-card">
+                <h2>30-minute notification</h2>
+                <p>Set the message that this app will show every 30 minutes after notifications are enabled on this device.</p>
+
+                <form class="notification-form" id="notificationSettingsForm">
+                    <div class="notification-switch-row">
+                        <div>
+                            <strong>Scheduled notifications</strong>
+                            <p style="margin:0;color:#777;font-size:.85rem;">Runs every 30 minutes while the app/browser can execute JavaScript.</p>
+                        </div>
+                        <select id="enabled">
+                            <option value="false">Off</option>
+                            <option value="true">On</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="title">Notification title</label>
+                        <input id="title" type="text" value="MA PLAST GROUP" required>
+                    </div>
+
+                    <div>
+                        <label for="body">Notification message</label>
+                        <textarea id="body" required>Browse plumbing products and send your order instantly via WhatsApp.</textarea>
+                    </div>
+
+                    <div>
+                        <label for="url">Open this page when clicked</label>
+                        <input id="url" type="text" value="/index.html#products" required>
+                    </div>
+
+                    <input id="intervalMinutes" type="hidden" value="30">
+
+                    <div class="notification-admin-actions">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save settings</button>
+                        <button type="button" class="btn btn-outline admin-outline" onclick="requestPermission()"><i class="fas fa-bell"></i> Allow notifications</button>
+                        <button type="button" class="btn btn-primary" onclick="sendNow()"><i class="fas fa-paper-plane"></i> Send now</button>
+                        <button type="button" class="btn btn-outline admin-outline" onclick="clearLocalNotifications()"><i class="fas fa-trash"></i> Clear local list</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="notification-admin-card">
+                <h2>Status & preview</h2>
+                <div class="notification-status" style="margin-bottom:1rem;">
+                    <span class="notification-status-dot" id="statusDot"></span>
+                    <span id="statusText">Loading...</span>
+                </div>
+
+                <div class="notification-preview">
+                    <div class="notification-preview-icon"><i class="fas fa-bell"></i></div>
+                    <div>
+                        <strong id="previewTitle">MA PLAST GROUP</strong>
+                        <span id="previewBody">Browse plumbing products and send your order instantly via WhatsApp.</span>
+                    </div>
+                </div>
+
+                <ul class="notification-help-list">
+                    <li><i class="fas fa-circle-info"></i> This removes the old demo/test notifications from the user interface.</li>
+                    <li><i class="fas fa-clock"></i> The interval is fixed at 30 minutes.</li>
+                    <li><i class="fas fa-triangle-exclamation"></i> True remote push to all users requires a push server or service like Firebase/OneSignal.</li>
+                    <li><i class="fas fa-palette"></i> The bell icon now follows the same black/white colors as the cart icon.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Saved</span></div>
+
+    <script>
+        const SETTINGS_KEY = 'ma_plast_notification_settings_v1';
+        const NOTIFICATIONS_KEY = 'ma_plast_notifications_v1';
+        const PERMISSION_KEY = 'ma_plast_notification_permission';
+
+        const navLinks = document.getElementById('navLinks');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const mobileMenuIcon = document.querySelector('.mobile-menu-btn i');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        const enabled = document.getElementById('enabled');
+        const title = document.getElementById('title');
+        const body = document.getElementById('body');
+        const url = document.getElementById('url');
+        const previewTitle = document.getElementById('previewTitle');
+        const previewBody = document.getElementById('previewBody');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+
+        function setMobileMenuIcon(isOpen) {
+            if (!mobileMenuIcon) return;
+            mobileMenuIcon.classList.toggle('fa-bars', !isOpen);
+            mobileMenuIcon.classList.toggle('fa-times', isOpen);
+        }
+        function toggleMobileMenu() {
+            navLinks.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+            setMobileMenuIcon(navLinks.classList.contains('active'));
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        }
+        function showToast(msg) {
+            toastMessage.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        function getDefaults() {
+            return {
+                enabled: false,
+                title: 'MA PLAST GROUP',
+                body: 'Browse plumbing products and send your order instantly via WhatsApp.',
+                url: '/index.html#products',
+                intervalMinutes: 30,
+                lastSentAt: 0
+            };
+        }
+        function loadSettings() {
+            try { return { ...getDefaults(), ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; }
+            catch { return getDefaults(); }
+        }
+        function saveSettings(settings) {
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        }
+        function updatePreview() {
+            previewTitle.textContent = title.value || 'MA PLAST GROUP';
+            previewBody.textContent = body.value || 'Browse plumbing products and send your order instantly via WhatsApp.';
+            updateStatus();
+        }
+        function updateStatus() {
+            const permission = 'Notification' in window ? Notification.permission : 'unsupported';
+            const isEnabled = enabled.value === 'true';
+            statusDot.classList.toggle('active', isEnabled && permission === 'granted');
+            statusText.textContent = `Schedule: ${isEnabled ? 'On' : 'Off'} | Permission: ${permission}`;
+        }
+        function populate() {
+            const s = loadSettings();
+            enabled.value = String(Boolean(s.enabled));
+            title.value = s.title;
+            body.value = s.body;
+            url.value = s.url;
+            updatePreview();
+        }
+        async function requestPermission() {
+            if (!('Notification' in window)) {
+                showToast('Notifications not supported');
+                return;
+            }
+            const permission = await Notification.requestPermission();
+            localStorage.setItem(PERMISSION_KEY, permission);
+            updateStatus();
+            showToast(permission === 'granted' ? 'Notifications allowed' : 'Notifications not allowed');
+        }
+        async function sendBrowserNotification(payload) {
+            if (!('Notification' in window) || Notification.permission !== 'granted') {
+                showToast('Allow notifications first');
+                return false;
+            }
+            if ('serviceWorker' in navigator) {
+                const registration = await navigator.serviceWorker.ready;
+                if (registration.active) {
+                    registration.active.postMessage({ type: 'showNotification', ...payload });
+                } else {
+                    registration.showNotification(payload.title, payload);
+                }
+            } else {
+                new Notification(payload.title, payload);
+            }
+            return true;
+        }
+        function addToLocalList(payload) {
+            let list = [];
+            try { list = JSON.parse(localStorage.getItem(NOTIFICATIONS_KEY) || '[]'); } catch { list = []; }
+            list.unshift({
+                id: 'notif_' + Date.now(),
+                title: payload.title,
+                body: payload.body,
+                type: 'promo',
+                time: Date.now(),
+                read: false,
+                actionUrl: payload.url || '/index.html#products'
+            });
+            localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(list.slice(0, 50)));
+        }
+        async function sendNow() {
+            const payload = {
+                title: title.value || 'MA PLAST GROUP',
+                body: body.value || 'Browse products and send your order instantly via WhatsApp.',
+                url: url.value || '/index.html#products',
+                icon: '/icon-192.png',
+                badge: '/icon-192.png',
+                tag: 'manual-' + Date.now()
+            };
+            addToLocalList(payload);
+            const sent = await sendBrowserNotification(payload);
+            showToast(sent ? 'Notification sent' : 'Saved to notification list');
+        }
+        function clearLocalNotifications() {
+            localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify([]));
+            showToast('Local notifications cleared');
+        }
+
+        document.getElementById('notificationSettingsForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const previous = loadSettings();
+            const settings = {
+                ...previous,
+                enabled: enabled.value === 'true',
+                title: title.value.trim() || 'MA PLAST GROUP',
+                body: body.value.trim() || 'Browse products and send your order instantly via WhatsApp.',
+                url: url.value.trim() || '/index.html#products',
+                intervalMinutes: 30
+            };
+            saveSettings(settings);
+            updateStatus();
+            showToast('Settings saved');
+        });
+
+        [enabled, title, body, url].forEach((el) => el.addEventListener('input', updatePreview));
+
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js');
+        populate();
+    </script>
+</body>
+</html>

@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScroll();
     initActiveNav();
     initScrollReveal();
-    initNotifications();
+    initNotificationsPanelOnly();
     initAboutImageReveal();
 });
 
@@ -417,7 +417,7 @@ function sendWhatsAppOrder() {
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         if (cartSidebar.classList.contains('active')) closeCart();
-        if (notificationPanel.classList.contains('active')) toggleNotificationPanel();
+        if (typeof notificationPanel !== 'undefined' && notificationPanel && notificationPanel.classList.contains('active')) toggleNotificationPanel();
         if (navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
             mobileOverlay.classList.remove('active');
@@ -437,8 +437,7 @@ window.addEventListener('resize', () => {
     }
 });
 
-// ============================================================
-// NOTIFICATION SYSTEM (SHEIN-STYLE)
+// NOTIFICATION SYSTEM - CLEAN USER VERSION + 30 MINUTE LOCAL SCHEDULE
 // ============================================================
 
 let notifications = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
@@ -447,73 +446,48 @@ let notificationPanel = null;
 let notificationOverlay = null;
 let notificationToggle = null;
 let notificationCount = null;
+let scheduledNotificationTimer = null;
 
-// Default demo notifications
-const defaultNotifications = [
-    {
-        id: 'notif_1',
-        title: 'Flash Sale: 20% Off All Pipes!',
-        body: 'Limited time offer on PVC and PPR pipes. Stock up now and save big on your plumbing projects.',
-        type: 'promo',
-        time: Date.now() - 3600000,
-        read: false,
-        actionUrl: '#products'
-    },
-    {
-        id: 'notif_2',
-        title: 'New Products Arrived',
-        body: 'Check out our latest collection of premium faucets, shower mixers, and bathroom accessories.',
-        type: 'product',
-        time: Date.now() - 7200000,
-        read: false,
-        actionUrl: '#products'
-    },
-    {
-        id: 'notif_3',
-        title: 'Your Cart is Waiting',
-        body: 'You have items in your cart. Complete your order now and get fast delivery across Egypt.',
-        type: 'cart',
-        time: Date.now() - 86400000,
-        read: true,
-        actionUrl: '#products'
-    },
-    {
-        id: 'notif_4',
-        title: 'Order Via WhatsApp',
-        body: 'Need help? Chat with us on WhatsApp for instant support and order confirmation.',
-        type: 'order',
-        time: Date.now() - 172800000,
-        read: true,
-        actionUrl: 'https://wa.me/201225588521'
+const NOTIFICATION_SETTINGS_KEY = 'ma_plast_notification_settings_v1';
+const NOTIFICATION_INTERVAL_MS = 30 * 60 * 1000;
+
+function removeOldDemoNotifications() {
+    const demoIds = ['notif_1', 'notif_2', 'notif_3', 'notif_4'];
+    const before = notifications.length;
+    notifications = notifications.filter((item) => !demoIds.includes(item.id));
+    if (before !== notifications.length) saveNotifications();
+}
+
+function getNotificationSettings() {
+    const defaults = {
+        enabled: false,
+        title: 'MA PLAST GROUP',
+        body: 'Browse products and send your order instantly via WhatsApp.',
+        url: '/index.html#products',
+        intervalMinutes: 30,
+        lastSentAt: 0
+    };
+
+    try {
+        return { ...defaults, ...JSON.parse(localStorage.getItem(NOTIFICATION_SETTINGS_KEY) || '{}') };
+    } catch (error) {
+        return defaults;
     }
-];
+}
+
+function saveNotificationSettings(settings) {
+    localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(settings));
+}
 
 function initNotifications() {
-    // Initialize default notifications if none exist
-    if (notifications.length === 0) {
-        notifications = [...defaultNotifications];
-        saveNotifications();
-    }
-
-    // Create notification UI elements
+    removeOldDemoNotifications();
+    // Hidden from user screens. Do not create bell, panel, or settings links here.
+    if (!document.body.classList.contains('notifications-backend')) return;
     createNotificationElements();
-
-    // Update badge count
     updateNotificationBadge();
 
-    // Show permission prompt after 3 seconds if not decided
-    if (notificationPermission === 'default' && 'Notification' in window) {
-        setTimeout(() => {
-            showNotificationPrompt();
-        }, 3000);
-    }
+    window.addEventListener('cartUpdated', () => updateNotificationBadge());
 
-    // Listen for cart updates
-    window.addEventListener('cartUpdated', () => {
-        updateNotificationBadge();
-    });
-
-    // Listen for service worker messages
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.addEventListener('message', (e) => {
             if (e.data && e.data.type === 'navigate') {
@@ -521,13 +495,13 @@ function initNotifications() {
             }
         });
     }
+
+    startScheduledNotifications();
 }
 
 function createNotificationElements() {
-    // Check if already created
     if (document.getElementById('notificationPanel')) return;
 
-    // Notification toggle button (inserted into nav-actions)
     const navActions = document.querySelector('.nav-actions');
     if (navActions) {
         const notifToggle = document.createElement('button');
@@ -544,7 +518,6 @@ function createNotificationElements() {
         notificationCount = document.getElementById('notificationCount');
     }
 
-    // Notification panel
     const notifPanel = document.createElement('div');
     notifPanel.className = 'notification-panel';
     notifPanel.id = 'notificationPanel';
@@ -552,6 +525,7 @@ function createNotificationElements() {
         <div class="notification-panel-header">
             <h3><i class="fas fa-bell"></i> Notifications</h3>
             <div class="notification-panel-actions">
+                <a href="notifications.html" title="Notification settings"><i class="fas fa-gear"></i></a>
                 <button onclick="markAllNotificationsRead()" title="Mark all read"><i class="fas fa-check-double"></i></button>
                 <button onclick="toggleNotificationPanel()" title="Close"><i class="fas fa-times"></i></button>
             </div>
@@ -561,7 +535,6 @@ function createNotificationElements() {
     document.body.appendChild(notifPanel);
     notificationPanel = notifPanel;
 
-    // Notification overlay
     const notifOverlay = document.createElement('div');
     notifOverlay.className = 'notification-overlay';
     notifOverlay.id = 'notificationOverlay';
@@ -569,7 +542,6 @@ function createNotificationElements() {
     document.body.appendChild(notifOverlay);
     notificationOverlay = notifOverlay;
 
-    // Render notifications
     renderNotifications();
 }
 
@@ -582,19 +554,18 @@ function renderNotifications() {
             <div class="notification-empty">
                 <i class="fas fa-bell-slash"></i>
                 <p>No notifications yet</p>
-                <button onclick="simulateNotification()">Test Notification</button>
+                <a href="notifications.html">Notification settings</a>
             </div>
         `;
         return;
     }
 
-    // Sort: unread first, then by time
     const sorted = [...notifications].sort((a, b) => {
         if (a.read !== b.read) return a.read ? 1 : -1;
         return b.time - a.time;
     });
 
-    list.innerHTML = sorted.map(n => `
+    list.innerHTML = sorted.map((n) => `
         <div class="notification-item ${n.read ? 'read' : 'unread'}" onclick="handleNotificationClick('${n.id}', '${n.actionUrl || ''}')">
             <div class="notification-item-dot"></div>
             <div class="notification-item-icon icon-${n.type}">
@@ -626,7 +597,6 @@ function getNotificationIcon(type) {
 function formatTime(timestamp) {
     const now = Date.now();
     const diff = now - timestamp;
-
     if (diff < 60000) return 'Just now';
     if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
     if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
@@ -636,24 +606,21 @@ function formatTime(timestamp) {
 
 function escapeHtml(str) {
     const div = document.createElement('div');
-    div.textContent = str;
+    div.textContent = str || '';
     return div.innerHTML;
 }
 
 function handleNotificationClick(id, url) {
     markNotificationRead(id);
     if (url) {
-        if (url.startsWith('http') || url.startsWith('https')) {
-            window.open(url, '_blank');
-        } else {
-            window.location.href = url;
-        }
+        if (url.startsWith('http') || url.startsWith('https')) window.open(url, '_blank');
+        else window.location.href = url;
     }
     toggleNotificationPanel();
 }
 
 function markNotificationRead(id) {
-    const notif = notifications.find(n => n.id === id);
+    const notif = notifications.find((n) => n.id === id);
     if (notif) {
         notif.read = true;
         saveNotifications();
@@ -663,7 +630,7 @@ function markNotificationRead(id) {
 }
 
 function markAllNotificationsRead() {
-    notifications.forEach(n => n.read = true);
+    notifications.forEach((n) => n.read = true);
     saveNotifications();
     renderNotifications();
     updateNotificationBadge();
@@ -671,15 +638,15 @@ function markAllNotificationsRead() {
 }
 
 function deleteNotification(id) {
-    notifications = notifications.filter(n => n.id !== id);
+    notifications = notifications.filter((n) => n.id !== id);
     saveNotifications();
     renderNotifications();
     updateNotificationBadge();
 }
 
 function updateNotificationBadge() {
-    if (!notificationCount) return;
-    const unreadCount = notifications.filter(n => !n.read).length;
+    if (!notificationCount || !notificationToggle) return;
+    const unreadCount = notifications.filter((n) => !n.read).length;
     if (unreadCount > 0) {
         notificationCount.textContent = unreadCount > 99 ? '99+' : unreadCount;
         notificationCount.style.display = 'flex';
@@ -696,10 +663,8 @@ function saveNotifications() {
 
 function toggleNotificationPanel() {
     if (!notificationPanel) return;
-
     const isActive = notificationPanel.classList.contains('active');
 
-    // Close other panels
     if (!isActive) {
         if (cartSidebar.classList.contains('active')) closeCart();
         if (navLinks.classList.contains('active')) {
@@ -711,136 +676,248 @@ function toggleNotificationPanel() {
 
     notificationPanel.classList.toggle('active');
     notificationOverlay.classList.toggle('active');
-
-    // Update body scroll
-    if (notificationPanel.classList.contains('active')) {
-        document.body.style.overflow = 'hidden';
-    } else {
-        document.body.style.overflow = '';
-    }
-
-    // Re-render to update read states
+    document.body.style.overflow = notificationPanel.classList.contains('active') ? 'hidden' : '';
     renderNotifications();
 }
 
-// ===== Notification Permission Prompt =====
-function showNotificationPrompt() {
-    if (document.getElementById('notificationPrompt')) return;
+function addLocalNotification({ title, body, type = 'promo', actionUrl = '#products', showBrowser = true }) {
+    const newNotif = {
+        id: 'notif_' + Date.now(),
+        title,
+        body,
+        type,
+        time: Date.now(),
+        read: false,
+        actionUrl
+    };
 
-    const prompt = document.createElement('div');
-    prompt.className = 'notification-prompt';
-    prompt.id = 'notificationPrompt';
-    prompt.innerHTML = `
-        <button class="notification-prompt-close" onclick="dismissNotificationPrompt()">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="notification-prompt-icon">
-            <i class="fas fa-bell"></i>
-        </div>
-        <div class="notification-prompt-content">
-            <h4>Stay Updated</h4>
-            <p>Get notified about new products, deals & order updates</p>
-        </div>
-        <div class="notification-prompt-actions">
-            <button class="btn-allow" onclick="requestNotificationPermission()">Allow</button>
-            <button class="btn-deny" onclick="dismissNotificationPrompt()">Not Now</button>
-        </div>
-    `;
-    document.body.appendChild(prompt);
+    notifications.unshift(newNotif);
+    notifications = notifications.slice(0, 50);
+    saveNotifications();
+    renderNotifications();
+    updateNotificationBadge();
 
-    // Show with animation
-    requestAnimationFrame(() => {
-        prompt.classList.add('show');
-    });
-
-    // Auto-dismiss after 10 seconds
-    setTimeout(() => {
-        dismissNotificationPrompt();
-    }, 10000);
+    if (showBrowser) showBrowserNotification(newNotif);
+    return newNotif;
 }
 
-function dismissNotificationPrompt() {
-    const prompt = document.getElementById('notificationPrompt');
-    if (prompt) {
-        prompt.classList.remove('show');
-        setTimeout(() => prompt.remove(), 400);
+function showBrowserNotification(notif) {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+    const payload = {
+        type: 'showNotification',
+        title: notif.title,
+        body: notif.body,
+        tag: notif.id,
+        url: notif.actionUrl || '/index.html#products',
+        icon: '/icon-192.png',
+        badge: '/icon-192.png'
+    };
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then((registration) => {
+            if (registration.active) registration.active.postMessage(payload);
+            else registration.showNotification(payload.title, payload);
+        });
+    } else {
+        new Notification(payload.title, payload);
     }
+}
+
+function startScheduledNotifications() {
+    if (scheduledNotificationTimer) clearInterval(scheduledNotificationTimer);
+
+    const tick = () => {
+        const settings = getNotificationSettings();
+        if (!settings.enabled) return;
+
+        const intervalMs = Math.max(1, Number(settings.intervalMinutes || 30)) * 60 * 1000;
+        const lastSentAt = Number(settings.lastSentAt || 0);
+        if (Date.now() - lastSentAt < intervalMs) return;
+
+        addLocalNotification({
+            title: settings.title || 'MA PLAST GROUP',
+            body: settings.body || 'Browse products and send your order instantly via WhatsApp.',
+            type: 'promo',
+            actionUrl: settings.url || '#products',
+            showBrowser: true
+        });
+
+        saveNotificationSettings({ ...settings, lastSentAt: Date.now() });
+    };
+
+    tick();
+    scheduledNotificationTimer = setInterval(tick, 60 * 1000);
 }
 
 function requestNotificationPermission() {
     if (!('Notification' in window)) {
         showToast('Notifications not supported');
-        dismissNotificationPrompt();
         return;
     }
 
-    Notification.requestPermission().then(permission => {
+    Notification.requestPermission().then((permission) => {
         notificationPermission = permission;
         localStorage.setItem('ma_plast_notification_permission', permission);
-
-        if (permission === 'granted') {
-            showToast('Notifications enabled!');
-            // Send a welcome notification
-            setTimeout(() => {
-                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.controller.postMessage({
-                        type: 'showNotification',
-                        title: 'MA PLAST GROUP',
-                        body: 'You will now receive updates on new products and deals!',
-                        tag: 'welcome',
-                        url: '/index.html'
-                    });
-                }
-            }, 1000);
-        } else {
-            showToast('Notifications disabled');
-        }
-        dismissNotificationPrompt();
+        showToast(permission === 'granted' ? 'Notifications enabled' : 'Notifications disabled');
     });
 }
 
-// ===== Simulate Push Notification (for demo) =====
-function simulateNotification() {
-    const types = ['promo', 'product', 'cart', 'order'];
-    const titles = [
-        'Flash Sale: 25% Off!',
-        'New Arrivals Just Dropped',
-        'Your Cart Misses You',
-        'Free Shipping Today'
-    ];
-    const bodies = [
-        'Grab premium PVC pipes at unbeatable prices. Limited stock available!',
-        'Explore our latest collection of modern faucets and bathroom accessories.',
-        'Complete your order now and enjoy fast delivery across Egypt.',
-        'Order today and get free shipping on all items over 500 EGP!'
-    ];
 
-    const idx = Math.floor(Math.random() * types.length);
-    const newNotif = {
-        id: 'notif_' + Date.now(),
-        title: titles[idx],
-        body: bodies[idx],
-        type: types[idx],
-        time: Date.now(),
-        read: false,
-        actionUrl: '#products'
-    };
 
-    notifications.unshift(newNotif);
-    saveNotifications();
-    renderNotifications();
-    updateNotificationBadge();
+// ===== Navbar Notification Icon Only =====
+function initNavbarNotificationIcon() {
+    const badge = document.getElementById('notificationCount');
+    if (!badge) return;
 
-    // Show browser notification if permitted
-    if (notificationPermission === 'granted' && 'Notification' in window) {
-        new Notification('MA PLAST GROUP', {
-            body: newNotif.title,
-            icon: '/icon-192.png',
-            badge: '/icon-192.png',
-            tag: newNotif.id,
-            requireInteraction: false
-        });
+    const notifications = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+    const unreadCount = notifications.filter(n => !n.read).length;
+
+    badge.textContent = unreadCount;
+    badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+}
+
+
+// ===== Notification Icon Opens Panel Only =====
+// This keeps notifications inside the navbar/panel and does not open notifications.html.
+function initNotificationsPanelOnly() {
+    removeOldDemoNotificationsSafe();
+    createNotificationPanelOnly();
+    updateNotificationBadgeOnly();
+}
+
+function removeOldDemoNotificationsSafe() {
+    const list = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+    const cleaned = list.filter(n => {
+        const title = (n.title || '').toLowerCase();
+        const body = (n.body || '').toLowerCase();
+        return !title.includes('test') && !body.includes('test') && !title.includes('welcome');
+    });
+    localStorage.setItem('ma_plast_notifications_v1', JSON.stringify(cleaned));
+}
+
+function createNotificationPanelOnly() {
+    if (document.getElementById('notificationPanel')) return;
+
+    const panel = document.createElement('div');
+    panel.className = 'notification-panel';
+    panel.id = 'notificationPanel';
+    panel.innerHTML = `
+        <div class="notification-panel-header">
+            <h3><i class="fas fa-bell"></i> Notifications</h3>
+            <div class="notification-panel-actions">
+                <button type="button" onclick="markAllNotificationsRead()">Mark all read</button>
+                <button type="button" onclick="clearAllNotifications()">Clear</button>
+                <button type="button" onclick="toggleNotificationPanel()"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="notification-list" id="notificationList"></div>
+    `;
+    document.body.appendChild(panel);
+    renderNotificationListOnly();
+}
+
+function toggleNotificationPanel() {
+    const panel = document.getElementById('notificationPanel');
+    if (!panel) {
+        createNotificationPanelOnly();
     }
 
-    showToast('New notification!');
+    const currentPanel = document.getElementById('notificationPanel');
+    currentPanel.classList.toggle('active');
+
+    if (typeof cartSidebar !== 'undefined' && cartSidebar && cartSidebar.classList.contains('active')) {
+        closeCart();
+    }
+
+    renderNotificationListOnly();
+}
+
+function renderNotificationListOnly() {
+    const listEl = document.getElementById('notificationList');
+    if (!listEl) return;
+
+    const list = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+
+    if (list.length === 0) {
+        listEl.innerHTML = `
+            <div class="notification-empty">
+                <i class="fas fa-bell-slash"></i>
+                <p>No notifications yet</p>
+            </div>
+        `;
+        updateNotificationBadgeOnly();
+        return;
+    }
+
+    listEl.innerHTML = list.slice().reverse().map(n => `
+        <div class="notification-item ${n.read ? 'read' : 'unread'}" onclick="markNotificationRead('${n.id}')">
+            <div class="notification-item-dot"></div>
+            <div class="notification-item-icon icon-system"><i class="fas fa-bell"></i></div>
+            <div class="notification-item-content">
+                <div class="notification-item-title">${escapeNotificationHtml(n.title || 'MA PLAST GROUP')}</div>
+                <div class="notification-item-body">${escapeNotificationHtml(n.body || '')}</div>
+                <div class="notification-item-time">${formatNotificationTime(n.time || Date.now())}</div>
+            </div>
+            <button class="notification-item-delete" onclick="event.stopPropagation(); deleteNotification('${n.id}')">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `).join('');
+
+    updateNotificationBadgeOnly();
+}
+
+function updateNotificationBadgeOnly() {
+    const badge = document.getElementById('notificationCount');
+    if (!badge) return;
+
+    const list = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+    const unreadCount = list.filter(n => !n.read).length;
+
+    badge.textContent = unreadCount;
+    badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+}
+
+function markNotificationRead(id) {
+    const list = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+    const notification = list.find(n => String(n.id) === String(id));
+    if (notification) notification.read = true;
+    localStorage.setItem('ma_plast_notifications_v1', JSON.stringify(list));
+    renderNotificationListOnly();
+}
+
+function markAllNotificationsRead() {
+    const list = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+    list.forEach(n => n.read = true);
+    localStorage.setItem('ma_plast_notifications_v1', JSON.stringify(list));
+    renderNotificationListOnly();
+}
+
+function clearAllNotifications() {
+    localStorage.setItem('ma_plast_notifications_v1', JSON.stringify([]));
+    renderNotificationListOnly();
+}
+
+function deleteNotification(id) {
+    const list = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+    const filtered = list.filter(n => String(n.id) !== String(id));
+    localStorage.setItem('ma_plast_notifications_v1', JSON.stringify(filtered));
+    renderNotificationListOnly();
+}
+
+function escapeNotificationHtml(value) {
+    return String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    }[char]));
+}
+
+function formatNotificationTime(time) {
+    const date = new Date(time);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleString();
 }

@@ -2531,3 +2531,243 @@ img { max-width: 100%; display: block; }
         width: auto;
     }
 }
+
+
+/* ===== Notification updates: same color logic as cart icon ===== */
+.notification-toggle {
+    position: relative;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.notification-toggle:hover { transform: scale(1.1); }
+.navbar.scrolled .notification-toggle { color: #000; }
+.notification-count {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #fff;
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 800;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+}
+.navbar.scrolled .notification-count {
+    background: #000;
+    color: #fff;
+    border: 0;
+}
+.notification-item-dot,
+.notification-item.read .notification-item-dot { background: #000; }
+.notification-item.read .notification-item-dot { opacity: 0.18; }
+.notification-item.unread {
+    background: rgba(0, 0, 0, 0.035);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+.notification-item.unread:hover { background: rgba(0, 0, 0, 0.06); }
+.notification-item-icon,
+.notification-item-icon.icon-promo,
+.notification-item-icon.icon-order,
+.notification-item-icon.icon-product,
+.notification-item-icon.icon-cart,
+.notification-item-icon.icon-system {
+    background: #000;
+    color: #fff;
+}
+.notification-panel-actions a {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+.notification-panel-actions a:hover { background: #f5f5f5; color: #000; }
+.notification-empty a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 40px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    color: #000;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+.notification-empty a:hover { border-color: #000; background: #000; color: #fff; }
+
+/* ===== Notification settings page ===== */
+.notification-admin-section { padding: 5rem 0; background: #f5f5f5; }
+.notification-admin-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.5rem; align-items: start; }
+.notification-admin-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 28px;
+    padding: 2rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+}
+.notification-admin-card h2 { color:#000; font-size:1.4rem; margin-bottom:.75rem; }
+.notification-admin-card p { color:#666; margin-bottom:1rem; }
+.notification-form { display:grid; gap:1rem; }
+.notification-form label { font-weight:800; color:#000; font-size:.9rem; }
+.notification-form input,
+.notification-form textarea,
+.notification-form select {
+    width: 100%;
+    border: 1px solid #e5e5e5;
+    border-radius: 18px;
+    padding: 0.9rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .95rem;
+    color: #000;
+    background: #f8f8f8;
+    outline: none;
+    transition: .2s;
+}
+.notification-form input:focus,
+.notification-form textarea:focus,
+.notification-form select:focus { border-color:#000; background:#fff; }
+.notification-form textarea { min-height: 120px; resize: vertical; }
+.notification-switch-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; background:#f5f5f5; border-radius:18px; padding:1rem; }
+.notification-status { display:flex; align-items:center; gap:.6rem; font-weight:800; }
+.notification-status-dot { width:10px; height:10px; border-radius:50%; background:#bbb; }
+.notification-status-dot.active { background:#000; }
+.notification-admin-actions { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:.5rem; }
+.notification-admin-actions .btn { width:auto; }
+.notification-preview {
+    border: 1px solid #e5e5e5;
+    border-radius: 22px;
+    padding: 1rem;
+    background: #f5f5f5;
+    display:flex;
+    gap:.9rem;
+    align-items:flex-start;
+}
+.notification-preview-icon {
+    width:44px; height:44px; border-radius:14px; background:#000; color:#fff;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.notification-preview strong { display:block; color:#000; margin-bottom:.2rem; }
+.notification-preview span { color:#666; font-size:.9rem; line-height:1.5; }
+.notification-help-list { list-style:none; display:grid; gap:.7rem; margin-top:1rem; }
+.notification-help-list li { background:#f5f5f5; border:1px solid #eee; padding:.9rem 1rem; border-radius:16px; color:#555; }
+.notification-help-list i { color:#000; margin-right:.5rem; }
+@media (max-width: 768px) {
+    .notification-admin-grid { grid-template-columns: 1fr; }
+    .notification-admin-card { padding:1.25rem; }
+    .notification-admin-actions .btn { width:100%; }
+}
+
+
+/* ===== Navbar Notification Icon - same colors as cart icon ===== */
+.navbar-notification-link {
+    position: relative;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-notification-link:hover {
+    transform: scale(1.1);
+}
+
+.navbar.scrolled .navbar-notification-link {
+    color: #000;
+}
+
+.navbar-notification-link .notification-count {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #fff;
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 800;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar.scrolled .navbar-notification-link .notification-count {
+    background: #000;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .navbar-notification-link {
+        font-size: 1rem;
+    }
+}
+
+
+
+
+/* ===== Navbar Notification Icon opens notification panel, not page ===== */
+.navbar-notification-link {
+    position: relative;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.navbar-notification-link:hover {
+    transform: scale(1.1);
+}
+
+.navbar.scrolled .navbar-notification-link {
+    color: #000;
+}
+
+.navbar-notification-link .notification-count {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #fff;
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 800;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar.scrolled .navbar-notification-link .notification-count {
+    background: #000;
+    color: #fff;
+}

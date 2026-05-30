@@ -1,238 +1,125 @@
-// ===== MA PLAST GROUP - Service Worker =====
-// Upload this file to GitHub and name it exactly: service-worker.js
-
-const CACHE_NAME = 'ma-plast-v5';
-
-const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/about.html',
-  '/contact.html',
-  '/privacy.html',
-  '/offline.html',
-  '/style.css',
-  '/script.js',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+// ===== MA PLAST GROUP - Service Worker with Local Notifications =====
+const CACHE_NAME = 'ma-plast-v9';
+const STATIC_ASSETS = [
+    '/',
+    '/index.html',
+    '/about.html',
+    '/contact.html',
+    '/privacy.html',
+    '/notifications.html',
+    '/offline.html',
+    '/style.css',
+    '/script.js',
+    '/manifest.json',
+    '/icon-192.png',
+    '/icon-512.png',
+    '/screenshot-wide.png',
+    '/screenshot-mobile.png'
 ];
 
-// Install new version immediately
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
-      .catch((error) => {
-        console.warn('[Service Worker] Install cache failed:', error);
-        return self.skipWaiting();
-      })
-  );
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => cache.addAll(STATIC_ASSETS))
+            .then(() => self.skipWaiting())
+            .catch(() => self.skipWaiting())
+    );
 });
 
-// Delete old caches and take control immediately
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames
-            .filter((cacheName) => cacheName !== CACHE_NAME)
-            .map((cacheName) => caches.delete(cacheName))
-        );
-      })
-      .then(() => self.clients.claim())
-  );
+    event.waitUntil(
+        caches.keys()
+            .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
+            .then(() => self.clients.claim())
+    );
 });
 
-// Main fetch handler
 self.addEventListener('fetch', (event) => {
-  const request = event.request;
+    const request = event.request;
+    if (request.method !== 'GET') return;
 
-  if (request.method !== 'GET') {
-    return;
-  }
+    const url = new URL(request.url);
+    if (url.origin !== self.location.origin) return;
 
-  const url = new URL(request.url);
+    // Pages: network first so new HTML updates open correctly inside the app.
+    if (request.mode === 'navigate' || request.destination === 'document') {
+        event.respondWith(
+            fetch(request)
+                .then((response) => {
+                    const copy = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+                    return response;
+                })
+                .catch(() => caches.match(request).then((cached) => cached || caches.match('/offline.html')))
+        );
+        return;
+    }
 
-  // Do not cache or intercept external files like Google Fonts, Font Awesome, images CDN, maps, etc.
-  if (url.origin !== self.location.origin) {
-    return;
-  }
-
-  // Pages / HTML navigation: Network First
-  // This fixes old pages opening inside the installed app.
-  if (request.mode === 'navigate' || request.destination === 'document') {
-    event.respondWith(networkFirstForPages(request));
-    return;
-  }
-
-  // Static local files: Stale While Revalidate
-  event.respondWith(staleWhileRevalidate(request));
+    // Local static assets: cache first.
+    event.respondWith(
+        caches.match(request).then((cached) => {
+            if (cached) return cached;
+            return fetch(request).then((response) => {
+                const copy = response.clone();
+                caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+                return response;
+            });
+        })
+    );
 });
 
-// Network first for HTML pages
-async function networkFirstForPages(request) {
-  const cache = await caches.open(CACHE_NAME);
-
-  try {
-    const networkResponse = await fetch(request);
-
-    if (networkResponse && networkResponse.ok) {
-      await cache.put(request, networkResponse.clone());
-    }
-
-    return networkResponse;
-  } catch (error) {
-    const cachedResponse = await cache.match(request);
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    const offlineResponse = await cache.match('/offline.html');
-    if (offlineResponse) {
-      return offlineResponse;
-    }
-
-    return new Response('You are offline.', {
-      status: 503,
-      statusText: 'Offline',
-      headers: { 'Content-Type': 'text/plain; charset=utf-8' }
-    });
-  }
-}
-
-// Stale while revalidate for local static assets
-async function staleWhileRevalidate(request) {
-  const cache = await caches.open(CACHE_NAME);
-  const cachedResponse = await cache.match(request);
-
-  const networkPromise = fetch(request)
-    .then((networkResponse) => {
-      if (networkResponse && networkResponse.ok) {
-        cache.put(request, networkResponse.clone());
-      }
-      return networkResponse;
-    })
-    .catch(() => null);
-
-  if (cachedResponse) {
-    return cachedResponse;
-  }
-
-  const networkResponse = await networkPromise;
-  if (networkResponse) {
-    return networkResponse;
-  }
-
-  return new Response('', {
-    status: 504,
-    statusText: 'Gateway Timeout'
-  });
-}
-
-// Push notifications
-self.addEventListener('push', (event) => {
-  if (!event.data) {
-    return;
-  }
-
-  let data = {};
-
-  try {
-    data = event.data.json();
-  } catch (error) {
-    data = {
-      title: 'MA PLAST GROUP',
-      body: event.data.text()
+function normalizeNotificationData(raw = {}) {
+    return {
+        title: raw.title || 'MA PLAST GROUP',
+        body: raw.body || 'Browse products and send your order instantly.',
+        icon: raw.icon || '/icon-192.png',
+        badge: raw.badge || '/icon-192.png',
+        tag: raw.tag || 'ma-plast-update',
+        requireInteraction: Boolean(raw.requireInteraction),
+        actions: Array.isArray(raw.actions) ? raw.actions : [],
+        data: { url: raw.url || raw.actionUrl || '/index.html' },
+        vibrate: [200, 100, 200],
+        timestamp: Date.now(),
+        dir: 'ltr',
+        renotify: false,
+        silent: false
     };
-  }
+}
 
-  const title = data.title || 'MA PLAST GROUP';
+self.addEventListener('push', (event) => {
+    if (!event.data) return;
 
-  const options = {
-    body: data.body || 'Check out our latest products!',
-    icon: '/icon-192.png',
-    badge: '/icon-192.png',
-    tag: data.tag || 'general',
-    requireInteraction: Boolean(data.requireInteraction),
-    actions: Array.isArray(data.actions) ? data.actions : [],
-    data: {
-      url: data.url || '/index.html'
-    },
-    vibrate: [200, 100, 200],
-    image: data.image || undefined,
-    timestamp: Date.now(),
-    dir: 'ltr',
-    renotify: false,
-    silent: false
-  };
+    let data = {};
+    try { data = event.data.json(); }
+    catch { data = { body: event.data.text() }; }
 
-  event.waitUntil(self.registration.showNotification(title, options));
+    const options = normalizeNotificationData(data);
+    event.waitUntil(self.registration.showNotification(options.title, options));
 });
 
-// Notification click
+// Allows notifications.html / script.js to request a local notification from the Service Worker.
+self.addEventListener('message', (event) => {
+    const data = event.data || {};
+    if (data.type !== 'showNotification') return;
+
+    const options = normalizeNotificationData(data);
+    event.waitUntil(self.registration.showNotification(options.title, options));
+});
+
 self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
+    event.notification.close();
+    const targetUrl = (event.notification.data && event.notification.data.url) || '/index.html';
 
-  const notificationData = event.notification.data || {};
-  let targetUrl = notificationData.url || '/index.html';
-
-  if (event.action === 'dismiss') {
-    return;
-  }
-
-  if (event.action === 'cart') {
-    targetUrl = '/index.html#products';
-  }
-
-  event.waitUntil(openOrFocusClient(targetUrl));
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+            for (const client of windowClients) {
+                if (client.url.includes(self.location.origin) && 'focus' in client) {
+                    client.focus();
+                    client.postMessage({ type: 'navigate', url: targetUrl });
+                    return;
+                }
+            }
+            if (clients.openWindow) return clients.openWindow(targetUrl);
+        })
+    );
 });
-
-async function openOrFocusClient(targetUrl) {
-  const windowClients = await clients.matchAll({
-    type: 'window',
-    includeUncontrolled: true
-  });
-
-  for (const client of windowClients) {
-    if (client.url.includes(self.location.origin) && 'focus' in client) {
-      await client.focus();
-
-      if ('postMessage' in client) {
-        client.postMessage({
-          type: 'navigate',
-          url: targetUrl
-        });
-      }
-
-      return;
-    }
-  }
-
-  if (clients.openWindow) {
-    return clients.openWindow(targetUrl);
-  }
-}
-
-// Background sync placeholder
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-cart') {
-    event.waitUntil(syncCart());
-  }
-});
-
-async function syncCart() {
-  console.log('[Service Worker] Cart sync attempted');
-}
-
-// Periodic background sync placeholder
-self.addEventListener('periodicsync', (event) => {
-  if (event.tag === 'check-new-products') {
-    event.waitUntil(checkNewProducts());
-  }
-});
-
-async function checkNewProducts() {
-  console.log('[Service Worker] Checking for new products');
-}
