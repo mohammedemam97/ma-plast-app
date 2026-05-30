@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.pages.ma_plast_app.twa",
+      "sha256_cert_fingerprints": [
+        "66:3B:F7:8C:AA:82:F2:FA:4F:44:91:3B:02:C9:7A:F9:D3:F9:55:1F:E4:15:2D:6E:01:07:63:74:97:4D:01:B5"
+      ]
+    }
+  }
+]
