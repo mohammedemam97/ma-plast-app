@@ -39,7 +39,7 @@
         </div>
     </nav>
 
-    <!-- Modern Hero - Normal Colors -->
+    <!-- Modern Hero -->
     <section class="hero" id="home">
         <div class="hero-bg">
             <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=1920&h=1080&fit=crop" alt="">
@@ -64,11 +64,12 @@
     <!-- Products -->
     <section class="products" id="products">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <span class="label">Our Store</span>
                 <h2>Products</h2>
+                <div class="section-divider"></div>
             </div>
-            <div class="products-toolbar">
+            <div class="products-toolbar reveal reveal-delay-1">
                 <div class="products-count" id="productsCount">Showing 8 products</div>
                 <div class="products-per-page"><i class="fas fa-layer-group"></i> 8 products per page</div>
             </div>
@@ -81,7 +82,7 @@
     <section class="about" id="about">
         <div class="container">
             <div class="about-grid">
-                <div class="about-text">
+                <div class="about-text reveal-left">
                     <span class="label">About Us</span>
                     <h2>Trusted by Professionals</h2>
                     <p>We deliver top-quality plumbing supplies across Egypt with fast delivery and expert support.</p>
@@ -92,7 +93,7 @@
                         <div><i class="fas fa-check"></i>Expert Support</div>
                     </div>
                 </div>
-                <div class="about-img">
+                <div class="about-img reveal-right">
                     <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=500&fit=crop" alt="">
                 </div>
             </div>
@@ -102,26 +103,27 @@
     <!-- Steps -->
     <section class="steps-section">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <span class="label">How It Works</span>
                 <h2>Order in 3 Steps</h2>
+                <div class="section-divider"></div>
             </div>
             <div class="steps">
-                <div class="step">
+                <div class="step reveal reveal-delay-1">
                     <div class="step-icon">1</div>
                     <i class="fas fa-mouse-pointer"></i>
                     <h3>Browse</h3>
                     <p>Pick products</p>
                 </div>
-                <div class="step-line"></div>
-                <div class="step">
+                <div class="step-line reveal"></div>
+                <div class="step reveal reveal-delay-2">
                     <div class="step-icon">2</div>
                     <i class="fas fa-shopping-cart"></i>
                     <h3>Review</h3>
                     <p>Check cart</p>
                 </div>
-                <div class="step-line"></div>
-                <div class="step">
+                <div class="step-line reveal"></div>
+                <div class="step reveal reveal-delay-3">
                     <div class="step-icon">3</div>
                     <i class="fab fa-whatsapp"></i>
                     <h3>Order</h3>
@@ -134,11 +136,12 @@
     <!-- Location -->
     <section class="location" id="location">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <span class="label">Find Us</span>
                 <h2>Location</h2>
+                <div class="section-divider"></div>
             </div>
-            <div class="location-box">
+            <div class="location-box reveal-scale">
                 <div class="loc-info">
                     <h3><i class="fas fa-map-marker-alt"></i> MA PLAST GROUP</h3>
                     <p>Main Street, Industrial Area</p>
@@ -156,12 +159,13 @@
     <!-- Enhanced Contact -->
     <section class="contact" id="contact">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <span class="label">Get In Touch</span>
                 <h2>Contact Us</h2>
+                <div class="section-divider"></div>
             </div>
             <div class="contact-grid">
-                <div class="contact-info-card">
+                <div class="contact-info-card reveal-left">
                     <h3>Contact Information</h3>
                     <p>Reach out to us through any of these channels. We are always happy to help.</p>
                     <div class="contact-details">
@@ -202,7 +206,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="contact-action-cards">
+                <div class="contact-action-cards reveal-right">
                     <div class="action-card whatsapp-card">
                         <div class="ac-icon"><i class="fab fa-whatsapp"></i></div>
                         <h4>Order on WhatsApp</h4>
@@ -224,33 +228,43 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Enhanced Footer -->
     <footer class="footer">
+        <div class="footer-animated-line"></div>
         <div class="container">
             <div class="footer-grid">
-                <div class="footer-brand">
+                <div class="footer-brand reveal">
                     <a href="#home" class="logo"><i class="fas fa-faucet"></i><span>MA PLAST GROUP</span></a>
-                    <p>Premium plumbing solutions across Egypt.</p>
+                    <p>Premium plumbing and plastic solutions across Egypt. Quality products for professionals and home projects since 2010.</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/201225588521" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="tel:+201225588521" aria-label="Phone"><i class="fas fa-phone"></i></a>
+                        <a href="mailto:info@maplastgroup.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="https://www.facebook.com/maplastgroup" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/maplastgroup" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                    <div class="footer-newsletter">
+                        <p>Subscribe for deals & updates</p>
+                        <form class="footer-newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed!'); this.reset();">
+                            <input type="email" placeholder="Your email" required>
+                            <button type="submit">Subscribe</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="footer-links">
-                    <h4>Links</h4>
+                <div class="footer-links reveal reveal-delay-1">
+                    <h4>Quick Links</h4>
                     <a href="#home">Home</a>
                     <a href="#products">Products</a>
-                    <a href="about.html">About</a>
+                    <a href="about.html">About Us</a>
                     <a href="contact.html">Contact</a>
+                    <a href="#location">Find Us</a>
                 </div>
-                <div class="footer-links">
-                    <h4>Categories</h4>
-                    <a href="#">PVC Pipes</a>
-                    <a href="#">Faucets</a>
-                    <a href="#">Heaters</a>
-                    <a href="#">Tools</a>
-                </div>
-                <div class="footer-contact">
+                <div class="footer-contact reveal reveal-delay-2">
                     <h4>Contact</h4>
                     <p><i class="fas fa-phone"></i> +20 122 558 8521</p>
                     <p><i class="fas fa-envelope"></i> info@maplastgroup.com</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Cairo, Egypt</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Main Street, Industrial Area, Cairo, Egypt</p>
+                    <p><i class="fas fa-clock"></i> Sat - Thu: 9AM - 8PM</p>
                 </div>
             </div>
             <div class="footer-bottom">

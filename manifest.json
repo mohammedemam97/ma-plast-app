@@ -2,18 +2,13 @@
   "name": "MA PLAST GROUP",
   "short_name": "MA PLAST",
   "description": "Premium plumbing and plastic supplies store. Order pipes, fittings, faucets, tools, and sanitary products via WhatsApp.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
   "orientation": "portrait",
-  "dir": "ltr",
+  "scope": "/",
   "lang": "en",
-  "categories": [
-    "shopping",
-    "business"
-  ],
   "icons": [
     {
       "src": "icon-192.png",
@@ -28,20 +23,19 @@
       "purpose": "any maskable"
     }
   ],
+  "categories": ["shopping", "business"],
   "screenshots": [
     {
       "src": "screenshot-wide.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "form_factor": "wide",
-      "label": "MA PLAST GROUP storefront"
+      "form_factor": "wide"
     },
     {
-      "src": "screenshot-mobile.png",
-      "sizes": "1080x1920",
+      "src": "screenshot-narrow.png",
+      "sizes": "750x1334",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Shop plumbing products on mobile"
+      "form_factor": "narrow"
     }
   ]
 }

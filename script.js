@@ -137,6 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCart();
     initScroll();
     initActiveNav();
+    initScrollReveal();
+    initNotifications();
+    initAboutImageReveal();
 });
 
 // ===== Scroll =====
@@ -175,6 +178,43 @@ function initActiveNav() {
     });
 }
 
+// ===== Scroll Reveal System =====
+function initScrollReveal() {
+    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    if (revealElements.length === 0) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => observer.observe(el));
+}
+
+// ===== About Image Reveal =====
+function initAboutImageReveal() {
+    const aboutImg = document.querySelector('.about-img');
+    if (!aboutImg) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                aboutImg.classList.add('revealed');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    observer.observe(aboutImg);
+}
+
 // ===== Mobile Menu =====
 function toggleMobileMenu() {
     navLinks.classList.toggle('active');
@@ -202,8 +242,8 @@ function renderProducts(page = currentPage) {
     const end = start + PRODUCTS_PER_PAGE;
     const visibleProducts = products.slice(start, end);
 
-    productsGrid.innerHTML = visibleProducts.map(p => `
-        <div class="product-card">
+    productsGrid.innerHTML = visibleProducts.map((p, i) => `
+        <div class="product-card" style="animation-delay: ${i * 0.07}s">
             <div class="product-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>
             <div class="product-info">
                 <h3 class="product-name">${p.name}</h3>
@@ -273,6 +313,9 @@ function addToCart(id) {
     }
     saveCart();
     renderCart();
+
+    // Dispatch cart update event for notifications
+    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { count: cart.reduce((s, i) => s + i.quantity, 0) } }));
 }
 
 // ===== Remove =====
@@ -374,6 +417,7 @@ function sendWhatsAppOrder() {
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         if (cartSidebar.classList.contains('active')) closeCart();
+        if (notificationPanel.classList.contains('active')) toggleNotificationPanel();
         if (navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
             mobileOverlay.classList.remove('active');
@@ -392,3 +436,411 @@ window.addEventListener('resize', () => {
         if (!cartSidebar.classList.contains('active')) document.body.style.overflow = '';
     }
 });
+
+// ============================================================
+// NOTIFICATION SYSTEM (SHEIN-STYLE)
+// ============================================================
+
+let notifications = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+let notificationPermission = localStorage.getItem('ma_plast_notification_permission') || 'default';
+let notificationPanel = null;
+let notificationOverlay = null;
+let notificationToggle = null;
+let notificationCount = null;
+
+// Default demo notifications
+const defaultNotifications = [
+    {
+        id: 'notif_1',
+        title: 'Flash Sale: 20% Off All Pipes!',
+        body: 'Limited time offer on PVC and PPR pipes. Stock up now and save big on your plumbing projects.',
+        type: 'promo',
+        time: Date.now() - 3600000,
+        read: false,
+        actionUrl: '#products'
+    },
+    {
+        id: 'notif_2',
+        title: 'New Products Arrived',
+        body: 'Check out our latest collection of premium faucets, shower mixers, and bathroom accessories.',
+        type: 'product',
+        time: Date.now() - 7200000,
+        read: false,
+        actionUrl: '#products'
+    },
+    {
+        id: 'notif_3',
+        title: 'Your Cart is Waiting',
+        body: 'You have items in your cart. Complete your order now and get fast delivery across Egypt.',
+        type: 'cart',
+        time: Date.now() - 86400000,
+        read: true,
+        actionUrl: '#products'
+    },
+    {
+        id: 'notif_4',
+        title: 'Order Via WhatsApp',
+        body: 'Need help? Chat with us on WhatsApp for instant support and order confirmation.',
+        type: 'order',
+        time: Date.now() - 172800000,
+        read: true,
+        actionUrl: 'https://wa.me/201225588521'
+    }
+];
+
+function initNotifications() {
+    // Initialize default notifications if none exist
+    if (notifications.length === 0) {
+        notifications = [...defaultNotifications];
+        saveNotifications();
+    }
+
+    // Create notification UI elements
+    createNotificationElements();
+
+    // Update badge count
+    updateNotificationBadge();
+
+    // Show permission prompt after 3 seconds if not decided
+    if (notificationPermission === 'default' && 'Notification' in window) {
+        setTimeout(() => {
+            showNotificationPrompt();
+        }, 3000);
+    }
+
+    // Listen for cart updates
+    window.addEventListener('cartUpdated', () => {
+        updateNotificationBadge();
+    });
+
+    // Listen for service worker messages
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'navigate') {
+                window.location.href = e.data.url;
+            }
+        });
+    }
+}
+
+function createNotificationElements() {
+    // Check if already created
+    if (document.getElementById('notificationPanel')) return;
+
+    // Notification toggle button (inserted into nav-actions)
+    const navActions = document.querySelector('.nav-actions');
+    if (navActions) {
+        const notifToggle = document.createElement('button');
+        notifToggle.className = 'notification-toggle';
+        notifToggle.id = 'notificationToggle';
+        notifToggle.setAttribute('onclick', 'toggleNotificationPanel()');
+        notifToggle.setAttribute('aria-label', 'Notifications');
+        notifToggle.innerHTML = `
+            <i class="fas fa-bell notification-bell-icon"></i>
+            <span class="notification-count" id="notificationCount" style="display:none">0</span>
+        `;
+        navActions.insertBefore(notifToggle, navActions.firstChild);
+        notificationToggle = notifToggle;
+        notificationCount = document.getElementById('notificationCount');
+    }
+
+    // Notification panel
+    const notifPanel = document.createElement('div');
+    notifPanel.className = 'notification-panel';
+    notifPanel.id = 'notificationPanel';
+    notifPanel.innerHTML = `
+        <div class="notification-panel-header">
+            <h3><i class="fas fa-bell"></i> Notifications</h3>
+            <div class="notification-panel-actions">
+                <button onclick="markAllNotificationsRead()" title="Mark all read"><i class="fas fa-check-double"></i></button>
+                <button onclick="toggleNotificationPanel()" title="Close"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="notification-list" id="notificationList"></div>
+    `;
+    document.body.appendChild(notifPanel);
+    notificationPanel = notifPanel;
+
+    // Notification overlay
+    const notifOverlay = document.createElement('div');
+    notifOverlay.className = 'notification-overlay';
+    notifOverlay.id = 'notificationOverlay';
+    notifOverlay.setAttribute('onclick', 'toggleNotificationPanel()');
+    document.body.appendChild(notifOverlay);
+    notificationOverlay = notifOverlay;
+
+    // Render notifications
+    renderNotifications();
+}
+
+function renderNotifications() {
+    const list = document.getElementById('notificationList');
+    if (!list) return;
+
+    if (notifications.length === 0) {
+        list.innerHTML = `
+            <div class="notification-empty">
+                <i class="fas fa-bell-slash"></i>
+                <p>No notifications yet</p>
+                <button onclick="simulateNotification()">Test Notification</button>
+            </div>
+        `;
+        return;
+    }
+
+    // Sort: unread first, then by time
+    const sorted = [...notifications].sort((a, b) => {
+        if (a.read !== b.read) return a.read ? 1 : -1;
+        return b.time - a.time;
+    });
+
+    list.innerHTML = sorted.map(n => `
+        <div class="notification-item ${n.read ? 'read' : 'unread'}" onclick="handleNotificationClick('${n.id}', '${n.actionUrl || ''}')">
+            <div class="notification-item-dot"></div>
+            <div class="notification-item-icon icon-${n.type}">
+                <i class="fas ${getNotificationIcon(n.type)}"></i>
+            </div>
+            <div class="notification-item-content">
+                <div class="notification-item-title">${escapeHtml(n.title)}</div>
+                <div class="notification-item-body">${escapeHtml(n.body)}</div>
+                <div class="notification-item-time">${formatTime(n.time)}</div>
+            </div>
+            <button class="notification-item-delete" onclick="event.stopPropagation(); deleteNotification('${n.id}')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        promo: 'fa-tag',
+        order: 'fa-box',
+        product: 'fa-star',
+        cart: 'fa-shopping-cart',
+        system: 'fa-info-circle'
+    };
+    return icons[type] || 'fa-bell';
+}
+
+function formatTime(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+
+    if (diff < 60000) return 'Just now';
+    if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+    if (diff < 604800000) return Math.floor(diff / 86400000) + 'd ago';
+    return new Date(timestamp).toLocaleDateString();
+}
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function handleNotificationClick(id, url) {
+    markNotificationRead(id);
+    if (url) {
+        if (url.startsWith('http') || url.startsWith('https')) {
+            window.open(url, '_blank');
+        } else {
+            window.location.href = url;
+        }
+    }
+    toggleNotificationPanel();
+}
+
+function markNotificationRead(id) {
+    const notif = notifications.find(n => n.id === id);
+    if (notif) {
+        notif.read = true;
+        saveNotifications();
+        renderNotifications();
+        updateNotificationBadge();
+    }
+}
+
+function markAllNotificationsRead() {
+    notifications.forEach(n => n.read = true);
+    saveNotifications();
+    renderNotifications();
+    updateNotificationBadge();
+    showToast('All marked as read');
+}
+
+function deleteNotification(id) {
+    notifications = notifications.filter(n => n.id !== id);
+    saveNotifications();
+    renderNotifications();
+    updateNotificationBadge();
+}
+
+function updateNotificationBadge() {
+    if (!notificationCount) return;
+    const unreadCount = notifications.filter(n => !n.read).length;
+    if (unreadCount > 0) {
+        notificationCount.textContent = unreadCount > 99 ? '99+' : unreadCount;
+        notificationCount.style.display = 'flex';
+        notificationToggle.classList.add('has-unread');
+    } else {
+        notificationCount.style.display = 'none';
+        notificationToggle.classList.remove('has-unread');
+    }
+}
+
+function saveNotifications() {
+    localStorage.setItem('ma_plast_notifications_v1', JSON.stringify(notifications));
+}
+
+function toggleNotificationPanel() {
+    if (!notificationPanel) return;
+
+    const isActive = notificationPanel.classList.contains('active');
+
+    // Close other panels
+    if (!isActive) {
+        if (cartSidebar.classList.contains('active')) closeCart();
+        if (navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            setMobileMenuIcon(false);
+        }
+    }
+
+    notificationPanel.classList.toggle('active');
+    notificationOverlay.classList.toggle('active');
+
+    // Update body scroll
+    if (notificationPanel.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+    }
+
+    // Re-render to update read states
+    renderNotifications();
+}
+
+// ===== Notification Permission Prompt =====
+function showNotificationPrompt() {
+    if (document.getElementById('notificationPrompt')) return;
+
+    const prompt = document.createElement('div');
+    prompt.className = 'notification-prompt';
+    prompt.id = 'notificationPrompt';
+    prompt.innerHTML = `
+        <button class="notification-prompt-close" onclick="dismissNotificationPrompt()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="notification-prompt-icon">
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="notification-prompt-content">
+            <h4>Stay Updated</h4>
+            <p>Get notified about new products, deals & order updates</p>
+        </div>
+        <div class="notification-prompt-actions">
+            <button class="btn-allow" onclick="requestNotificationPermission()">Allow</button>
+            <button class="btn-deny" onclick="dismissNotificationPrompt()">Not Now</button>
+        </div>
+    `;
+    document.body.appendChild(prompt);
+
+    // Show with animation
+    requestAnimationFrame(() => {
+        prompt.classList.add('show');
+    });
+
+    // Auto-dismiss after 10 seconds
+    setTimeout(() => {
+        dismissNotificationPrompt();
+    }, 10000);
+}
+
+function dismissNotificationPrompt() {
+    const prompt = document.getElementById('notificationPrompt');
+    if (prompt) {
+        prompt.classList.remove('show');
+        setTimeout(() => prompt.remove(), 400);
+    }
+}
+
+function requestNotificationPermission() {
+    if (!('Notification' in window)) {
+        showToast('Notifications not supported');
+        dismissNotificationPrompt();
+        return;
+    }
+
+    Notification.requestPermission().then(permission => {
+        notificationPermission = permission;
+        localStorage.setItem('ma_plast_notification_permission', permission);
+
+        if (permission === 'granted') {
+            showToast('Notifications enabled!');
+            // Send a welcome notification
+            setTimeout(() => {
+                if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({
+                        type: 'showNotification',
+                        title: 'MA PLAST GROUP',
+                        body: 'You will now receive updates on new products and deals!',
+                        tag: 'welcome',
+                        url: '/index.html'
+                    });
+                }
+            }, 1000);
+        } else {
+            showToast('Notifications disabled');
+        }
+        dismissNotificationPrompt();
+    });
+}
+
+// ===== Simulate Push Notification (for demo) =====
+function simulateNotification() {
+    const types = ['promo', 'product', 'cart', 'order'];
+    const titles = [
+        'Flash Sale: 25% Off!',
+        'New Arrivals Just Dropped',
+        'Your Cart Misses You',
+        'Free Shipping Today'
+    ];
+    const bodies = [
+        'Grab premium PVC pipes at unbeatable prices. Limited stock available!',
+        'Explore our latest collection of modern faucets and bathroom accessories.',
+        'Complete your order now and enjoy fast delivery across Egypt.',
+        'Order today and get free shipping on all items over 500 EGP!'
+    ];
+
+    const idx = Math.floor(Math.random() * types.length);
+    const newNotif = {
+        id: 'notif_' + Date.now(),
+        title: titles[idx],
+        body: bodies[idx],
+        type: types[idx],
+        time: Date.now(),
+        read: false,
+        actionUrl: '#products'
+    };
+
+    notifications.unshift(newNotif);
+    saveNotifications();
+    renderNotifications();
+    updateNotificationBadge();
+
+    // Show browser notification if permitted
+    if (notificationPermission === 'granted' && 'Notification' in window) {
+        new Notification('MA PLAST GROUP', {
+            body: newNotif.title,
+            icon: '/icon-192.png',
+            badge: '/icon-192.png',
+            tag: newNotif.id,
+            requireInteraction: false
+        });
+    }
+
+    showToast('New notification!');
+}
