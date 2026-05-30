@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MA PLAST GROUP</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Premium plumbing and plastic supplies store. Order pipes, fittings, faucets, tools, and sanitary products via WhatsApp.">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Liquid Glass Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-glass">
+            <a href="#home" class="logo">
+                <i class="fas fa-faucet"></i>
+                <span>MA PLAST GROUP</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#location">Location</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="cart-toggle" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Modern Hero - Normal Colors -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=1920&h=1080&fit=crop" alt="">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <span class="hero-tag">EST. 2010</span>
+            <h1>MA PLAST<br>GROUP</h1>
+            <p>Premium Plumbing & Plastic Solutions</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn btn-primary">Explore Products</a>
+                <a href="tel:+201225588521" class="btn btn-outline">Call Now</a>
+            </div>
+        </div>
+        <div class="scroll-hint">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products" id="products">
+        <div class="container">
+            <div class="section-header">
+                <span class="label">Our Store</span>
+                <h2>Products</h2>
+            </div>
+            <div class="products-toolbar">
+                <div class="products-count" id="productsCount">Showing 8 products</div>
+                <div class="products-per-page"><i class="fas fa-layer-group"></i> 8 products per page</div>
+            </div>
+            <div class="products-grid" id="productsGrid"></div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <span class="label">About Us</span>
+                    <h2>Trusted by Professionals</h2>
+                    <p>We deliver top-quality plumbing supplies across Egypt with fast delivery and expert support.</p>
+                    <div class="about-features">
+                        <div><i class="fas fa-check"></i>Premium Quality</div>
+                        <div><i class="fas fa-check"></i>Best Prices</div>
+                        <div><i class="fas fa-check"></i>Fast Delivery</div>
+                        <div><i class="fas fa-check"></i>Expert Support</div>
+                    </div>
+                </div>
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&h=500&fit=crop" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps -->
+    <section class="steps-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="label">How It Works</span>
+                <h2>Order in 3 Steps</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">1</div>
+                    <i class="fas fa-mouse-pointer"></i>
+                    <h3>Browse</h3>
+                    <p>Pick products</p>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-icon">2</div>
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Review</h3>
+                    <p>Check cart</p>
+                </div>
+                <div class="step-line"></div>
+                <div class="step">
+                    <div class="step-icon">3</div>
+                    <i class="fab fa-whatsapp"></i>
+                    <h3>Order</h3>
+                    <p>Via WhatsApp</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location -->
+    <section class="location" id="location">
+        <div class="container">
+            <div class="section-header">
+                <span class="label">Find Us</span>
+                <h2>Location</h2>
+            </div>
+            <div class="location-box">
+                <div class="loc-info">
+                    <h3><i class="fas fa-map-marker-alt"></i> MA PLAST GROUP</h3>
+                    <p>Main Street, Industrial Area</p>
+                    <p>Cairo, Egypt</p>
+                    <p><i class="fas fa-clock"></i> Sat - Thu: 9AM - 8PM</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=Cairo+Egypt" target="_blank" class="btn btn-primary">Get Directions</a>
+                </div>
+                <div class="loc-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.0!2d31.2357!3d30.0444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDAyJzQwLjAiTiAzMcKwMTQnMDguNSJF!5e0!3m2!1sen!2seg!4v1" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Contact -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="label">Get In Touch</span>
+                <h2>Contact Us</h2>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info-card">
+                    <h3>Contact Information</h3>
+                    <p>Reach out to us through any of these channels. We are always happy to help.</p>
+                    <div class="contact-details">
+                        <a href="https://wa.me/+201225588521" class="contact-detail">
+                            <div class="cd-icon"><i class="fab fa-whatsapp"></i></div>
+                            <div class="cd-text">
+                                <span class="cd-label">WhatsApp</span>
+                                <span class="cd-value">+20 122 558 8521</span>
+                            </div>
+                        </a>
+                        <a href="tel:+201225588521" class="contact-detail">
+                            <div class="cd-icon"><i class="fas fa-phone"></i></div>
+                            <div class="cd-text">
+                                <span class="cd-label">Phone</span>
+                                <span class="cd-value">+20 122 558 8521</span>
+                            </div>
+                        </a>
+                        <a href="mailto:info@maplastgroup.com" class="contact-detail">
+                            <div class="cd-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="cd-text">
+                                <span class="cd-label">Email</span>
+                                <span class="cd-value">info@maplastgroup.com</span>
+                            </div>
+                        </a>
+                        <div class="contact-detail">
+                            <div class="cd-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="cd-text">
+                                <span class="cd-label">Address</span>
+                                <span class="cd-value">Cairo, Egypt</span>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <div class="cd-icon"><i class="fas fa-clock"></i></div>
+                            <div class="cd-text">
+                                <span class="cd-label">Working Hours</span>
+                                <span class="cd-value">Sat - Thu: 9AM - 8PM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-action-cards">
+                    <div class="action-card whatsapp-card">
+                        <div class="ac-icon"><i class="fab fa-whatsapp"></i></div>
+                        <h4>Order on WhatsApp</h4>
+                        <p>Send your order directly through WhatsApp for the fastest response.</p>
+                        <a href="https://wa.me/+201225588521" class="btn btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i> Start Chat
+                        </a>
+                    </div>
+                    <div class="action-card call-card">
+                        <div class="ac-icon"><i class="fas fa-phone"></i></div>
+                        <h4>Call Us Now</h4>
+                        <p>Speak directly with our team for instant support and inquiries.</p>
+                        <a href="tel:+201225588521" class="btn btn-primary">
+                            <i class="fas fa-phone"></i> Call Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#home" class="logo"><i class="fas fa-faucet"></i><span>MA PLAST GROUP</span></a>
+                    <p>Premium plumbing solutions across Egypt.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#products">Products</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Categories</h4>
+                    <a href="#">PVC Pipes</a>
+                    <a href="#">Faucets</a>
+                    <a href="#">Heaters</a>
+                    <a href="#">Tools</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-phone"></i> +20 122 558 8521</p>
+                    <p><i class="fas fa-envelope"></i> info@maplastgroup.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Cairo, Egypt</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-links">
+                    <p>&copy; 2026 MA PLAST GROUP. All Rights Reserved.</p>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart -->
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Cart</h3>
+            <button class="close-cart" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <i class="fas fa-shopping-basket"></i>
+                <p>Your cart is empty</p>
+                <a href="#products" class="btn btn-primary btn-sm" onclick="toggleCart()">Start Shopping</a>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total</span><span id="totalPrice">0.00 EGP</span></div>
+            <button class="btn btn-whatsapp" onclick="sendWhatsAppOrder()" id="whatsappBtn" disabled>
+                <i class="fab fa-whatsapp"></i> Send Order
+            </button>
+        </div>
+    </aside>
+
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Added!</span></div>
+
+    <script src="script.js"></script>
+    <button id="installAppBtn" class="install-app-btn" style="display:none;">
+        <i class="fas fa-download"></i> Install App
+    </button>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js');
+            });
+        }
+
+        let deferredInstallPrompt;
+        const installAppBtn = document.getElementById('installAppBtn');
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            installAppBtn.style.display = 'inline-flex';
+        });
+
+        installAppBtn.addEventListener('click', async () => {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            installAppBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
