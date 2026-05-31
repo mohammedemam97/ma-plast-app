@@ -139,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initActiveNav();
     initScrollReveal();
     initNotificationsPanelOnly();
+    initOneSignalProfessionalPrompt();
     initAboutImageReveal();
 });
 
@@ -818,6 +819,9 @@ function createNotificationPanelOnly() {
 }
 
 function toggleNotificationPanel() {
+    if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+        showOneSignalPrompt();
+    }
     const panel = document.getElementById('notificationPanel');
     if (!panel) {
         createNotificationPanelOnly();
@@ -920,4 +924,110 @@ function formatNotificationTime(time) {
     const date = new Date(time);
     if (Number.isNaN(date.getTime())) return '';
     return date.toLocaleString();
+}
+
+
+// ============================================================
+// ONESIGNAL PROFESSIONAL WEB PUSH PROMPT
+// ============================================================
+function initOneSignalProfessionalPrompt() {
+    createOneSignalPromptUI();
+
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+        try {
+            updateOneSignalPromptState();
+
+            OneSignal.Notifications.addEventListener('permissionChange', function(permission) {
+                localStorage.setItem('ma_plast_push_permission_seen', 'yes');
+                updateOneSignalPromptState();
+                if (permission) {
+                    addLocalNotification({
+                        title: 'Notifications enabled',
+                        body: 'You will now receive MA PLAST offers and updates.',
+                        type: 'system'
+                    });
+                }
+            });
+
+            setTimeout(function() {
+                const seen = localStorage.getItem('ma_plast_push_permission_seen');
+                if (!seen && Notification.permission === 'default') {
+                    showOneSignalPrompt();
+                }
+            }, 2500);
+        } catch (error) {
+            console.warn('[OneSignal] Prompt setup failed', error);
+        }
+    });
+}
+
+function createOneSignalPromptUI() {
+    if (document.getElementById('pushPermissionPrompt')) return;
+
+    const prompt = document.createElement('div');
+    prompt.className = 'push-permission-prompt';
+    prompt.id = 'pushPermissionPrompt';
+    prompt.innerHTML = `
+        <button class="push-prompt-close" onclick="hideOneSignalPrompt()" aria-label="Close"><i class="fas fa-times"></i></button>
+        <div class="push-prompt-icon"><i class="fas fa-bell"></i></div>
+        <div class="push-prompt-content">
+            <h4>Get offers and updates</h4>
+            <p>Enable notifications to receive new products, deals, and order updates from MA PLAST.</p>
+        </div>
+        <div class="push-prompt-actions">
+            <button type="button" class="push-allow" onclick="requestOneSignalPermission()">Allow</button>
+            <button type="button" class="push-later" onclick="hideOneSignalPrompt()">Later</button>
+        </div>
+    `;
+    document.body.appendChild(prompt);
+}
+
+function showOneSignalPrompt() {
+    const prompt = document.getElementById('pushPermissionPrompt');
+    if (prompt) prompt.classList.add('show');
+}
+
+function hideOneSignalPrompt() {
+    const prompt = document.getElementById('pushPermissionPrompt');
+    if (prompt) prompt.classList.remove('show');
+    localStorage.setItem('ma_plast_push_permission_seen', 'yes');
+}
+
+function requestOneSignalPermission() {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+        try {
+            await OneSignal.Notifications.requestPermission();
+            localStorage.setItem('ma_plast_push_permission_seen', 'yes');
+            hideOneSignalPrompt();
+            updateOneSignalPromptState();
+        } catch (error) {
+            console.warn('[OneSignal] Permission request failed', error);
+            showToast('Notifications permission failed');
+        }
+    });
+}
+
+function updateOneSignalPromptState() {
+    const isGranted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+    const notificationIcon = document.querySelector('.navbar-notification-link');
+    if (notificationIcon) {
+        notificationIcon.classList.toggle('push-enabled', isGranted);
+    }
+}
+
+function addLocalNotification(notification) {
+    const list = JSON.parse(localStorage.getItem('ma_plast_notifications_v1')) || [];
+    list.push({
+        id: Date.now().toString(),
+        title: notification.title || 'MA PLAST GROUP',
+        body: notification.body || '',
+        type: notification.type || 'system',
+        read: false,
+        time: Date.now()
+    });
+    localStorage.setItem('ma_plast_notifications_v1', JSON.stringify(list));
+    if (typeof renderNotificationListOnly === 'function') renderNotificationListOnly();
+    if (typeof updateNotificationBadgeOnly === 'function') updateNotificationBadgeOnly();
 }

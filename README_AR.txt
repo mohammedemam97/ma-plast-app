@@ -54,3 +54,17 @@ Notifications update:
 - أيقونة الإشعارات في النافبار تفتح لوحة الإشعارات داخل نفس الصفحة.
 - لا تفتح notifications.html عند الضغط على الأيقونة.
 - صفحة notifications.html ما زالت للباك إند فقط وتفتح بالرابط المباشر.
+
+
+تحديث Mobile Fix:
+- تم إصلاح المساحة البيضاء في يمين الشاشة على الموبايل فقط.
+- تم ضبط عرض الـ hero والـ navbar على 100vw بدون overflow.
+- تم تحديث service worker cache لإجبار ظهور النسخة الجديدة.
+
+
+OneSignal Web Push Update:
+- تم تركيب OneSignal Web SDK.
+- App ID: a4aee757-dd1f-4247-8ac7-ad5eaee17ea5
+- الإشعارات الحقيقية تُرسل من OneSignal Dashboard لكل الأجهزة التي وافقت على الإشعارات.
+- تم إضافة prompt احترافي للمستخدم.
+- تم دمج OneSignal داخل service-worker.js.

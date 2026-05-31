@@ -1,5 +1,7 @@
+try { importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js'); } catch (error) { console.warn('[OneSignal] Worker import failed', error); }
+
 // ===== MA PLAST GROUP - Service Worker with Local Notifications =====
-const CACHE_NAME = 'ma-plast-mobile-fix-v1';
+const CACHE_NAME = 'ma-plast-onesignal-v1';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
