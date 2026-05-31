@@ -23,21 +23,7 @@
           serviceWorkerUpdaterPath: "OneSignalSDKUpdaterWorker.js",
           serviceWorkerParam: { scope: "/" },
           notifyButton: { enable: false },
-          promptOptions: {
-            slidedown: {
-              prompts: [
-                {
-                  type: "push",
-                  autoPrompt: false,
-                  text: {
-                    actionMessage: "Enable notifications to receive MA PLAST offers and updates.",
-                    acceptButton: "Allow",
-                    cancelButton: "Later"
-                  }
-                }
-              ]
-            }
-          }
+          autoResubscribe: true
         });
       });
     </script>

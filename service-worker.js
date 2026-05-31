@@ -1,5 +1,5 @@
 // ===== MA PLAST GROUP - Service Worker with Local Notifications =====
-const CACHE_NAME = 'ma-plast-onesignal-click-fix-v3';
+const CACHE_NAME = 'ma-plast-onesignal-force-v4';
 const STATIC_ASSETS = [
     '/',
     '/index.html',

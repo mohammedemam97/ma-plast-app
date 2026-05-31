@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OneSignal Check | MA PLAST</title>
+  <title>OneSignal Force Subscribe | MA PLAST</title>
   <meta name="robots" content="noindex,nofollow">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -16,72 +14,100 @@
         serviceWorkerPath: "OneSignalSDKWorker.js",
         serviceWorkerUpdaterPath: "OneSignalSDKUpdaterWorker.js",
         serviceWorkerParam: { scope: "/" },
-        notifyButton: { enable: false }
+        notifyButton: { enable: false },
+        autoResubscribe: true
       });
     });
   </script>
   <style>
-    body { background:#f5f5f5; color:#000; font-family:Inter, Arial, sans-serif; padding:32px; }
-    .box { max-width:760px; margin:40px auto; background:white; border:1px solid #ddd; border-radius:24px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.08); }
-    h1 { margin-bottom:10px; }
-    p { color:#555; line-height:1.7; }
-    button { background:#000; color:#fff; border:0; border-radius:999px; padding:14px 22px; font-weight:800; cursor:pointer; margin:6px; }
-    pre { background:#111; color:#fff; border-radius:18px; padding:18px; overflow:auto; direction:ltr; text-align:left; }
+    body { font-family: Arial, sans-serif; background:#f4f4f4; color:#000; padding:24px; }
+    .box { max-width:800px; margin:40px auto; background:#fff; border-radius:22px; border:1px solid #ddd; padding:26px; box-shadow:0 20px 60px rgba(0,0,0,.08); }
+    button { background:#000; color:#fff; border:0; border-radius:999px; padding:14px 20px; font-weight:800; cursor:pointer; margin:6px; }
+    .muted { color:#555; line-height:1.7; }
+    pre { background:#111; color:#fff; padding:18px; border-radius:16px; overflow:auto; direction:ltr; text-align:left; }
+    .warn { background:#fff3cd; border:1px solid #ffec99; padding:12px; border-radius:14px; margin:12px 0; }
   </style>
 </head>
 <body>
   <div class="box">
-    <h1>MA PLAST OneSignal Check</h1>
-    <p>Use this private page after upload. Press Subscribe / Allow. If Chrome does not activate, click the lock icon beside the URL and set Notifications to Allow, then refresh.</p>
-    <button onclick="subscribeNow()">Subscribe / Allow</button>
+    <h1>MA PLAST Notification Setup Check</h1>
+    <p class="muted">Step 1: Press Force Subscribe. If Chrome shows a permission popup, choose Allow.</p>
+    <p class="muted">Step 2: Press Check Status. Send me a screenshot of the result if it still fails.</p>
+    <div class="warn">If permission is blocked, click the lock/settings icon beside the URL, set Notifications to Allow, then refresh.</div>
+    <button onclick="forceSubscribe()">Force Subscribe</button>
     <button onclick="checkStatus()">Check Status</button>
+    <button onclick="resetPermissionHelp()">How to fix blocked permission</button>
     <a href="index.html"><button>Back to App</button></a>
     <pre id="result">Waiting...</pre>
   </div>
 
-  <script>
-    async function subscribeNow() {
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        try {
-          if (Notification.permission === 'denied') {
-            document.getElementById('result').textContent = 'Notifications are blocked. Click the lock/settings icon beside the URL and set Notifications to Allow, then refresh.';
-            return;
-          }
+<script>
+async function forceSubscribe() {
+  const out = document.getElementById('result');
 
-          await OneSignal.Notifications.requestPermission();
+  try {
+    if (!('Notification' in window)) {
+      out.textContent = 'Notifications are not supported in this browser.';
+      return;
+    }
 
-          if (Notification.permission !== 'granted') {
-            document.getElementById('result').textContent = 'Browser permission is not granted yet. Press Allow in the browser popup.';
-            return;
-          }
+    if (Notification.permission === 'denied') {
+      out.textContent = 'BLOCKED: Notifications are blocked. Click the lock/settings icon beside the URL, set Notifications to Allow, then refresh.';
+      return;
+    }
 
-          if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optIn) {
-            await OneSignal.User.PushSubscription.optIn();
-          }
+    const browserPermission = await Notification.requestPermission();
 
-          setTimeout(checkStatus, 1200);
-        } catch (e) {
-          document.getElementById('result').textContent = 'Error: ' + e.message;
+    if (browserPermission !== 'granted') {
+      out.textContent = 'Permission result: ' + browserPermission + '. You must choose Allow.';
+      return;
+    }
+
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      try {
+        if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optIn) {
+          await OneSignal.User.PushSubscription.optIn();
         }
-      });
-    }
+        setTimeout(checkStatus, 1500);
+      } catch (e) {
+        out.textContent = 'OneSignal optIn error: ' + e.message;
+      }
+    });
+  } catch (e) {
+    out.textContent = 'Error: ' + e.message;
+  }
+}
 
-    async function checkStatus() {
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        const status = {
-          browserPermission: Notification.permission,
-          oneSignalId: OneSignal.User ? OneSignal.User.onesignalId : null,
-          pushSubscriptionId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
-          token: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
-          optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null
-        };
-        document.getElementById('result').textContent = JSON.stringify(status, null, 2);
-      });
-    }
+function checkStatus() {
+  const out = document.getElementById('result');
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    const status = {
+      currentUrl: location.href,
+      browserPermission: Notification.permission,
+      oneSignalId: OneSignal.User ? OneSignal.User.onesignalId : null,
+      pushSubscriptionId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
+      token: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
+      optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null,
+      serviceWorkerController: navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null
+    };
+    out.textContent = JSON.stringify(status, null, 2);
+  });
+}
 
-    setTimeout(checkStatus, 2500);
-  </script>
+function resetPermissionHelp() {
+  document.getElementById('result').textContent =
+`Chrome fix:
+1. Click the lock/settings icon beside https://ma-plast-app.pages.dev
+2. Open Site settings
+3. Set Notifications = Allow
+4. Clear site data if needed
+5. Refresh this page
+6. Press Force Subscribe again`;
+}
+
+setTimeout(checkStatus, 2500);
+</script>
 </body>
 </html>

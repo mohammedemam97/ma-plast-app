@@ -84,3 +84,10 @@ OneSignal Click Fix:
 - تم تحسين زر Allow ليستخدم OneSignal permission flow ثم optIn.
 - لو الإشعارات Blocked يظهر للمستخدم تعليمات تفعيلها من إعدادات الموقع.
 - تم تحديث صفحة onesignal-check.html للفحص.
+
+
+OneSignal Force Permission Fix:
+- زر Allow الآن يستخدم Notification.requestPermission مباشرة من ضغطة المستخدم.
+- بعد السماح، يتم تشغيل OneSignal optIn.
+- صفحة الفحص:
+  /onesignal-check.html

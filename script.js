@@ -1033,59 +1033,7 @@ function addLocalNotification(notification) {
 }
 
 
-async function requestOneSignalPermission() {
-    if (typeof Notification === 'undefined') {
-        showToast('Notifications not supported on this browser');
-        return;
-    }
 
-    if (Notification.permission === 'denied') {
-        showToast('Notifications are blocked. Enable them from browser site settings.');
-        showBlockedPermissionHelp();
-        return;
-    }
-
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-        try {
-            // Official OneSignal permission flow
-            let permissionResult = await OneSignal.Notifications.requestPermission();
-
-            // Chrome sometimes returns undefined; check the real browser permission.
-            const granted = Notification.permission === 'granted' || permissionResult === true;
-
-            if (!granted) {
-                showToast('Please press Allow in the browser notification popup');
-                return;
-            }
-
-            // Force OneSignal opt-in after browser permission is granted.
-            if (
-                OneSignal.User &&
-                OneSignal.User.PushSubscription &&
-                typeof OneSignal.User.PushSubscription.optIn === 'function'
-            ) {
-                await OneSignal.User.PushSubscription.optIn();
-            }
-
-            localStorage.setItem('ma_plast_push_permission_seen', 'yes');
-            hideOneSignalPrompt();
-            updateOneSignalPromptState();
-
-            setTimeout(function() {
-                checkOneSignalStatus();
-            }, 1200);
-
-            if (typeof showToast === 'function') {
-                showToast('Notifications enabled successfully');
-            }
-        } catch (error) {
-            console.warn('[OneSignal] Permission request failed', error);
-            showToast('Open notification settings and allow notifications');
-            showBlockedPermissionHelp();
-        }
-    });
-}
 
 function showBlockedPermissionHelp() {
     let box = document.getElementById('pushPermissionHelp');
@@ -1127,4 +1075,76 @@ function checkOneSignalStatus() {
 
         return status;
     });
+}
+
+
+// ===== OneSignal Force Permission Fix =====
+async function requestOneSignalPermission() {
+    if (typeof Notification === 'undefined') {
+        showToast('Notifications are not supported in this browser');
+        return;
+    }
+
+    if (Notification.permission === 'denied') {
+        showToast('Notifications are blocked in browser settings');
+        showBlockedPermissionHelp();
+        return;
+    }
+
+    try {
+        // Direct browser prompt. This must run from the user's click.
+        const browserPermission = await Notification.requestPermission();
+
+        if (browserPermission !== 'granted') {
+            showToast('Please choose Allow in the browser notification popup');
+            return;
+        }
+
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                // Then activate OneSignal subscription.
+                if (
+                    OneSignal.User &&
+                    OneSignal.User.PushSubscription &&
+                    typeof OneSignal.User.PushSubscription.optIn === 'function'
+                ) {
+                    await OneSignal.User.PushSubscription.optIn();
+                }
+
+                localStorage.setItem('ma_plast_push_permission_seen', 'yes');
+                hideOneSignalPrompt();
+                updateOneSignalPromptState();
+
+                setTimeout(function() {
+                    checkOneSignalStatus();
+                }, 1500);
+
+                showToast('Notifications enabled successfully');
+            } catch (error) {
+                console.warn('[OneSignal] optIn failed', error);
+                showToast('Browser allowed. OneSignal still loading, refresh and try again');
+            }
+        });
+    } catch (error) {
+        console.warn('[Notification] Direct permission failed', error);
+        showToast('Notification permission failed');
+        showBlockedPermissionHelp();
+    }
+}
+
+function showBlockedPermissionHelp() {
+    let box = document.getElementById('pushPermissionHelp');
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'pushPermissionHelp';
+        box.className = 'push-permission-help';
+        box.innerHTML = `
+            <button class="push-help-close" onclick="document.getElementById('pushPermissionHelp').remove()"><i class="fas fa-times"></i></button>
+            <h4>Enable notifications manually</h4>
+            <p>Click the lock/settings icon beside the website URL, open Site settings, set Notifications to Allow, then refresh the page and try again.</p>
+        `;
+        document.body.appendChild(box);
+    }
+    box.classList.add('show');
 }
