@@ -91,3 +91,10 @@ OneSignal Force Permission Fix:
 - بعد السماح، يتم تشغيل OneSignal optIn.
 - صفحة الفحص:
   /onesignal-check.html
+
+
+OneSignal Existing Service Worker Fix:
+- تم استخدام service-worker.js الحالي كـ OneSignal worker.
+- تمت إضافة importScripts الخاص بـ OneSignal داخل service-worker.js.
+- لا تعتمد هذه النسخة على OneSignalSDKWorker.js كـ controller منفصل.
+- إذا كان المتصفح ما زال يستخدم worker قديم، افتح /onesignal-check.html واضغط Reset Service Worker ثم Refresh.

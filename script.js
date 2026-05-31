@@ -1057,21 +1057,19 @@ function checkOneSignalStatus() {
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
         const status = {
+            currentUrl: location.href,
             browserPermission: typeof Notification !== 'undefined' ? Notification.permission : 'not-supported',
-            oneSignalId: OneSignal.User && OneSignal.User.onesignalId ? OneSignal.User.onesignalId : null,
-            pushId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
-            pushToken: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
-            optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null
+            oneSignalId: OneSignal.User ? OneSignal.User.onesignalId : null,
+            pushSubscriptionId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
+            token: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
+            optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null,
+            serviceWorkerController: navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null
         };
+
         console.log('[OneSignal Status]', status);
 
         const result = document.getElementById('result');
         if (result) result.textContent = JSON.stringify(status, null, 2);
-
-        if (status.browserPermission === 'granted' && status.optedIn && status.pushId) {
-            localStorage.setItem('ma_plast_push_permission_seen', 'yes');
-            hideOneSignalPrompt();
-        }
 
         return status;
     });
@@ -1079,6 +1077,26 @@ function checkOneSignalStatus() {
 
 
 // ===== OneSignal Force Permission Fix =====
+
+
+function showBlockedPermissionHelp() {
+    let box = document.getElementById('pushPermissionHelp');
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'pushPermissionHelp';
+        box.className = 'push-permission-help';
+        box.innerHTML = `
+            <button class="push-help-close" onclick="document.getElementById('pushPermissionHelp').remove()"><i class="fas fa-times"></i></button>
+            <h4>Enable notifications manually</h4>
+            <p>Click the lock/settings icon beside the website URL, open Site settings, set Notifications to Allow, then refresh the page and try again.</p>
+        `;
+        document.body.appendChild(box);
+    }
+    box.classList.add('show');
+}
+
+
+// ===== OneSignal Existing Service Worker Permission Fix =====
 async function requestOneSignalPermission() {
     if (typeof Notification === 'undefined') {
         showToast('Notifications are not supported in this browser');
@@ -1092,7 +1110,7 @@ async function requestOneSignalPermission() {
     }
 
     try {
-        // Direct browser prompt. This must run from the user's click.
+        // Must be called directly from user's click.
         const browserPermission = await Notification.requestPermission();
 
         if (browserPermission !== 'granted') {
@@ -1103,7 +1121,6 @@ async function requestOneSignalPermission() {
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(async function(OneSignal) {
             try {
-                // Then activate OneSignal subscription.
                 if (
                     OneSignal.User &&
                     OneSignal.User.PushSubscription &&
@@ -1112,22 +1129,29 @@ async function requestOneSignalPermission() {
                     await OneSignal.User.PushSubscription.optIn();
                 }
 
+                // Give OneSignal a moment to create the subscription.
+                setTimeout(async function() {
+                    if (
+                        OneSignal.User &&
+                        OneSignal.User.PushSubscription &&
+                        typeof OneSignal.User.PushSubscription.optIn === 'function'
+                    ) {
+                        await OneSignal.User.PushSubscription.optIn();
+                    }
+                    checkOneSignalStatus();
+                }, 1800);
+
                 localStorage.setItem('ma_plast_push_permission_seen', 'yes');
                 hideOneSignalPrompt();
                 updateOneSignalPromptState();
-
-                setTimeout(function() {
-                    checkOneSignalStatus();
-                }, 1500);
-
                 showToast('Notifications enabled successfully');
             } catch (error) {
                 console.warn('[OneSignal] optIn failed', error);
-                showToast('Browser allowed. OneSignal still loading, refresh and try again');
+                showToast('Permission allowed. Refresh and press Allow again.');
             }
         });
     } catch (error) {
-        console.warn('[Notification] Direct permission failed', error);
+        console.warn('[Notification] Permission failed', error);
         showToast('Notification permission failed');
         showBlockedPermissionHelp();
     }
@@ -1142,7 +1166,7 @@ function showBlockedPermissionHelp() {
         box.innerHTML = `
             <button class="push-help-close" onclick="document.getElementById('pushPermissionHelp').remove()"><i class="fas fa-times"></i></button>
             <h4>Enable notifications manually</h4>
-            <p>Click the lock/settings icon beside the website URL, open Site settings, set Notifications to Allow, then refresh the page and try again.</p>
+            <p>Click the lock/settings icon beside the URL, open Site settings, set Notifications to Allow, then refresh the page and try again.</p>
         `;
         document.body.appendChild(box);
     }
