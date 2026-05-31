@@ -98,3 +98,9 @@ OneSignal Existing Service Worker Fix:
 - تمت إضافة importScripts الخاص بـ OneSignal داخل service-worker.js.
 - لا تعتمد هذه النسخة على OneSignalSDKWorker.js كـ controller منفصل.
 - إذا كان المتصفح ما زال يستخدم worker قديم، افتح /onesignal-check.html واضغط Reset Service Worker ثم Refresh.
+
+
+Check Button Fix:
+- تم إعادة بناء صفحة onesignal-check.html بالكامل.
+- الأزرار تعمل بـ addEventListener وليس onclick.
+- الصفحة لا تعتمد على script.js أو style.css.

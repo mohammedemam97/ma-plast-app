@@ -5,7 +5,7 @@ try {
 }
 
 // ===== MA PLAST GROUP - Service Worker with Local Notifications =====
-const CACHE_NAME = 'ma-plast-onesignal-existing-sw-v5';
+const CACHE_NAME = 'ma-plast-check-button-fix-v6';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
