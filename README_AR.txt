@@ -104,3 +104,19 @@ Check Button Fix:
 - تم إعادة بناء صفحة onesignal-check.html بالكامل.
 - الأزرار تعمل بـ addEventListener وليس onclick.
 - الصفحة لا تعتمد على script.js أو style.css.
+
+
+No Duplicate OneSignal Fix:
+- تم حذف prompt المخصص من الموقع.
+- الاعتماد الآن على OneSignal Native Prompt فقط.
+- تم منع تسجيل service-worker.js من صفحات الموقع حتى لا يحدث اشتراكين.
+- OneSignalSDKWorker.js هو worker الوحيد للإشعارات.
+- بعد الرفع افتح /onesignal-check.html واضغط Reset Old Workers مرة واحدة ثم Refresh.
+
+
+Custom Push Prompt Update:
+- تم استبدال شكل OneSignal Native Prompt بواجهة MA PLAST احترافية.
+- عند ضغط Enable Notifications يظهر طلب المتصفح الحقيقي مرة واحدة فقط.
+- يجب إيقاف Auto Prompt داخل OneSignal Dashboard لتجنب ظهور طلبين:
+  Settings > Push & In-App > Web Push > Permission Prompt Setup > Auto Prompt OFF
+- لا ترسل الإشعارات مرتين لأن OneSignal worker فقط هو المستخدم.

@@ -138,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initScroll();
     initActiveNav();
     initScrollReveal();
+    initMaPlastPushPrompt();
     initNotificationsPanelOnly();
-    initOneSignalProfessionalPrompt();
     initAboutImageReveal();
 });
 
@@ -927,8 +927,8 @@ function formatNotificationTime(time) {
 }
 
 
-// ============================================================
-// ONESIGNAL PROFESSIONAL WEB PUSH PROMPT
+
+
 // ============================================================
 function initOneSignalProfessionalPrompt() {
     createOneSignalPromptUI();
@@ -1052,69 +1052,106 @@ function showBlockedPermissionHelp() {
 }
 
 
-// ===== OneSignal quick diagnostic helper =====
-function checkOneSignalStatus() {
+
+
+
+
+
+
+// ===== Custom MA PLAST Push Prompt =====
+// This shows a professional branded prompt first.
+// The real browser permission popup appears only after the user presses "Enable".
+function initMaPlastPushPrompt() {
+    createMaPlastPushPrompt();
+
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
-        const status = {
-            currentUrl: location.href,
-            browserPermission: typeof Notification !== 'undefined' ? Notification.permission : 'not-supported',
-            oneSignalId: OneSignal.User ? OneSignal.User.onesignalId : null,
-            pushSubscriptionId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
-            token: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
-            optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null,
-            serviceWorkerController: navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null
-        };
+        try {
+            updatePushPromptStatus();
 
-        console.log('[OneSignal Status]', status);
+            const alreadySeen = localStorage.getItem('ma_plast_custom_push_seen') === 'yes';
+            const isGranted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+            const isDenied = typeof Notification !== 'undefined' && Notification.permission === 'denied';
 
-        const result = document.getElementById('result');
-        if (result) result.textContent = JSON.stringify(status, null, 2);
-
-        return status;
+            if (!alreadySeen && !isGranted && !isDenied) {
+                setTimeout(showMaPlastPushPrompt, 2500);
+            }
+        } catch (error) {
+            console.warn('[MA PLAST Push] init failed', error);
+        }
     });
 }
 
+function createMaPlastPushPrompt() {
+    if (document.getElementById('maPlastPushPrompt')) return;
 
-// ===== OneSignal Force Permission Fix =====
+    const prompt = document.createElement('div');
+    prompt.className = 'ma-push-prompt';
+    prompt.id = 'maPlastPushPrompt';
+    prompt.innerHTML = `
+        <div class="ma-push-card">
+            <button class="ma-push-close" type="button" onclick="dismissMaPlastPushPrompt()" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
 
+            <div class="ma-push-icon">
+                <i class="fas fa-bell"></i>
+            </div>
 
-function showBlockedPermissionHelp() {
-    let box = document.getElementById('pushPermissionHelp');
-    if (!box) {
-        box = document.createElement('div');
-        box.id = 'pushPermissionHelp';
-        box.className = 'push-permission-help';
-        box.innerHTML = `
-            <button class="push-help-close" onclick="document.getElementById('pushPermissionHelp').remove()"><i class="fas fa-times"></i></button>
-            <h4>Enable notifications manually</h4>
-            <p>Click the lock/settings icon beside the website URL, open Site settings, set Notifications to Allow, then refresh the page and try again.</p>
-        `;
-        document.body.appendChild(box);
-    }
-    box.classList.add('show');
+            <div class="ma-push-content">
+                <span class="ma-push-kicker">MA PLAST GROUP</span>
+                <h3>Stay updated</h3>
+                <p>Enable notifications to receive new plumbing products, offers, and order updates.</p>
+
+                <div class="ma-push-actions">
+                    <button type="button" class="ma-push-primary" onclick="enableMaPlastPush()">
+                        <i class="fas fa-bell"></i>
+                        Enable Notifications
+                    </button>
+                    <button type="button" class="ma-push-secondary" onclick="dismissMaPlastPushPrompt()">
+                        Later
+                    </button>
+                </div>
+
+                <small class="ma-push-note">You can turn this off anytime from your browser settings.</small>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(prompt);
 }
 
+function showMaPlastPushPrompt() {
+    const prompt = document.getElementById('maPlastPushPrompt');
+    if (prompt) prompt.classList.add('show');
+}
 
-// ===== OneSignal Existing Service Worker Permission Fix =====
-async function requestOneSignalPermission() {
+function hideMaPlastPushPrompt() {
+    const prompt = document.getElementById('maPlastPushPrompt');
+    if (prompt) prompt.classList.remove('show');
+}
+
+function dismissMaPlastPushPrompt() {
+    localStorage.setItem('ma_plast_custom_push_seen', 'yes');
+    hideMaPlastPushPrompt();
+}
+
+async function enableMaPlastPush() {
     if (typeof Notification === 'undefined') {
-        showToast('Notifications are not supported in this browser');
+        showToastSafe('Notifications are not supported in this browser');
         return;
     }
 
     if (Notification.permission === 'denied') {
-        showToast('Notifications are blocked in browser settings');
-        showBlockedPermissionHelp();
+        showToastSafe('Notifications are blocked. Enable them from browser settings.');
+        showMaPlastPermissionHelp();
         return;
     }
 
     try {
-        // Must be called directly from user's click.
-        const browserPermission = await Notification.requestPermission();
+        const permission = await Notification.requestPermission();
 
-        if (browserPermission !== 'granted') {
-            showToast('Please choose Allow in the browser notification popup');
+        if (permission !== 'granted') {
+            showToastSafe('Please choose Allow to enable notifications');
             return;
         }
 
@@ -1129,46 +1166,65 @@ async function requestOneSignalPermission() {
                     await OneSignal.User.PushSubscription.optIn();
                 }
 
-                // Give OneSignal a moment to create the subscription.
-                setTimeout(async function() {
-                    if (
-                        OneSignal.User &&
-                        OneSignal.User.PushSubscription &&
-                        typeof OneSignal.User.PushSubscription.optIn === 'function'
-                    ) {
-                        await OneSignal.User.PushSubscription.optIn();
-                    }
-                    checkOneSignalStatus();
-                }, 1800);
-
-                localStorage.setItem('ma_plast_push_permission_seen', 'yes');
-                hideOneSignalPrompt();
-                updateOneSignalPromptState();
-                showToast('Notifications enabled successfully');
+                localStorage.setItem('ma_plast_custom_push_seen', 'yes');
+                hideMaPlastPushPrompt();
+                updatePushPromptStatus();
+                showToastSafe('Notifications enabled');
             } catch (error) {
-                console.warn('[OneSignal] optIn failed', error);
-                showToast('Permission allowed. Refresh and press Allow again.');
+                console.warn('[MA PLAST Push] optIn failed', error);
+                showToastSafe('Permission allowed. Refresh and try again.');
             }
         });
     } catch (error) {
-        console.warn('[Notification] Permission failed', error);
-        showToast('Notification permission failed');
-        showBlockedPermissionHelp();
+        console.warn('[MA PLAST Push] permission failed', error);
+        showToastSafe('Notification permission failed');
     }
 }
 
-function showBlockedPermissionHelp() {
-    let box = document.getElementById('pushPermissionHelp');
-    if (!box) {
-        box = document.createElement('div');
-        box.id = 'pushPermissionHelp';
-        box.className = 'push-permission-help';
-        box.innerHTML = `
-            <button class="push-help-close" onclick="document.getElementById('pushPermissionHelp').remove()"><i class="fas fa-times"></i></button>
-            <h4>Enable notifications manually</h4>
-            <p>Click the lock/settings icon beside the URL, open Site settings, set Notifications to Allow, then refresh the page and try again.</p>
+function showMaPlastPermissionHelp() {
+    let help = document.getElementById('maPlastPushHelp');
+    if (!help) {
+        help = document.createElement('div');
+        help.id = 'maPlastPushHelp';
+        help.className = 'ma-push-help';
+        help.innerHTML = `
+            <button type="button" onclick="document.getElementById('maPlastPushHelp').remove()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h4>Notifications are blocked</h4>
+            <p>Click the lock/settings icon beside the website URL, open Site settings, set Notifications to Allow, then refresh.</p>
         `;
-        document.body.appendChild(box);
+        document.body.appendChild(help);
     }
-    box.classList.add('show');
+    help.classList.add('show');
+}
+
+function updatePushPromptStatus() {
+    const icon = document.querySelector('.navbar-notification-link');
+    const isGranted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+    if (icon) icon.classList.toggle('push-enabled', isGranted);
+}
+
+function showToastSafe(message) {
+    if (typeof showToast === 'function') {
+        showToast(message);
+    } else {
+        console.log(message);
+    }
+}
+
+function checkOneSignalStatus() {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+        const status = {
+            browserPermission: typeof Notification !== 'undefined' ? Notification.permission : 'not-supported',
+            oneSignalId: OneSignal.User ? OneSignal.User.onesignalId : null,
+            pushSubscriptionId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
+            token: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
+            optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null,
+            serviceWorkerController: navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null
+        };
+        console.log('[OneSignal Status]', status);
+        return status;
+    });
 }

@@ -3,185 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OneSignal Check | MA PLAST</title>
+  <title>OneSignal No Duplicate Check | MA PLAST</title>
   <meta name="robots" content="noindex,nofollow" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:Arial,sans-serif; background:#f4f4f4; color:#000; padding:24px; }
+    .box { max-width:950px; margin:40px auto; background:#fff; border-radius:22px; border:1px solid #ddd; padding:26px; box-shadow:0 20px 60px rgba(0,0,0,.08); }
+    h1 { margin-top:0; font-size:34px; }
+    p { color:#444; line-height:1.7; font-size:18px; }
+    .warn { background:#fff3cd; border:1px solid #ffec99; padding:14px; border-radius:14px; margin:16px 0; }
+    .buttons { display:flex; gap:12px; flex-wrap:wrap; margin:20px 0; }
+    button, a.button { background:#000; color:#fff; border:0; border-radius:999px; padding:14px 22px; font-weight:800; cursor:pointer; text-decoration:none; display:inline-flex; font-size:15px; }
+    pre { background:#111; color:#fff; padding:18px; border-radius:16px; overflow:auto; direction:ltr; text-align:left; min-height:160px; white-space:pre-wrap; word-break:break-word; }
+  </style>
 
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-  <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      try {
+    <!-- OneSignal Web Push SDK - custom pre-prompt mode -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "a4aee757-dd1f-4247-8ac7-ad5eaee17ea5",
-          serviceWorkerPath: "service-worker.js",
+          serviceWorkerPath: "OneSignalSDKWorker.js",
+          serviceWorkerUpdaterPath: "OneSignalSDKUpdaterWorker.js",
           serviceWorkerParam: { scope: "/" },
           notifyButton: { enable: false },
           autoResubscribe: true
         });
-        window.__osReady = true;
-      } catch (error) {
-        window.__osInitError = error.message || String(error);
-      }
-    });
-  </script>
+      });
+    </script>
 
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      color: #000;
-      padding: 24px;
-    }
-    .box {
-      max-width: 900px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 22px;
-      border: 1px solid #ddd;
-      padding: 26px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.08);
-    }
-    h1 { margin-top: 0; font-size: 34px; }
-    p { color: #444; line-height: 1.7; font-size: 18px; }
-    .warn {
-      background:#fff3cd;
-      border:1px solid #ffec99;
-      padding:14px;
-      border-radius:14px;
-      margin:16px 0;
-      font-size: 16px;
-    }
-    .buttons { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
-    button, a.button {
-      background:#000;
-      color:#fff;
-      border:0;
-      border-radius:999px;
-      padding:14px 22px;
-      font-weight:800;
-      cursor:pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-    }
-    button:active, a.button:active { transform: scale(.98); }
-    pre {
-      background:#111;
-      color:#fff;
-      padding:18px;
-      border-radius:16px;
-      overflow:auto;
-      direction:ltr;
-      text-align:left;
-      min-height: 120px;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-  </style>
 </head>
 <body>
   <div class="box">
-    <h1>MA PLAST Notification Setup Check</h1>
-    <p>اضغط Force Subscribe، ثم اضغط Check Status. هذه الصفحة مستقلة ولا تعتمد على ملفات التطبيق الأخرى.</p>
-    <div class="warn">
-      لو الإذن Blocked: اضغط علامة القفل بجانب الرابط، ثم Site settings، ثم Notifications = Allow، وبعدها Refresh.
-    </div>
-
+    <h1>MA PLAST OneSignal No Duplicate Check</h1>
+    <p>هذه النسخة تستخدم MA PLAST custom prompt فقط، ثم يظهر طلب المتصفح الحقيقي بعد ضغط Enable.</p>
+    <div class="warn">بعد رفع هذه النسخة: اضغط Reset Old Workers مرة واحدة، ثم Refresh، ثم Allow من OneSignal فقط.</div>
     <div class="buttons">
-      <button id="forceBtn" type="button">Force Subscribe</button>
-      <button id="checkBtn" type="button">Check Status</button>
-      <button id="resetBtn" type="button">Reset Service Worker</button>
+      <button id="resetBtn" type="button">Reset Old Workers</button>
+      <button id="statusBtn" type="button">Check Status</button>
       <a class="button" href="index.html">Back to App</a>
     </div>
-
     <pre id="result">Waiting...</pre>
   </div>
 
 <script>
 (function () {
   const result = document.getElementById('result');
-  const forceBtn = document.getElementById('forceBtn');
-  const checkBtn = document.getElementById('checkBtn');
   const resetBtn = document.getElementById('resetBtn');
+  const statusBtn = document.getElementById('statusBtn');
 
   function write(value) {
-    if (typeof value === 'string') {
-      result.textContent = value;
-    } else {
-      result.textContent = JSON.stringify(value, null, 2);
-    }
+    result.textContent = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
   }
 
-  async function forceSubscribe() {
-    try {
-      if (!('Notification' in window)) {
-        write('Notifications are not supported in this browser.');
-        return;
-      }
-
-      if (Notification.permission === 'denied') {
-        write('BLOCKED: Notifications are blocked. Click the lock/settings icon beside the URL, set Notifications to Allow, then refresh.');
-        return;
-      }
-
-      const permission = await Notification.requestPermission();
-
-      if (permission !== 'granted') {
-        write('Permission result: ' + permission + '. You must choose Allow.');
-        return;
-      }
-
-      write('Browser permission granted. Waiting for OneSignal...');
-
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        try {
-          if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optIn) {
-            await OneSignal.User.PushSubscription.optIn();
-          }
-
-          setTimeout(checkStatus, 1800);
-        } catch (error) {
-          write('OneSignal optIn error: ' + (error.message || String(error)));
-        }
-      });
-    } catch (error) {
-      write('Force Subscribe Error: ' + (error.message || String(error)));
-    }
-  }
-
-  function checkStatus() {
-    try {
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        try {
-          const status = {
-            pageLoaded: true,
-            oneSignalReady: Boolean(window.__osReady),
-            oneSignalInitError: window.__osInitError || null,
-            currentUrl: location.href,
-            browserPermission: ('Notification' in window) ? Notification.permission : 'not-supported',
-            oneSignalId: OneSignal.User ? OneSignal.User.onesignalId : null,
-            pushSubscriptionId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
-            token: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
-            optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null,
-            serviceWorkerController: navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null
-          };
-          write(status);
-        } catch (innerError) {
-          write('Check inner error: ' + (innerError.message || String(innerError)));
-        }
-      });
-    } catch (error) {
-      write('Check Status Error: ' + (error.message || String(error)));
-    }
-  }
-
-  async function resetServiceWorker() {
+  async function resetOldWorkers() {
     try {
       if ('serviceWorker' in navigator) {
         const regs = await navigator.serviceWorker.getRegistrations();
@@ -189,22 +65,42 @@
           await reg.unregister();
         }
       }
-
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
       }
-
-      write('Service worker and cache cleared. Now refresh this page, then press Force Subscribe.');
+      write('Old service workers and caches cleared. Now refresh this page and open the app again.');
     } catch (error) {
-      write('Reset Error: ' + (error.message || String(error)));
+      write('Reset error: ' + (error.message || String(error)));
     }
   }
 
-  forceBtn.addEventListener('click', forceSubscribe);
-  checkBtn.addEventListener('click', checkStatus);
-  resetBtn.addEventListener('click', resetServiceWorker);
+  async function checkStatus() {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      const registrations = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistrations() : [];
+      const status = {
+        oneSignalReady: Boolean(window.__osReady),
+        oneSignalInitError: window.__osInitError || null,
+        browserPermission: ('Notification' in window) ? Notification.permission : 'not-supported',
+        oneSignalId: OneSignal.User ? OneSignal.User.onesignalId : null,
+        pushSubscriptionId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
+        token: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
+        optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null,
+        controller: navigator.serviceWorker && navigator.serviceWorker.controller ? navigator.serviceWorker.controller.scriptURL : null,
+        registrations: registrations.map(r => ({
+          scope: r.scope,
+          active: r.active ? r.active.scriptURL : null,
+          waiting: r.waiting ? r.waiting.scriptURL : null,
+          installing: r.installing ? r.installing.scriptURL : null
+        }))
+      };
+      write(status);
+    });
+  }
 
+  resetBtn.addEventListener('click', resetOldWorkers);
+  statusBtn.addEventListener('click', checkStatus);
   setTimeout(checkStatus, 3000);
 })();
 </script>
