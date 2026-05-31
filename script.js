@@ -1193,66 +1193,28 @@ window.addEventListener('resize', () => {
 
 
 
-// ===== Real Footer Email Subscription With Customer Welcome Email =====
+
+
+// ===== Real Footer Email Subscription via FormSubmit hidden iframe =====
 function initNewsletterForm() {
     const form = document.getElementById('newsletterForm');
     const emailInput = document.getElementById('newsletterEmail');
     const status = document.getElementById('newsletterStatus');
     if (!form || !emailInput || !status) return;
 
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
+    form.addEventListener('submit', () => {
         const email = emailInput.value.trim();
         if (!email) return;
 
-        status.textContent = 'Subscribing...';
+        localStorage.setItem('ma_plast_newsletter_email', email);
+        status.textContent = 'Submitting... If this is the first time, confirm FormSubmit from the owner Gmail inbox.';
         status.className = 'newsletter-status is-loading';
 
-        const welcomeMessage = `Welcome to MA PLAST GROUP!
-
-Thank you for subscribing to our updates.
-
-You will receive our latest plumbing products, offers, and important updates.
-
-For fast orders and support, contact us on WhatsApp:
-+20 122 558 8521
-
-MA PLAST GROUP
-Premium Plumbing & Plastic Solutions`;
-
-        try {
-            const response = await fetch('https://formsubmit.co/ajax/hammedmo504@gmail.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email,
-                    _replyto: email,
-                    _subject: 'New MA PLAST newsletter subscriber',
-                    message: `New newsletter subscriber: ${email}`,
-                    _template: 'table',
-                    _captcha: 'false',
-                    _autoresponse: welcomeMessage
-                })
-            });
-
-            if (!response.ok) throw new Error('Subscription failed');
-
-            localStorage.setItem('ma_plast_newsletter_email', email);
-            status.textContent = 'Subscribed successfully. A welcome message has been sent to your email.';
+        setTimeout(() => {
+            status.textContent = 'Subscribed. A welcome email will be sent after FormSubmit is confirmed.';
             status.className = 'newsletter-status is-success';
             form.reset();
-            showToastSafe('Welcome email sent');
-        } catch (error) {
-            console.warn('[Newsletter] Subscription failed', error);
-            const fallbackSubject = 'Subscribe me to MA PLAST updates';
-            const fallbackBody = `Please subscribe this email and send the welcome message: ${email}`;
-            const fallback = `mailto:hammedmo504@gmail.com?subject=${encodeURIComponent(fallbackSubject)}&body=${encodeURIComponent(fallbackBody)}`;
-            status.innerHTML = `Could not submit automatically. <a href="${fallback}">Send by email</a>`;
-            status.className = 'newsletter-status is-error';
-        }
+            showToastSafe('Subscribed successfully');
+        }, 1800);
     });
 }

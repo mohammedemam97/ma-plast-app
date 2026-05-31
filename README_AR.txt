@@ -150,3 +150,11 @@ Email Update:
 - تم تغيير إيميل استقبال الاشتراكات ورسائل الموقع إلى:
   hammedmo504@gmail.com
 - مهم: أول استخدام مع FormSubmit قد يحتاج تأكيد من Gmail.
+
+
+FormSubmit Iframe Fix:
+- تم إصلاح اشتراك الإيميل باستخدام form POST حقيقي إلى FormSubmit بدل fetch/ajax.
+- الإرسال يتم إلى: hammedmo504@gmail.com
+- يتم إرسال رسالة ترحيب للعميل عبر _autoresponse.
+- أول إرسال يتطلب فتح Gmail (hammedmo504@gmail.com) والضغط على رسالة تأكيد FormSubmit.
+- بعد التأكيد، ستصل رسائل الترحيب للعملاء تلقائيًا.
