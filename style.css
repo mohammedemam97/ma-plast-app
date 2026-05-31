@@ -2676,103 +2676,6 @@ img { max-width: 100%; display: block; }
 }
 
 
-/* ===== Navbar Notification Icon - same colors as cart icon ===== */
-.navbar-notification-link {
-    position: relative;
-    cursor: pointer;
-    color: #fff;
-    font-size: 1rem;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.navbar-notification-link:hover {
-    transform: scale(1.1);
-}
-
-.navbar.scrolled .navbar-notification-link {
-    color: #000;
-}
-
-.navbar-notification-link .notification-count {
-    position: absolute;
-    top: -6px;
-    right: -8px;
-    background: #fff;
-    color: #000;
-    font-size: 0.6rem;
-    font-weight: 800;
-    width: 17px;
-    height: 17px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.navbar.scrolled .navbar-notification-link .notification-count {
-    background: #000;
-    color: #fff;
-}
-
-@media (max-width: 768px) {
-    .navbar-notification-link {
-        font-size: 1rem;
-    }
-}
-
-
-
-
-/* ===== Navbar Notification Icon opens notification panel, not page ===== */
-.navbar-notification-link {
-    position: relative;
-    cursor: pointer;
-    color: #fff;
-    font-size: 1rem;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    padding: 0;
-    text-decoration: none;
-    font-family: inherit;
-}
-
-.navbar-notification-link:hover {
-    transform: scale(1.1);
-}
-
-.navbar.scrolled .navbar-notification-link {
-    color: #000;
-}
-
-.navbar-notification-link .notification-count {
-    position: absolute;
-    top: -6px;
-    right: -8px;
-    background: #fff;
-    color: #000;
-    font-size: 0.6rem;
-    font-weight: 800;
-    width: 17px;
-    height: 17px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.navbar.scrolled .navbar-notification-link .notification-count {
-    background: #000;
-    color: #fff;
-}
-
-
 /* ============================================================
    MOBILE ONLY FIX: remove right white space / horizontal overflow
    ============================================================ */
@@ -3067,15 +2970,7 @@ img { max-width: 100%; display: block; }
     line-height: 1.6;
 }
 
-.navbar-notification-link.push-enabled .notification-bell-icon {
-    filter: drop-shadow(0 0 8px rgba(255,255,255,.55));
-}
-
-.navbar.scrolled .navbar-notification-link.push-enabled .notification-bell-icon {
-    filter: drop-shadow(0 0 8px rgba(0,0,0,.25));
-}
-
-@media (max-width: 768px) {
+.navbar.scrolled @media (max-width: 768px) {
     .ma-push-prompt {
         padding-top: 5.4rem;
         align-items: flex-start;
@@ -3112,5 +3007,201 @@ img { max-width: 100%; display: block; }
     .ma-push-primary,
     .ma-push-secondary {
         width: 100%;
+    }
+}
+
+
+/* ===== FINAL: Compact MA PLAST Push Prompt ===== */
+.ma-push-prompt {
+    padding-top: 5.35rem;
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.ma-push-card {
+    width: min(420px, calc(100vw - 2rem));
+    grid-template-columns: 46px 1fr;
+    gap: 0.75rem;
+    padding: 0.85rem 0.95rem;
+    border-radius: 22px;
+    box-shadow: 0 18px 54px rgba(0, 0, 0, 0.20);
+}
+
+.ma-push-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    font-size: 1rem;
+}
+
+.ma-push-close {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+}
+
+.ma-push-kicker {
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.1rem;
+}
+
+.ma-push-content h3 {
+    font-size: 1.03rem;
+    line-height: 1.1;
+}
+
+.ma-push-content p {
+    margin: 0.28rem 1.3rem 0.65rem 0;
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.ma-push-actions {
+    gap: 0.42rem;
+}
+
+.ma-push-primary,
+.ma-push-secondary {
+    padding: 0.55rem 0.78rem;
+    font-size: 0.74rem;
+}
+
+.ma-push-note {
+    margin-top: 0.5rem;
+    font-size: 0.66rem;
+}
+
+/* ===== FINAL: Product discounts ===== */
+.product-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.product-discount-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    background: #000;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.6);
+    border-radius: 999px;
+    padding: 0.35rem 0.62rem;
+    font-size: 0.72rem;
+    font-weight: 900;
+    box-shadow: 0 10px 24px rgba(0,0,0,.18);
+}
+
+.product-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.35rem 0 0.15rem;
+}
+
+.product-old-price {
+    color: #8a8a8a;
+    text-decoration: line-through;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.product-price {
+    color: #000;
+    font-weight: 900;
+}
+
+.product-saving {
+    display: inline-flex;
+    width: fit-content;
+    margin-bottom: 0.85rem;
+    padding: 0.24rem 0.55rem;
+    border-radius: 999px;
+    background: #f1f1f1;
+    color: #111;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+/* ===== FINAL: Real newsletter status ===== */
+.newsletter-status {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: rgba(255,255,255,.72);
+}
+
+.newsletter-status.is-success {
+    color: #b7ffcf;
+}
+
+.newsletter-status.is-error {
+    color: #ffd0d0;
+}
+
+.newsletter-status a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .ma-push-prompt {
+        padding-top: 5rem;
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+    }
+
+    .ma-push-card {
+        width: 100%;
+        grid-template-columns: 42px 1fr;
+        border-radius: 20px;
+        padding: 0.78rem;
+    }
+
+    .ma-push-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+    }
+
+    .ma-push-content h3 {
+        font-size: 0.98rem;
+    }
+
+    .ma-push-content p {
+        font-size: 0.74rem;
+        margin-right: 1rem;
+    }
+
+    .ma-push-actions {
+        flex-direction: row;
+    }
+
+    .ma-push-primary,
+    .ma-push-secondary {
+        width: auto;
+        padding: 0.5rem 0.68rem;
+        font-size: 0.7rem;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    .product-discount-badge {
+        top: 10px;
+        left: 10px;
+        font-size: 0.62rem;
+        padding: 0.28rem 0.48rem;
+    }
+
+    .product-old-price,
+    .product-saving {
+        font-size: 0.68rem;
     }
 }

@@ -1,105 +1,35 @@
 // ===== Products =====
 const products = [
-    { id: 1, name: "PVC Pipe 1/2 Inch", price: 25.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 2, name: "PVC Pipe 3/4 Inch", price: 35.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 3, name: "PVC Pipe 1 Inch", price: 48.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 4, name: "PVC Elbow Fitting", price: 18.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 5, name: "PVC Tee Fitting", price: 22.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 6, name: "PVC Coupling", price: 16.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 7, name: "Brass Faucet Mixer", price: 185.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 8, name: "Kitchen Faucet", price: 240.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 9, name: "Bathroom Faucet", price: 210.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 10, name: "Shower Mixer", price: 320.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 11, name: "Shower Head Set", price: 275.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 12, name: "Sink Drain Pipe", price: 45.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 13, name: "Flexible Hose 60cm", price: 38.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 14, name: "Angle Valve", price: 55.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 15, name: "Ball Valve 1/2 Inch", price: 75.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 16, name: "Gate Valve 1 Inch", price: 145.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 17, name: "Water Heater 30L", price: 950.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 18, name: "Water Heater 50L", price: 1200.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 19, name: "Water Heater 80L", price: 1650.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 20, name: "Water Pump 0.5HP", price: 620.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 21, name: "Water Pump 1HP", price: 850.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 22, name: "Pressure Pump", price: 1350.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 23, name: "Toilet Seat Ceramic", price: 450.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 24, name: "Basin Mixer", price: 260.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 25, name: "Floor Drain", price: 65.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 26, name: "Pipe Wrench 12 Inch", price: 95.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 27, name: "Pipe Wrench 18 Inch", price: 145.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 28, name: "Plumber Tape", price: 12.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 29, name: "Thread Seal Tape Pack", price: 35.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 30, name: "Silicone Sealant", price: 68.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 31, name: "PPR Pipe 20mm", price: 42.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 32, name: "PPR Pipe 25mm", price: 58.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 33, name: "PPR Elbow 20mm", price: 14.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 34, name: "PPR Tee 25mm", price: 20.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 35, name: "PPR Coupling 32mm", price: 24.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 36, name: "Drain Cover Stainless", price: 85.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 37, name: "Shattaf Set", price: 160.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 38, name: "Flush Tank", price: 420.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 39, name: "Bathroom Accessories Set", price: 350.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 40, name: "Water Filter Housing", price: 290.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 41, name: "Filter Cartridge", price: 95.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 42, name: "Copper Valve", price: 180.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 43, name: "Chrome Bottle Trap", price: 220.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 44, name: "PVC Solvent Cement", price: 55.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 45, name: "Inspection Chamber Cover", price: 240.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 46, name: "Garden Hose 20m", price: 210.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 47, name: "Hose Connector Set", price: 70.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 48, name: "Sink Mixer Pullout", price: 520.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 49, name: "Thermostatic Mixer", price: 780.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 50, name: "Submersible Pump", price: 1450.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 51, name: "PVC Pipe 1/2 Inch - Pro 2", price: 32.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 52, name: "PVC Pipe 3/4 Inch - Pro 2", price: 42.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 53, name: "PVC Pipe 1 Inch - Pro 2", price: 55.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 54, name: "PVC Elbow Fitting - Pro 2", price: 25.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 55, name: "PVC Tee Fitting - Pro 2", price: 29.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 56, name: "PVC Coupling - Pro 2", price: 23.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 57, name: "Brass Faucet Mixer - Pro 2", price: 192.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 58, name: "Kitchen Faucet - Pro 2", price: 247.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 59, name: "Bathroom Faucet - Pro 2", price: 217.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 60, name: "Shower Mixer - Pro 2", price: 327.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 61, name: "Shower Head Set - Pro 2", price: 282.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 62, name: "Sink Drain Pipe - Pro 2", price: 52.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 63, name: "Flexible Hose 60cm - Pro 2", price: 45.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 64, name: "Angle Valve - Pro 2", price: 62.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 65, name: "Ball Valve 1/2 Inch - Pro 2", price: 82.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 66, name: "Gate Valve 1 Inch - Pro 2", price: 152.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 67, name: "Water Heater 30L - Pro 2", price: 957.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 68, name: "Water Heater 50L - Pro 2", price: 1207.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 69, name: "Water Heater 80L - Pro 2", price: 1657.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 70, name: "Water Pump 0.5HP - Pro 2", price: 627.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 71, name: "Water Pump 1HP - Pro 2", price: 857.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 72, name: "Pressure Pump - Pro 2", price: 1357.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 73, name: "Toilet Seat Ceramic - Pro 2", price: 457.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 74, name: "Basin Mixer - Pro 2", price: 267.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 75, name: "Floor Drain - Pro 2", price: 72.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 76, name: "Pipe Wrench 12 Inch - Pro 2", price: 102.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 77, name: "Pipe Wrench 18 Inch - Pro 2", price: 152.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 78, name: "Plumber Tape - Pro 2", price: 19.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 79, name: "Thread Seal Tape Pack - Pro 2", price: 42.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 80, name: "Silicone Sealant - Pro 2", price: 75.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 81, name: "PPR Pipe 20mm - Pro 2", price: 49.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 82, name: "PPR Pipe 25mm - Pro 2", price: 65.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 83, name: "PPR Elbow 20mm - Pro 2", price: 21.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 84, name: "PPR Tee 25mm - Pro 2", price: 27.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 85, name: "PPR Coupling 32mm - Pro 2", price: 31.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 86, name: "Drain Cover Stainless - Pro 2", price: 92.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 87, name: "Shattaf Set - Pro 2", price: 167.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 88, name: "Flush Tank - Pro 2", price: 427.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 89, name: "Bathroom Accessories Set - Pro 2", price: 357.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 90, name: "Water Filter Housing - Pro 2", price: 297.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 91, name: "Filter Cartridge - Pro 2", price: 102.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 92, name: "Copper Valve - Pro 2", price: 187.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
-    { id: 93, name: "Chrome Bottle Trap - Pro 2", price: 227.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
-    { id: 94, name: "PVC Solvent Cement - Pro 2", price: 62.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
-    { id: 95, name: "Inspection Chamber Cover - Pro 2", price: 247.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
-    { id: 96, name: "Garden Hose 20m - Pro 2", price: 217.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
-    { id: 97, name: "Hose Connector Set - Pro 2", price: 77.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
-    { id: 98, name: "Sink Mixer Pullout - Pro 2", price: 527.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
-    { id: 99, name: "Thermostatic Mixer - Pro 2", price: 787.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
-    { id: 100, name: "Submersible Pump - Pro 2", price: 1457.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" }
+    { id: 1, name: "PVC Pipe 1/2 Inch", price: 25.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop", discount: 10 },
+    { id: 2, name: "PVC Pipe 3/4 Inch", price: 35.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop", discount: 15 },
+    { id: 3, name: "PVC Pipe 1 Inch", price: 48.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop", discount: 20 },
+    { id: 4, name: "PVC Elbow Fitting", price: 18.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop", discount: 12 },
+    { id: 5, name: "PVC Tee Fitting", price: 22.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop", discount: 18 },
+    { id: 6, name: "PVC Coupling", price: 16.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop", discount: 8 },
+    { id: 7, name: "Brass Faucet Mixer", price: 185.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop", discount: 22 },
+    { id: 8, name: "Kitchen Faucet", price: 240.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop", discount: 25 },
+    { id: 9, name: "Bathroom Faucet", price: 210.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop", discount: 17 },
+    { id: 10, name: "Shower Mixer", price: 320.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop", discount: 30 },
+    { id: 11, name: "Shower Head Set", price: 275.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop", discount: 14 },
+    { id: 12, name: "Sink Drain Pipe", price: 45.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop", discount: 11 },
+    { id: 13, name: "Flexible Hose 60cm", price: 38.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop", discount: 9 },
+    { id: 14, name: "Angle Valve", price: 55.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop", discount: 16 },
+    { id: 15, name: "Ball Valve 1/2 Inch", price: 75.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop", discount: 21 },
+    { id: 16, name: "Gate Valve 1 Inch", price: 145.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop", discount: 13 },
+    { id: 17, name: "Water Heater 30L", price: 950.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop", discount: 24 },
+    { id: 18, name: "Water Heater 50L", price: 1200.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop", discount: 19 },
+    { id: 19, name: "Water Heater 80L", price: 1650.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop", discount: 26 },
+    { id: 20, name: "Water Pump 0.5HP", price: 620.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop", discount: 15 },
+    { id: 21, name: "Water Pump 1HP", price: 850.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop", discount: 12 },
+    { id: 22, name: "Pressure Pump", price: 1350.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop", discount: 20 },
+    { id: 23, name: "Toilet Seat Ceramic", price: 450.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop", discount: 18 },
+    { id: 24, name: "Basin Mixer", price: 260.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop", discount: 10 },
+    { id: 25, name: "Floor Drain", price: 65.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop", discount: 23 },
+    { id: 26, name: "Pipe Wrench 12 Inch", price: 95.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop", discount: 14 },
+    { id: 27, name: "Pipe Wrench 18 Inch", price: 145.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop", discount: 17 },
+    { id: 28, name: "Plumber Tape", price: 12.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop", discount: 8 },
+    { id: 29, name: "Thread Seal Tape Pack", price: 35.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop", discount: 15 },
+    { id: 30, name: "Silicone Sealant", price: 68.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop", discount: 25 }
 ];
 
 let cart = JSON.parse(localStorage.getItem('ma_plast_cart_v1')) || [];
@@ -120,8 +50,13 @@ const whatsappBtn = document.getElementById('whatsappBtn');
 const paginationEl = document.getElementById('pagination');
 const productsCountEl = document.getElementById('productsCount');
 
-const PRODUCTS_PER_PAGE = 8;
+const DESKTOP_PRODUCTS_PER_PAGE = 8;
+const MOBILE_PRODUCTS_PER_PAGE = 6;
 let currentPage = 1;
+
+function getProductsPerPage() {
+    return window.innerWidth <= 768 ? MOBILE_PRODUCTS_PER_PAGE : DESKTOP_PRODUCTS_PER_PAGE;
+}
 const mobileMenuIcon = document.querySelector('.mobile-menu-btn i');
 
 function setMobileMenuIcon(isOpen) {
@@ -139,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initActiveNav();
     initScrollReveal();
     initMaPlastPushPrompt();
-    initNotificationsPanelOnly();
+    initNewsletterForm();
     initAboutImageReveal();
 });
 
@@ -232,23 +167,34 @@ function showToast(msg) {
     setTimeout(() => toast.classList.remove('show'), 2000);
 }
 
+function getOldPrice(product) {
+    const discount = Number(product.discount || 0);
+    if (!discount) return Number(product.price || 0);
+    return Number(product.price || 0) / (1 - discount / 100);
+}
+
 // ===== Render Products =====
 function renderProducts(page = currentPage) {
     if (!productsGrid) return;
 
-    const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
+    const totalPages = Math.ceil(products.length / getProductsPerPage());
     currentPage = Math.min(Math.max(page, 1), totalPages);
 
-    const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    const end = start + PRODUCTS_PER_PAGE;
+    const start = (currentPage - 1) * getProductsPerPage();
+    const end = start + getProductsPerPage();
     const visibleProducts = products.slice(start, end);
 
     productsGrid.innerHTML = visibleProducts.map((p, i) => `
         <div class="product-card" style="animation-delay: ${i * 0.07}s">
+            <div class="product-discount-badge">-${p.discount || 0}%</div>
             <div class="product-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>
             <div class="product-info">
                 <h3 class="product-name">${p.name}</h3>
-                <p class="product-price">${p.price.toFixed(2)} EGP</p>
+                <div class="product-pricing">
+                    <span class="product-old-price">${getOldPrice(p).toFixed(2)} EGP</span>
+                    <span class="product-price">${p.price.toFixed(2)} EGP</span>
+                </div>
+                <div class="product-saving">Save ${(getOldPrice(p) - p.price).toFixed(2)} EGP</div>
                 <button class="add-to-cart" onclick="addToCart(${p.id})">
                     <i class="fas fa-cart-plus"></i> Add to Cart
                 </button>
@@ -262,6 +208,10 @@ function renderProducts(page = currentPage) {
         const first = start + 1;
         const last = Math.min(end, products.length);
         productsCountEl.textContent = `Showing ${first}-${last} of ${products.length} products`;
+        const perPageText = document.getElementById('productsPerPageText');
+        if (perPageText) {
+            perPageText.innerHTML = `<i class="fas fa-layer-group"></i> ${getProductsPerPage()} products per page`;
+        }
     }
 }
 
@@ -292,7 +242,7 @@ function renderPagination(totalPages) {
 }
 
 function goToPage(page) {
-    const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
+    const totalPages = Math.ceil(products.length / getProductsPerPage());
     if (page < 1 || page > totalPages) return;
     renderProducts(page);
     const productsSection = document.getElementById('products');
@@ -1226,5 +1176,83 @@ function checkOneSignalStatus() {
         };
         console.log('[OneSignal Status]', status);
         return status;
+    });
+}
+
+
+let lastProductsPerPage = getProductsPerPage();
+window.addEventListener('resize', () => {
+    const nowProductsPerPage = getProductsPerPage();
+    if (nowProductsPerPage !== lastProductsPerPage) {
+        lastProductsPerPage = nowProductsPerPage;
+        currentPage = 1;
+        renderProducts();
+    }
+});
+
+
+
+
+// ===== Real Footer Email Subscription With Customer Welcome Email =====
+function initNewsletterForm() {
+    const form = document.getElementById('newsletterForm');
+    const emailInput = document.getElementById('newsletterEmail');
+    const status = document.getElementById('newsletterStatus');
+    if (!form || !emailInput || !status) return;
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const email = emailInput.value.trim();
+        if (!email) return;
+
+        status.textContent = 'Subscribing...';
+        status.className = 'newsletter-status is-loading';
+
+        const welcomeMessage = `Welcome to MA PLAST GROUP!
+
+Thank you for subscribing to our updates.
+
+You will receive our latest plumbing products, offers, and important updates.
+
+For fast orders and support, contact us on WhatsApp:
++20 122 558 8521
+
+MA PLAST GROUP
+Premium Plumbing & Plastic Solutions`;
+
+        try {
+            const response = await fetch('https://formsubmit.co/ajax/hammedmo504@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    _replyto: email,
+                    _subject: 'New MA PLAST newsletter subscriber',
+                    message: `New newsletter subscriber: ${email}`,
+                    _template: 'table',
+                    _captcha: 'false',
+                    _autoresponse: welcomeMessage
+                })
+            });
+
+            if (!response.ok) throw new Error('Subscription failed');
+
+            localStorage.setItem('ma_plast_newsletter_email', email);
+            status.textContent = 'Subscribed successfully. A welcome message has been sent to your email.';
+            status.className = 'newsletter-status is-success';
+            form.reset();
+            showToastSafe('Welcome email sent');
+        } catch (error) {
+            console.warn('[Newsletter] Subscription failed', error);
+            const fallbackSubject = 'Subscribe me to MA PLAST updates';
+            const fallbackBody = `Please subscribe this email and send the welcome message: ${email}`;
+            const fallback = `mailto:hammedmo504@gmail.com?subject=${encodeURIComponent(fallbackSubject)}&body=${encodeURIComponent(fallbackBody)}`;
+            status.innerHTML = `Could not submit automatically. <a href="${fallback}">Send by email</a>`;
+            status.className = 'newsletter-status is-error';
+        }
     });
 }

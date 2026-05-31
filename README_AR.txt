@@ -120,3 +120,33 @@ Custom Push Prompt Update:
 - يجب إيقاف Auto Prompt داخل OneSignal Dashboard لتجنب ظهور طلبين:
   Settings > Push & In-App > Web Push > Permission Prompt Setup > Auto Prompt OFF
 - لا ترسل الإشعارات مرتين لأن OneSignal worker فقط هو المستخدم.
+
+
+Final Update v2:
+- تم حذف أيقونة الإشعارات من داخل التطبيق.
+- تم تثبيت عدد المنتجات على 30 منتج فقط.
+- الموبايل يعرض 6 منتجات في الصفحة، والـ PC كما هو 8 منتجات في الصفحة.
+- تم إضافة خصومات داخل كارت المنتج مع السعر القديم والتوفير.
+- تم حذف Contact Information من الصفحة الرئيسية فقط.
+- تم تصغير وتحسين شكل رسالة تفعيل الإشعارات.
+- تم تفعيل اشتراك الإيميل في الفوتر عبر FormSubmit إلى hammedmo504@gmail.com.
+- ملاحظة FormSubmit: أول إرسال قد يحتاج تأكيد البريد المستلم من inbox.
+
+
+Welcome Email Update:
+- تم تعديل اشتراك الإيميل في الفوتر بحيث العميل يستقبل رسالة ترحيب على الإيميل الذي يكتبه.
+- يتم الإرسال عبر FormSubmit باستخدام _autoresponse.
+- مهم: أول مرة قد يحتاج hammedmo504@gmail.com إلى تأكيد FormSubmit من رسالة تصل للبريد.
+- بعد التأكيد، العملاء سيستقبلون رسالة الترحيب تلقائيًا.
+
+
+Email Update:
+- تم تغيير إيميل استقبال الاشتراكات ورسائل الموقع إلى:
+  hammedmo504@gmail.com
+- مهم: أول استخدام مع FormSubmit قد يحتاج تأكيد من Gmail.
+
+
+Email Update:
+- تم تغيير إيميل استقبال الاشتراكات ورسائل الموقع إلى:
+  hammedmo504@gmail.com
+- مهم: أول استخدام مع FormSubmit قد يحتاج تأكيد من Gmail.
