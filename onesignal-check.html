@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneSignal Check | MA PLAST</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "a4aee757-dd1f-4247-8ac7-ad5eaee17ea5",
+        serviceWorkerPath: "OneSignalSDKWorker.js",
+        serviceWorkerUpdaterPath: "OneSignalSDKUpdaterWorker.js",
+        serviceWorkerParam: { scope: "/" },
+        notifyButton: { enable: false }
+      });
+    });
+  </script>
+  <style>
+    body { background:#f5f5f5; color:#000; font-family:Inter, Arial, sans-serif; padding:32px; }
+    .box { max-width:760px; margin:40px auto; background:white; border:1px solid #ddd; border-radius:24px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,.08); }
+    h1 { margin-bottom:10px; }
+    p { color:#555; line-height:1.7; }
+    button { background:#000; color:#fff; border:0; border-radius:999px; padding:14px 22px; font-weight:800; cursor:pointer; margin:6px; }
+    pre { background:#111; color:#fff; border-radius:18px; padding:18px; overflow:auto; direction:ltr; text-align:left; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>MA PLAST OneSignal Check</h1>
+    <p>Use this private page after upload. Press Subscribe, allow notifications, then press Check Status.</p>
+    <button onclick="subscribeNow()">Subscribe / Allow</button>
+    <button onclick="checkStatus()">Check Status</button>
+    <a href="index.html"><button>Back to App</button></a>
+    <pre id="result">Waiting...</pre>
+  </div>
+
+  <script>
+    async function subscribeNow() {
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        try {
+          await OneSignal.Notifications.requestPermission();
+          if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optIn) {
+            await OneSignal.User.PushSubscription.optIn();
+          }
+          checkStatus();
+        } catch (e) {
+          document.getElementById('result').textContent = 'Error: ' + e.message;
+        }
+      });
+    }
+
+    async function checkStatus() {
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        const status = {
+          browserPermission: Notification.permission,
+          oneSignalId: OneSignal.User ? OneSignal.User.onesignalId : null,
+          pushSubscriptionId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
+          token: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
+          optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null
+        };
+        document.getElementById('result').textContent = JSON.stringify(status, null, 2);
+      });
+    }
+
+    setTimeout(checkStatus, 2500);
+  </script>
+</body>
+</html>

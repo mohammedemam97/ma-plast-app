@@ -68,3 +68,13 @@ OneSignal Web Push Update:
 - الإشعارات الحقيقية تُرسل من OneSignal Dashboard لكل الأجهزة التي وافقت على الإشعارات.
 - تم إضافة prompt احترافي للمستخدم.
 - تم دمج OneSignal داخل service-worker.js.
+
+
+OneSignal Fix v2:
+- تمت إضافة OneSignalSDKWorker.js و OneSignalSDKUpdaterWorker.js في root.
+- تم ضبط OneSignal init لاستخدام worker الافتراضي.
+- تم إضافة optIn بعد السماح بالإشعارات.
+- صفحة فحص خاصة:
+  /onesignal-check.html
+- App ID:
+  a4aee757-dd1f-4247-8ac7-ad5eaee17ea5

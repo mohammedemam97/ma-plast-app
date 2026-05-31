@@ -1031,3 +1031,52 @@ function addLocalNotification(notification) {
     if (typeof renderNotificationListOnly === 'function') renderNotificationListOnly();
     if (typeof updateNotificationBadgeOnly === 'function') updateNotificationBadgeOnly();
 }
+
+
+async function requestOneSignalPermission() {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+        try {
+            await OneSignal.Notifications.requestPermission();
+
+            // After browser permission is granted, force OneSignal opt-in.
+            if (
+                OneSignal.User &&
+                OneSignal.User.PushSubscription &&
+                typeof OneSignal.User.PushSubscription.optIn === 'function'
+            ) {
+                await OneSignal.User.PushSubscription.optIn();
+            }
+
+            localStorage.setItem('ma_plast_push_permission_seen', 'yes');
+            hideOneSignalPrompt();
+            updateOneSignalPromptState();
+
+            if (typeof showToast === 'function') {
+                showToast('Notifications enabled');
+            }
+        } catch (error) {
+            console.warn('[OneSignal] Permission request failed', error);
+            if (typeof showToast === 'function') {
+                showToast('Notifications permission failed');
+            }
+        }
+    });
+}
+
+
+// ===== OneSignal quick diagnostic helper =====
+function checkOneSignalStatus() {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+        const status = {
+            browserPermission: typeof Notification !== 'undefined' ? Notification.permission : 'not-supported',
+            oneSignalId: OneSignal.User && OneSignal.User.onesignalId ? OneSignal.User.onesignalId : null,
+            pushId: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.id : null,
+            pushToken: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.token : null,
+            optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null
+        };
+        console.log('[OneSignal Status]', status);
+        return status;
+    });
+}
