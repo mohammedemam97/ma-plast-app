@@ -3021,3 +3021,45 @@ img { max-width: 100%; display: block; }
         width: 100%;
     }
 }
+
+
+/* ===== Push permission manual help box ===== */
+.push-permission-help {
+    position: fixed;
+    top: 7rem;
+    right: 1rem;
+    width: min(420px, calc(100vw - 2rem));
+    background: #fff;
+    color: #000;
+    border: 1px solid #ddd;
+    border-radius: 22px;
+    box-shadow: 0 24px 70px rgba(0,0,0,.18);
+    padding: 1.2rem;
+    z-index: 3000;
+    display: none;
+}
+
+.push-permission-help.show {
+    display: block;
+}
+
+.push-permission-help h4 {
+    margin: 0 0 .4rem;
+    font-weight: 900;
+}
+
+.push-permission-help p {
+    margin: 0;
+    color: #555;
+    line-height: 1.6;
+}
+
+.push-help-close {
+    position: absolute;
+    top: .55rem;
+    right: .55rem;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: #777;
+}

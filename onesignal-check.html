@@ -32,7 +32,7 @@
 <body>
   <div class="box">
     <h1>MA PLAST OneSignal Check</h1>
-    <p>Use this private page after upload. Press Subscribe, allow notifications, then press Check Status.</p>
+    <p>Use this private page after upload. Press Subscribe / Allow. If Chrome does not activate, click the lock icon beside the URL and set Notifications to Allow, then refresh.</p>
     <button onclick="subscribeNow()">Subscribe / Allow</button>
     <button onclick="checkStatus()">Check Status</button>
     <a href="index.html"><button>Back to App</button></a>
@@ -44,11 +44,23 @@
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         try {
+          if (Notification.permission === 'denied') {
+            document.getElementById('result').textContent = 'Notifications are blocked. Click the lock/settings icon beside the URL and set Notifications to Allow, then refresh.';
+            return;
+          }
+
           await OneSignal.Notifications.requestPermission();
+
+          if (Notification.permission !== 'granted') {
+            document.getElementById('result').textContent = 'Browser permission is not granted yet. Press Allow in the browser popup.';
+            return;
+          }
+
           if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optIn) {
             await OneSignal.User.PushSubscription.optIn();
           }
-          checkStatus();
+
+          setTimeout(checkStatus, 1200);
         } catch (e) {
           document.getElementById('result').textContent = 'Error: ' + e.message;
         }

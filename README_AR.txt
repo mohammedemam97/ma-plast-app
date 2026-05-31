@@ -78,3 +78,9 @@ OneSignal Fix v2:
   /onesignal-check.html
 - App ID:
   a4aee757-dd1f-4247-8ac7-ad5eaee17ea5
+
+
+OneSignal Click Fix:
+- تم تحسين زر Allow ليستخدم OneSignal permission flow ثم optIn.
+- لو الإشعارات Blocked يظهر للمستخدم تعليمات تفعيلها من إعدادات الموقع.
+- تم تحديث صفحة onesignal-check.html للفحص.

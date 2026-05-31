@@ -1034,12 +1034,32 @@ function addLocalNotification(notification) {
 
 
 async function requestOneSignalPermission() {
+    if (typeof Notification === 'undefined') {
+        showToast('Notifications not supported on this browser');
+        return;
+    }
+
+    if (Notification.permission === 'denied') {
+        showToast('Notifications are blocked. Enable them from browser site settings.');
+        showBlockedPermissionHelp();
+        return;
+    }
+
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
         try {
-            await OneSignal.Notifications.requestPermission();
+            // Official OneSignal permission flow
+            let permissionResult = await OneSignal.Notifications.requestPermission();
 
-            // After browser permission is granted, force OneSignal opt-in.
+            // Chrome sometimes returns undefined; check the real browser permission.
+            const granted = Notification.permission === 'granted' || permissionResult === true;
+
+            if (!granted) {
+                showToast('Please press Allow in the browser notification popup');
+                return;
+            }
+
+            // Force OneSignal opt-in after browser permission is granted.
             if (
                 OneSignal.User &&
                 OneSignal.User.PushSubscription &&
@@ -1052,16 +1072,35 @@ async function requestOneSignalPermission() {
             hideOneSignalPrompt();
             updateOneSignalPromptState();
 
+            setTimeout(function() {
+                checkOneSignalStatus();
+            }, 1200);
+
             if (typeof showToast === 'function') {
-                showToast('Notifications enabled');
+                showToast('Notifications enabled successfully');
             }
         } catch (error) {
             console.warn('[OneSignal] Permission request failed', error);
-            if (typeof showToast === 'function') {
-                showToast('Notifications permission failed');
-            }
+            showToast('Open notification settings and allow notifications');
+            showBlockedPermissionHelp();
         }
     });
+}
+
+function showBlockedPermissionHelp() {
+    let box = document.getElementById('pushPermissionHelp');
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'pushPermissionHelp';
+        box.className = 'push-permission-help';
+        box.innerHTML = `
+            <button class="push-help-close" onclick="document.getElementById('pushPermissionHelp').remove()"><i class="fas fa-times"></i></button>
+            <h4>Enable notifications manually</h4>
+            <p>Click the lock/settings icon beside the website URL, then set Notifications to Allow. After that refresh the page and press Allow again.</p>
+        `;
+        document.body.appendChild(box);
+    }
+    box.classList.add('show');
 }
 
 
@@ -1077,6 +1116,15 @@ function checkOneSignalStatus() {
             optedIn: OneSignal.User && OneSignal.User.PushSubscription ? OneSignal.User.PushSubscription.optedIn : null
         };
         console.log('[OneSignal Status]', status);
+
+        const result = document.getElementById('result');
+        if (result) result.textContent = JSON.stringify(status, null, 2);
+
+        if (status.browserPermission === 'granted' && status.optedIn && status.pushId) {
+            localStorage.setItem('ma_plast_push_permission_seen', 'yes');
+            hideOneSignalPrompt();
+        }
+
         return status;
     });
 }
