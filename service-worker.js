@@ -1,5 +1,5 @@
 // ===== MA PLAST GROUP - Service Worker with Local Notifications =====
-const CACHE_NAME = 'ma-plast-premium-card-v2';
+const CACHE_NAME = 'ma-plast-clean-bw-cards-v1';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
