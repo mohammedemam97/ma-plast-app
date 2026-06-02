@@ -184,45 +184,47 @@ function renderProducts(page = currentPage) {
     const end = start + getProductsPerPage();
     const visibleProducts = products.slice(start, end);
 
-    productsGrid.innerHTML = visibleProducts.map((p, i) => `
-        <div class="product-card compact-premium-card" style="animation-delay: ${i * 0.06}s">
-            <div class="product-image">
-                <img src="${p.image}" alt="${p.name}" loading="lazy">
-                <div class="product-top-badges">
-                    <div class="discount-pill">
-                        <span>SAVE</span>
-                        <strong>${p.discount || 0}%</strong>
+    productsGrid.innerHTML = visibleProducts.map((p, i) => {
+        const oldPrice = getOldPrice(p);
+        const saving = oldPrice - p.price;
+        return `
+        <div class="product-card compact-premium-card minimal-clean-card" style="animation-delay: ${i * 0.06}s">
+            <div class="discount-corner">-${p.discount || 0}%</div>
+
+            <div class="minimal-card-shell">
+                <div class="minimal-main-row">
+                    <div class="minimal-image-wrap">
+                        <div class="product-image">
+                            <img src="${p.image}" alt="${p.name}" loading="lazy">
+                        </div>
                     </div>
-                    <div class="offer-pill">Special Offer</div>
-                </div>
-            </div>
 
-            <div class="product-info">
-                <div class="product-category">${p.category || 'MA PLAST'}</div>
+                    <div class="minimal-details">
+                        <h3 class="product-name">${p.name}</h3>
+                        <div class="product-meta"><i class="fas fa-box"></i> العبوة: <strong>${p.package || 1}</strong></div>
 
-                <div class="product-title-row">
-                    <div class="product-meta"><i class="fas fa-box"></i> العبوة: <strong>${p.package || 1}</strong></div>
-                    <h3 class="product-name">${p.name}</h3>
-                </div>
-
-                <div class="compact-price-row">
-                    <div class="current-price">
-                        <strong>${p.price.toFixed(2)}</strong>
-                        <span>EGP</span>
-                    </div>
-                    <div class="old-price">${getOldPrice(p).toFixed(2)} EGP</div>
-                    <div class="save-value">
-                        <span>You save</span>
-                        <strong>${(getOldPrice(p) - p.price).toFixed(2)} EGP</strong>
+                        <div class="minimal-price-block">
+                            <div class="current-price">
+                                <strong>${p.price.toFixed(2)}</strong>
+                                <span>EGP</span>
+                            </div>
+                            ${Number(p.discount || 0) > 0 ? `<div class="old-price">${oldPrice.toFixed(2)} EGP</div>` : ''}
+                        </div>
                     </div>
                 </div>
 
-                <button class="add-to-cart compact-cart-btn" onclick="addToCart(${p.id})">
+                <div class="save-strip">
+                    <span class="save-strip-icon"><i class="fas fa-coins"></i></span>
+                    <span class="save-strip-label">توفير</span>
+                    <strong>${saving.toFixed(2)} EGP</strong>
+                </div>
+
+                <button class="add-to-cart compact-cart-btn minimal-cart-btn" onclick="addToCart(${p.id})">
                     <i class="fas fa-cart-plus"></i> Add to Cart
                 </button>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 
     renderPagination(totalPages);
 
