@@ -185,32 +185,39 @@ function renderProducts(page = currentPage) {
     const visibleProducts = products.slice(start, end);
 
     productsGrid.innerHTML = visibleProducts.map((p, i) => `
-        <div class="product-card modern-product-card" style="animation-delay: ${i * 0.07}s">
-            <div class="product-badges">
-                <div class="product-discount-badge">
-                    <span class="discount-label">Save</span>
-                    <span class="discount-value">${p.discount || 0}%</span>
+        <div class="product-card compact-premium-card" style="animation-delay: ${i * 0.06}s">
+            <div class="product-image">
+                <img src="${p.image}" alt="${p.name}" loading="lazy">
+                <div class="product-top-badges">
+                    <div class="discount-pill">
+                        <span>SAVE</span>
+                        <strong>${p.discount || 0}%</strong>
+                    </div>
+                    <div class="offer-pill">Special Offer</div>
                 </div>
-                <div class="product-offer-chip"><i class="fas fa-sparkles"></i> Special Offer</div>
             </div>
-            <div class="product-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>
+
             <div class="product-info">
                 <div class="product-category">${p.category || 'MA PLAST'}</div>
-                <h3 class="product-name">${p.name}</h3>
-                <div class="product-meta"><i class="fas fa-box"></i> العبوة: ${p.package || 1}</div>
-                <div class="product-pricing-card">
-                    <div class="pricing-current">
-                        <span class="pricing-caption">Now</span>
-                        <span class="product-price">${p.price.toFixed(2)} <small>EGP</small></span>
+
+                <div class="product-title-row">
+                    <div class="product-meta"><i class="fas fa-box"></i> العبوة: <strong>${p.package || 1}</strong></div>
+                    <h3 class="product-name">${p.name}</h3>
+                </div>
+
+                <div class="compact-price-row">
+                    <div class="current-price">
+                        <strong>${p.price.toFixed(2)}</strong>
+                        <span>EGP</span>
                     </div>
-                    <div class="pricing-divider"></div>
-                    <div class="pricing-before">
-                        <span class="pricing-caption muted">Before</span>
-                        <span class="product-old-price">${getOldPrice(p).toFixed(2)} EGP</span>
+                    <div class="old-price">${getOldPrice(p).toFixed(2)} EGP</div>
+                    <div class="save-value">
+                        <span>You save</span>
+                        <strong>${(getOldPrice(p) - p.price).toFixed(2)} EGP</strong>
                     </div>
                 </div>
-                <div class="product-saving"><i class="fas fa-badge-percent"></i> You save ${(getOldPrice(p) - p.price).toFixed(2)} EGP</div>
-                <button class="add-to-cart" onclick="addToCart(${p.id})">
+
+                <button class="add-to-cart compact-cart-btn" onclick="addToCart(${p.id})">
                     <i class="fas fa-cart-plus"></i> Add to Cart
                 </button>
             </div>
