@@ -186,7 +186,6 @@ function renderProducts(page = currentPage) {
 
     productsGrid.innerHTML = visibleProducts.map((p, i) => {
         const oldPrice = getOldPrice(p);
-        const saving = oldPrice - p.price;
         return `
         <div class="product-card compact-premium-card minimal-clean-card" style="animation-delay: ${i * 0.06}s">
             <div class="discount-corner">-${p.discount || 0}%</div>
@@ -211,12 +210,6 @@ function renderProducts(page = currentPage) {
                             ${Number(p.discount || 0) > 0 ? `<div class="old-price">${oldPrice.toFixed(2)} EGP</div>` : ''}
                         </div>
                     </div>
-                </div>
-
-                <div class="save-strip">
-                    <span class="save-strip-icon"><i class="fas fa-coins"></i></span>
-                    <span class="save-strip-label">توفير</span>
-                    <strong>${saving.toFixed(2)} EGP</strong>
                 </div>
 
                 <button class="add-to-cart compact-cart-btn minimal-cart-btn" onclick="addToCart(${p.id})">
