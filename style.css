@@ -3207,22 +3207,6 @@ img { max-width: 100%; display: block; }
 }
 
 
-/* ===== PDF Logo Branding ===== */
-.logo.brand-logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-}
-
-.logo.brand-logo img {
-    width: 38px;
-    height: 38px;
-    object-fit: contain;
-    border-radius: 10px;
-    background: #fff;
-    padding: 3px;
-}
-
 /* ===== PDF Product List Cards ===== */
 .product-card {
     position: relative;
@@ -3630,5 +3614,64 @@ img { max-width: 100%; display: block; }
     .modern-product-card .product-saving,
     .modern-product-card .product-meta {
         font-size: 0.66rem;
+    }
+}
+
+
+/* ===== Real uploaded MA PLAST logo sizing ===== */
+.logo.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+}
+
+.logo.brand-logo img {
+    width: auto;
+    height: 42px;
+    max-width: 170px;
+    object-fit: contain;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+}
+
+.navbar .logo.brand-logo img {
+    height: 34px;
+    max-width: 145px;
+}
+
+.footer .logo.brand-logo img {
+    height: 48px;
+    max-width: 210px;
+}
+
+.logo.brand-logo span {
+    white-space: nowrap;
+}
+
+.thank-you-logo {
+    width: min(420px, 86vw);
+    height: auto;
+    object-fit: contain;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .navbar .logo.brand-logo img {
+        height: 30px;
+        max-width: 118px;
+    }
+
+    .navbar .logo.brand-logo span {
+        font-size: 0.82rem;
+    }
+
+    .footer .logo.brand-logo img {
+        height: 42px;
+        max-width: 180px;
     }
 }
