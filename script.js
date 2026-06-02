@@ -205,15 +205,15 @@ function renderProducts(page = currentPage) {
                         <div class="minimal-price-block">
                             <div class="current-price">
                                 <strong>${p.price.toFixed(2)}</strong>
-                                <span>EGP</span>
+                                <span>جنيه</span>
                             </div>
-                            ${Number(p.discount || 0) > 0 ? `<div class="old-price">${oldPrice.toFixed(2)} EGP</div>` : ''}
+                            ${Number(p.discount || 0) > 0 ? `<div class="old-price">${oldPrice.toFixed(2)} جنيه</div>` : ''}
                         </div>
                     </div>
                 </div>
 
                 <button class="add-to-cart compact-cart-btn minimal-cart-btn" onclick="addToCart(${p.id})">
-                    <i class="fas fa-cart-plus"></i> Add to Cart
+                    <i class="fas fa-cart-plus"></i> أضف إلى السلة
                 </button>
             </div>
         </div>
@@ -224,10 +224,10 @@ function renderProducts(page = currentPage) {
     if (productsCountEl) {
         const first = start + 1;
         const last = Math.min(end, products.length);
-        productsCountEl.textContent = `Showing ${first}-${last} of ${products.length} products`;
+        productsCountEl.textContent = `عرض ${first}-${last} من ${products.length} منتج`;
         const perPageText = document.getElementById('productsPerPageText');
         if (perPageText) {
-            perPageText.innerHTML = `<i class="fas fa-layer-group"></i> ${getProductsPerPage()} products per page`;
+            perPageText.innerHTML = `<i class="fas fa-layer-group"></i> ${getProductsPerPage()} منتج في الصفحة`;
         }
     }
 }
@@ -314,15 +314,15 @@ function renderCart() {
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
     cartCountEl.textContent = totalItems;
-    totalPriceEl.textContent = total.toFixed(2) + ' EGP';
+    totalPriceEl.textContent = total.toFixed(2) + ' جنيه';
     whatsappBtn.disabled = cart.length === 0;
 
     if (cart.length === 0) {
         cartItems.innerHTML = `
             <div class="cart-empty">
                 <i class="fas fa-shopping-basket"></i>
-                <p>Your cart is empty</p>
-                <a href="#products" class="btn btn-primary btn-sm" onclick="toggleCart()">Start Shopping</a>
+                <p>السلة فارغة</p>
+                <a href="#products" class="btn btn-primary btn-sm" onclick="toggleCart()">ابدأ التسوق</a>
             </div>`;
         return;
     }
@@ -332,7 +332,7 @@ function renderCart() {
             <img src="${item.image}" alt="${item.name}">
             <div class="cart-item-info">
                 <div class="cart-item-name">${item.name}</div>
-                <div class="cart-item-price">${(item.price * item.quantity).toFixed(2)} EGP</div>
+                <div class="cart-item-price">${(item.price * item.quantity).toFixed(2)} جنيه</div>
                 <div class="qty-row">
                     <button class="qty-btn" onclick="updateQty(${item.id}, -1)"><i class="fas fa-minus"></i></button>
                     <span class="qty-val">${item.quantity}</span>
@@ -364,21 +364,21 @@ function closeCart() {
 
 // ===== WhatsApp =====
 function sendWhatsAppOrder() {
-    if (cart.length === 0) { showToast('Cart is empty'); return; }
+    if (cart.length === 0) { showToast('السلة فارغة'); return; }
 
-    let msg = '*MA PLAST GROUP - Order*\n';
+    let msg = '*MA PLAST GROUP - طلب جديد*\n';
     msg += '==================\n\n';
     cart.forEach((item, i) => {
         msg += `${i + 1}. ${item.name}\n`;
-        msg += `   ${item.quantity} x ${item.price.toFixed(2)} = ${(item.price * item.quantity).toFixed(2)} EGP\n\n`;
+        msg += `   ${item.quantity} x ${item.price.toFixed(2)} = ${(item.price * item.quantity).toFixed(2)} جنيه\n\n`;
     });
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
     msg += '==================\n';
-    msg += `*Total: ${total.toFixed(2)} EGP*\n\n`;
-    msg += 'Please confirm. Thank you!';
+    msg += `*الإجمالي: ${total.toFixed(2)} جنيه*\n\n`;
+    msg += 'برجاء تأكيد الطلب، شكرًا لك.';
 
     window.open(`https://wa.me/201225588521?text=${encodeURIComponent(msg)}`, '_blank');
-    showToast('Opening WhatsApp');
+    showToast('جارٍ فتح واتساب');
 }
 
 // ===== Escape =====
@@ -430,7 +430,7 @@ function getNotificationSettings() {
     const defaults = {
         enabled: false,
         title: 'MA PLAST GROUP',
-        body: 'Browse products and send your order instantly via WhatsApp.',
+        body: 'تصفح المنتجات وأرسل طلبك فورًا عبر واتساب.',
         url: '/index.html#products',
         intervalMinutes: 30,
         lastSentAt: 0
@@ -476,7 +476,7 @@ function createNotificationElements() {
         notifToggle.className = 'notification-toggle';
         notifToggle.id = 'notificationToggle';
         notifToggle.setAttribute('onclick', 'toggleNotificationPanel()');
-        notifToggle.setAttribute('aria-label', 'Notifications');
+        notifToggle.setAttribute('aria-label', 'الإشعارات');
         notifToggle.innerHTML = `
             <i class="fas fa-bell notification-bell-icon"></i>
             <span class="notification-count" id="notificationCount" style="display:none">0</span>
@@ -491,11 +491,11 @@ function createNotificationElements() {
     notifPanel.id = 'notificationPanel';
     notifPanel.innerHTML = `
         <div class="notification-panel-header">
-            <h3><i class="fas fa-bell"></i> Notifications</h3>
+            <h3><i class="fas fa-bell"></i> الإشعارات</h3>
             <div class="notification-panel-actions">
                 <a href="notifications.html" title="Notification settings"><i class="fas fa-gear"></i></a>
-                <button onclick="markAllNotificationsRead()" title="Mark all read"><i class="fas fa-check-double"></i></button>
-                <button onclick="toggleNotificationPanel()" title="Close"><i class="fas fa-times"></i></button>
+                <button onclick="markAllNotificationsRead()" title="تعيين الكل كمقروء"><i class="fas fa-check-double"></i></button>
+                <button onclick="toggleNotificationPanel()" title="إغلاق"><i class="fas fa-times"></i></button>
             </div>
         </div>
         <div class="notification-list" id="notificationList"></div>
@@ -720,14 +720,14 @@ function startScheduledNotifications() {
 
 function requestNotificationPermission() {
     if (!('Notification' in window)) {
-        showToast('Notifications not supported');
+        showToast('الإشعارات غير مدعومة في هذا المتصفح');
         return;
     }
 
     Notification.requestPermission().then((permission) => {
         notificationPermission = permission;
         localStorage.setItem('ma_plast_notification_permission', permission);
-        showToast(permission === 'granted' ? 'Notifications enabled' : 'Notifications disabled');
+        showToast(permission === 'granted' ? 'تم تفعيل الإشعارات' : 'تم إيقاف الإشعارات');
     });
 }
 
@@ -772,10 +772,10 @@ function createNotificationPanelOnly() {
     panel.id = 'notificationPanel';
     panel.innerHTML = `
         <div class="notification-panel-header">
-            <h3><i class="fas fa-bell"></i> Notifications</h3>
+            <h3><i class="fas fa-bell"></i> الإشعارات</h3>
             <div class="notification-panel-actions">
-                <button type="button" onclick="markAllNotificationsRead()">Mark all read</button>
-                <button type="button" onclick="clearAllNotifications()">Clear</button>
+                <button type="button" onclick="markAllNotificationsRead()">تعيين الكل كمقروء</button>
+                <button type="button" onclick="clearAllNotifications()">مسح</button>
                 <button type="button" onclick="toggleNotificationPanel()"><i class="fas fa-times"></i></button>
             </div>
         </div>
@@ -910,7 +910,7 @@ function initOneSignalProfessionalPrompt() {
                 updateOneSignalPromptState();
                 if (permission) {
                     addLocalNotification({
-                        title: 'Notifications enabled',
+                        title: 'تم تفعيل الإشعارات',
                         body: 'You will now receive MA PLAST offers and updates.',
                         type: 'system'
                     });
@@ -936,15 +936,15 @@ function createOneSignalPromptUI() {
     prompt.className = 'push-permission-prompt';
     prompt.id = 'pushPermissionPrompt';
     prompt.innerHTML = `
-        <button class="push-prompt-close" onclick="hideOneSignalPrompt()" aria-label="Close"><i class="fas fa-times"></i></button>
+        <button class="push-prompt-close" onclick="hideOneSignalPrompt()" aria-label="إغلاق"><i class="fas fa-times"></i></button>
         <div class="push-prompt-icon"><i class="fas fa-bell"></i></div>
         <div class="push-prompt-content">
-            <h4>Get offers and updates</h4>
-            <p>Enable notifications to receive new products, deals, and order updates from MA PLAST.</p>
+            <h4>استقبل العروض والتحديثات</h4>
+            <p>فعّل الإشعارات ليصلك كل جديد من المنتجات والعروض وتحديثات الطلب من MA PLAST.</p>
         </div>
         <div class="push-prompt-actions">
-            <button type="button" class="push-allow" onclick="requestOneSignalPermission()">Allow</button>
-            <button type="button" class="push-later" onclick="hideOneSignalPrompt()">Later</button>
+            <button type="button" class="push-allow" onclick="requestOneSignalPermission()">سماح</button>
+            <button type="button" class="push-later" onclick="hideOneSignalPrompt()">لاحقًا</button>
         </div>
     `;
     document.body.appendChild(prompt);
@@ -971,7 +971,7 @@ function requestOneSignalPermission() {
             updateOneSignalPromptState();
         } catch (error) {
             console.warn('[OneSignal] Permission request failed', error);
-            showToast('Notifications permission failed');
+            showToast('فشل طلب صلاحية الإشعارات');
         }
     });
 }
@@ -1010,8 +1010,8 @@ function showBlockedPermissionHelp() {
         box.className = 'push-permission-help';
         box.innerHTML = `
             <button class="push-help-close" onclick="document.getElementById('pushPermissionHelp').remove()"><i class="fas fa-times"></i></button>
-            <h4>Enable notifications manually</h4>
-            <p>Click the lock/settings icon beside the website URL, then set Notifications to Allow. After that refresh the page and press Allow again.</p>
+            <h4>تفعيل الإشعارات يدويًا</h4>
+            <p>اضغط على رمز القفل أو الإعدادات بجوار رابط الموقع، ثم غيّر الإشعارات إلى سماح. بعد ذلك حدّث الصفحة واضغط سماح مرة أخرى.</p>
         `;
         document.body.appendChild(box);
     }
@@ -1057,7 +1057,7 @@ function createMaPlastPushPrompt() {
     prompt.id = 'maPlastPushPrompt';
     prompt.innerHTML = `
         <div class="ma-push-card">
-            <button class="ma-push-close" type="button" onclick="dismissMaPlastPushPrompt()" aria-label="Close">
+            <button class="ma-push-close" type="button" onclick="dismissMaPlastPushPrompt()" aria-label="إغلاق">
                 <i class="fas fa-times"></i>
             </button>
 
@@ -1067,20 +1067,20 @@ function createMaPlastPushPrompt() {
 
             <div class="ma-push-content">
                 <span class="ma-push-kicker">MA PLAST GROUP</span>
-                <h3>Stay updated</h3>
-                <p>Enable notifications to receive new plumbing products, offers, and order updates.</p>
+                <h3>ابقَ على اطلاع</h3>
+                <p>فعّل الإشعارات لتصلك أحدث منتجات السباكة والعروض وتحديثات الطلب.</p>
 
                 <div class="ma-push-actions">
                     <button type="button" class="ma-push-primary" onclick="enableMaPlastPush()">
                         <i class="fas fa-bell"></i>
-                        Enable Notifications
+                        تفعيل الإشعارات
                     </button>
                     <button type="button" class="ma-push-secondary" onclick="dismissMaPlastPushPrompt()">
-                        Later
+                        لاحقًا
                     </button>
                 </div>
 
-                <small class="ma-push-note">You can turn this off anytime from your browser settings.</small>
+                <small class="ma-push-note">يمكنك إيقاف ذلك في أي وقت من إعدادات المتصفح.</small>
             </div>
         </div>
     `;
@@ -1104,12 +1104,12 @@ function dismissMaPlastPushPrompt() {
 
 async function enableMaPlastPush() {
     if (typeof Notification === 'undefined') {
-        showToastSafe('Notifications are not supported in this browser');
+        showToastSafe('الإشعارات غير مدعومة في هذا المتصفح');
         return;
     }
 
     if (Notification.permission === 'denied') {
-        showToastSafe('Notifications are blocked. Enable them from browser settings.');
+        showToastSafe('الإشعارات محظورة. فعّلها من إعدادات المتصفح.');
         showMaPlastPermissionHelp();
         return;
     }
@@ -1118,7 +1118,7 @@ async function enableMaPlastPush() {
         const permission = await Notification.requestPermission();
 
         if (permission !== 'granted') {
-            showToastSafe('Please choose Allow to enable notifications');
+            showToastSafe('يرجى اختيار سماح لتفعيل الإشعارات');
             return;
         }
 
@@ -1136,7 +1136,7 @@ async function enableMaPlastPush() {
                 localStorage.setItem('ma_plast_custom_push_seen', 'yes');
                 hideMaPlastPushPrompt();
                 updatePushPromptStatus();
-                showToastSafe('Notifications enabled');
+                showToastSafe('تم تفعيل الإشعارات');
             } catch (error) {
                 console.warn('[MA PLAST Push] optIn failed', error);
                 showToastSafe('Permission allowed. Refresh and try again.');
@@ -1158,8 +1158,8 @@ function showMaPlastPermissionHelp() {
             <button type="button" onclick="document.getElementById('maPlastPushHelp').remove()">
                 <i class="fas fa-times"></i>
             </button>
-            <h4>Notifications are blocked</h4>
-            <p>Click the lock/settings icon beside the website URL, open Site settings, set Notifications to Allow, then refresh.</p>
+            <h4>الإشعارات محظورة</h4>
+            <p>اضغط على رمز القفل أو الإعدادات بجوار رابط الموقع، ثم افتح إعدادات الموقع، وغيّر الإشعارات إلى سماح، وبعدها حدّث الصفحة.</p>
         `;
         document.body.appendChild(help);
     }
@@ -1226,11 +1226,11 @@ function initNewsletterForm() {
         if (!email) return;
 
         localStorage.setItem('ma_plast_newsletter_email', email);
-        status.textContent = 'Submitting...';
+        status.textContent = 'جارٍ الإرسال...';
         status.className = 'newsletter-status is-loading';
 
         setTimeout(() => {
-            status.textContent = 'If this is the first time, confirm FormSubmit from Gmail. After confirmation, welcome emails will be sent automatically.';
+            status.textContent = 'إذا كانت هذه أول مرة، أكّد FormSubmit من Gmail. بعد التأكيد سيتم إرسال رسائل الترحيب تلقائيًا.';
             status.className = 'newsletter-status is-success';
         }, 1000);
     });

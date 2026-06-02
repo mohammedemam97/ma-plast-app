@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backend Notifications | MA PLAST GROUP</title>
+    <title>إعدادات الإشعارات | MA PLAST GROUP</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     <meta name="robots" content="noindex,nofollow">
@@ -12,15 +12,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 
-    <!-- OneSignal Web Push SDK - custom pre-prompt mode -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <!-- تشغيلeSignal Web Push SDK - custom pre-prompt mode -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/تشغيلeSignalSDK.page.js" defer></script>
     <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
+      window.تشغيلeSignalDeferred = window.تشغيلeSignalDeferred || [];
+      تشغيلeSignalDeferred.push(async function(تشغيلeSignal) {
+        await تشغيلeSignal.init({
           appId: "a4aee757-dd1f-4247-8ac7-ad5eaee17ea5",
-          serviceWorkerPath: "OneSignalSDKWorker.js",
-          serviceWorkerUpdaterPath: "OneSignalSDKUpdaterWorker.js",
+          serviceWorkerPath: "تشغيلeSignalSDKWorker.js",
+          serviceWorkerUpdaterPath: "تشغيلeSignalSDKUpdaterWorker.js",
           serviceWorkerParam: { scope: "/" },
           notifyButton: { enable: false },
           autoResubscribe: true
@@ -34,10 +34,10 @@
         <div class="nav-glass">
             <a href="index.html#home" class="logo brand-logo"><span class="logo-plate"><img src="ma-plast-logo.png" alt="MA PLAST GROUP"></span><span>MA PLAST GROUP</span></a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="index.html#home">Home</a></li>
-                <li><a href="index.html#products">Products</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="index.html#home">الرئيسية</a></li>
+                <li><a href="index.html#products">المنتجات</a></li>
+                <li><a href="about.html">من نحن</a></li>
+                <li><a href="contact.html">تواصل معنا</a></li>
             </ul>
             <div class="nav-actions">
                 <a href="index.html#products" class="cart-toggle" title="Shop"><i class="fas fa-shopping-cart"></i></a>
@@ -48,83 +48,83 @@
 
     <section class="page-hero">
         <div class="page-hero-content">
-            <span class="hero-tag">Private Backend</span>
-            <h1>Notification Settings</h1>
-            <p>This private page is not linked on the user app. Open it directly when you need to manage notifications.</p>
+            <span class="hero-tag">لوحة داخلية</span>
+            <h1>إعدادات الإشعارات</h1>
+            <p>هذه الصفحة داخلية وغير ظاهرة للمستخدم. افتحها مباشرة عند الحاجة إلى إدارة الإشعارات.</p>
         </div>
     </section>
 
     <section class="notification-admin-section">
         <div class="container notification-admin-grid">
             <div class="notification-admin-card">
-                <h2>30-minute notification</h2>
-                <p>Set the message that this app will show every 30 minutes after notifications are enabled on this device.</p>
+                <h2>إشعار كل 30 دقيقة</h2>
+                <p>حدد الرسالة التي سيعرضها التطبيق كل 30 دقيقة بعد تفعيل الإشعارات على هذا الجهاز.</p>
 
                 <form class="notification-form" id="notificationSettingsForm">
                     <div class="notification-switch-row">
                         <div>
-                            <strong>Scheduled notifications</strong>
-                            <p style="margin:0;color:#777;font-size:.85rem;">Runs every 30 minutes while the app/browser can execute JavaScript.</p>
+                            <strong>الإشعارات المجدولة</strong>
+                            <p style="margin:0;color:#777;font-size:.85rem;">يعمل كل 30 دقيقة طالما أن التطبيق أو المتصفح يستطيع تشغيل JavaScript.</p>
                         </div>
                         <select id="enabled">
-                            <option value="false">Off</option>
-                            <option value="true">On</option>
+                            <option value="false">إيقاف</option>
+                            <option value="true">تشغيل</option>
                         </select>
                     </div>
 
                     <div>
-                        <label for="title">Notification title</label>
+                        <label for="title">عنوان الإشعار</label>
                         <input id="title" type="text" value="MA PLAST GROUP" required>
                     </div>
 
                     <div>
-                        <label for="body">Notification message</label>
-                        <textarea id="body" required>Browse plumbing products and send your order instantly via WhatsApp.</textarea>
+                        <label for="body">رسالة الإشعار</label>
+                        <textarea id="body" required>تصفح منتجات السباكة وأرسل طلبك فورًا عبر واتساب.</textarea>
                     </div>
 
                     <div>
-                        <label for="url">Open this page when clicked</label>
+                        <label for="url">افتح هذه الصفحة عند الضغط</label>
                         <input id="url" type="text" value="/index.html#products" required>
                     </div>
 
                     <input id="intervalMinutes" type="hidden" value="30">
 
                     <div class="notification-admin-actions">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save settings</button>
-                        <button type="button" class="btn btn-outline admin-outline" onclick="requestPermission()"><i class="fas fa-bell"></i> Allow notifications</button>
-                        <button type="button" class="btn btn-primary" onclick="sendNow()"><i class="fas fa-paper-plane"></i> Send now</button>
-                        <button type="button" class="btn btn-outline admin-outline" onclick="clearLocalNotifications()"><i class="fas fa-trash"></i> Clear local list</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ الإعدادات</button>
+                        <button type="button" class="btn btn-outline admin-outline" onclick="requestPermission()"><i class="fas fa-bell"></i> تفعيل الإشعارات</button>
+                        <button type="button" class="btn btn-primary" onclick="sendNow()"><i class="fas fa-paper-plane"></i> إرسال الآن</button>
+                        <button type="button" class="btn btn-outline admin-outline" onclick="clearLocalNotifications()"><i class="fas fa-trash"></i> مسح القائمة المحلية</button>
                     </div>
                 </form>
             </div>
 
             <div class="notification-admin-card">
-                <h2>Status & preview</h2>
+                <h2>الحالة والمعاينة</h2>
                 <div class="notification-status" style="margin-bottom:1rem;">
                     <span class="notification-status-dot" id="statusDot"></span>
-                    <span id="statusText">Loading...</span>
+                    <span id="statusText">جارٍ التحميل...</span>
                 </div>
 
                 <div class="notification-preview">
                     <div class="notification-preview-icon"><i class="fas fa-bell"></i></div>
                     <div>
                         <strong id="previewTitle">MA PLAST GROUP</strong>
-                        <span id="previewBody">Browse plumbing products and send your order instantly via WhatsApp.</span>
+                        <span id="previewBody">تصفح منتجات السباكة وأرسل طلبك فورًا عبر واتساب.</span>
                     </div>
                 </div>
 
                 <ul class="notification-help-list">
-                    <li><i class="fas fa-circle-info"></i> This removes the old demo/test notifications from the user interface.</li>
-                    <li><i class="fas fa-clock"></i> The interval is fixed at 30 minutes.</li>
-                    <li><i class="fas fa-triangle-exclamation"></i> True remote push to all users requires a push server or service like Firebase/OneSignal.</li>
-                    <li><i class="fas fa-palette"></i> The bell icon now follows the same black/white colors as the cart icon.</li>
+                    <li><i class="fas fa-circle-info"></i> هذا الخيار يحذف إشعارات التجربة القديمة من واجهة المستخدم.</li>
+                    <li><i class="fas fa-clock"></i> الفاصل الزمني ثابت عند 30 دقيقة.</li>
+                    <li><i class="fas fa-triangle-exclamation"></i> True remote push to all users requires a push server or service like Firebase/تشغيلeSignal.</li>
+                    <li><i class="fas fa-palette"></i> أيقونة الجرس أصبحت بنفس ألوان السلة الأبيض والأسود.</li>
                 </ul>
             </div>
         </div>
     </section>
 
     <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Saved</span></div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">تم الحفظ</span></div>
 
     <script>
         const SETTINGS_KEY = 'ma_plast_notification_settings_v1';
@@ -167,7 +167,7 @@
             return {
                 enabled: false,
                 title: 'MA PLAST GROUP',
-                body: 'Browse plumbing products and send your order instantly via WhatsApp.',
+                body: 'تصفح منتجات السباكة وأرسل طلبك فورًا عبر واتساب.',
                 url: '/index.html#products',
                 intervalMinutes: 30,
                 lastSentAt: 0
@@ -182,14 +182,14 @@
         }
         function updatePreview() {
             previewTitle.textContent = title.value || 'MA PLAST GROUP';
-            previewBody.textContent = body.value || 'Browse plumbing products and send your order instantly via WhatsApp.';
+            previewBody.textContent = body.value || 'تصفح منتجات السباكة وأرسل طلبك فورًا عبر واتساب.';
             updateStatus();
         }
         function updateStatus() {
             const permission = 'Notification' in window ? Notification.permission : 'unsupported';
             const isEnabled = enabled.value === 'true';
             statusDot.classList.toggle('active', isEnabled && permission === 'granted');
-            statusText.textContent = `Schedule: ${isEnabled ? 'On' : 'Off'} | Permission: ${permission}`;
+            statusText.textContent = `Schedule: ${isEnabled ? 'تشغيل' : 'إيقاف'} | Permission: ${permission}`;
         }
         function populate() {
             const s = loadSettings();
@@ -211,7 +211,7 @@
         }
         async function sendBrowserNotification(payload) {
             if (!('Notification' in window) || Notification.permission !== 'granted') {
-                showToast('Allow notifications first');
+                showToast('تفعيل الإشعارات first');
                 return false;
             }
             if ('serviceWorker' in navigator) {
@@ -251,7 +251,7 @@
             };
             addToLocalList(payload);
             const sent = await sendBrowserNotification(payload);
-            showToast(sent ? 'Notification sent' : 'Saved to notification list');
+            showToast(sent ? 'تم إرسال الإشعار' : 'تم حفظه في قائمة الإشعارات');
         }
         function clearLocalNotifications() {
             localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify([]));
