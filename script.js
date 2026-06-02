@@ -186,9 +186,10 @@ function renderProducts(page = currentPage) {
 
     productsGrid.innerHTML = visibleProducts.map((p, i) => {
         const oldPrice = getOldPrice(p);
+        const hasDiscount = Number(p.discount || 0) > 0;
         return `
         <div class="product-card compact-premium-card minimal-clean-card" style="animation-delay: ${i * 0.06}s">
-            <div class="discount-corner">-${p.discount || 0}%</div>
+            ${hasDiscount ? `<div class="discount-corner">-${p.discount}%</div>` : ''}
 
             <div class="minimal-card-shell">
                 <div class="minimal-main-row">
@@ -207,7 +208,7 @@ function renderProducts(page = currentPage) {
                                 <strong>${p.price.toFixed(2)}</strong>
                                 <span>جنيه</span>
                             </div>
-                            ${Number(p.discount || 0) > 0 ? `<div class="old-price">${oldPrice.toFixed(2)} جنيه</div>` : ''}
+                            ${hasDiscount ? `<div class="old-price">${oldPrice.toFixed(2)} جنيه</div>` : ''}
                         </div>
                     </div>
                 </div>

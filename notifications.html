@@ -124,7 +124,7 @@
     </section>
 
     <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
-    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">تم الحفظ</span></div>
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">Saved</span></div>
 
     <script>
         const SETTINGS_KEY = 'ma_plast_notification_settings_v1';
@@ -251,7 +251,7 @@
             };
             addToLocalList(payload);
             const sent = await sendBrowserNotification(payload);
-            showToast(sent ? 'تم إرسال الإشعار' : 'تم حفظه في قائمة الإشعارات');
+            showToast(sent ? 'Notification sent' : 'Saved to notification list');
         }
         function clearLocalNotifications() {
             localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify([]));

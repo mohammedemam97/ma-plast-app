@@ -5378,3 +5378,233 @@ html[lang="ar"] .cart-total span:last-child { font-weight: 900; }
   .footer-bottom { padding: 1rem 0 1.2rem; }
   .footer-bottom-links { flex-direction: column; gap: .45rem; text-align: center; }
 }
+
+
+/* ===== FINAL OVERRIDE: cleaner product cards + refined discount ===== */
+.minimal-clean-card {
+    background: #fff !important;
+    border: 1px solid #ececec !important;
+    border-radius: 24px !important;
+    box-shadow: 0 16px 36px rgba(0,0,0,.08) !important;
+    overflow: hidden !important;
+}
+
+.minimal-clean-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 46px rgba(0,0,0,.11) !important;
+}
+
+.minimal-clean-card .minimal-card-shell {
+    padding: 0 0 1rem !important;
+}
+
+.minimal-clean-card .minimal-main-row {
+    display: block !important;
+}
+
+.minimal-clean-card .minimal-image-wrap {
+    width: 100%;
+}
+
+.minimal-clean-card .product-image {
+    position: relative;
+    width: 100%;
+    height: 230px !important;
+    padding: 0 !important;
+    border-radius: 24px 24px 0 0 !important;
+    overflow: hidden;
+    background: linear-gradient(180deg, #fbfbfb 0%, #f2f2f2 100%) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.minimal-clean-card .product-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+.minimal-clean-card:hover .product-image img {
+    transform: scale(1.02) !important;
+}
+
+.minimal-clean-card .minimal-details {
+    padding: 1rem 1rem 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    text-align: right !important;
+    gap: .6rem !important;
+}
+
+.minimal-clean-card .product-name {
+    margin: 0 !important;
+    font-size: 1.14rem !important;
+    line-height: 1.35 !important;
+    font-weight: 900 !important;
+    color: #111 !important;
+}
+
+.minimal-clean-card .product-meta {
+    background: #f6f6f6 !important;
+    color: #444 !important;
+    border: 1px solid #ececec !important;
+    border-radius: 999px !important;
+    padding: .38rem .78rem !important;
+    font-size: .82rem !important;
+    font-weight: 800 !important;
+}
+
+.minimal-clean-card .minimal-price-block {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: .18rem !important;
+}
+
+.minimal-clean-card .current-price {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: .35rem !important;
+    color: #111 !important;
+    direction: ltr;
+}
+
+.minimal-clean-card .current-price strong {
+    font-size: 2.2rem !important;
+    font-weight: 1000 !important;
+    letter-spacing: -.8px !important;
+    color: #111 !important;
+}
+
+.minimal-clean-card .current-price span {
+    font-size: .98rem !important;
+    font-weight: 900 !important;
+    color: #555 !important;
+}
+
+.minimal-clean-card .old-price {
+    font-size: .98rem !important;
+    color: #8a8a8a !important;
+    text-decoration: line-through !important;
+    text-decoration-thickness: 2px !important;
+    font-weight: 800 !important;
+    direction: ltr;
+}
+
+.minimal-clean-card .minimal-cart-btn {
+    width: calc(100% - 2rem) !important;
+    margin: 1rem 1rem 0 !important;
+    min-height: 48px !important;
+    border-radius: 16px !important;
+    background: linear-gradient(180deg, #141414 0%, #000 100%) !important;
+    color: #fff !important;
+    border: 1px solid #000 !important;
+    box-shadow: 0 14px 28px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.06) !important;
+    font-size: .96rem !important;
+    font-weight: 900 !important;
+    letter-spacing: .1px;
+}
+
+.minimal-clean-card .minimal-cart-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%) !important;
+    box-shadow: 0 18px 34px rgba(0,0,0,.18) !important;
+}
+
+.minimal-clean-card .discount-corner {
+    position: absolute !important;
+    top: 14px !important;
+    right: 14px !important;
+    width: auto !important;
+    min-width: 74px;
+    height: 38px !important;
+    padding: 0 14px !important;
+    border-radius: 999px !important;
+    background: rgba(0,0,0,.94) !important;
+    color: #fff !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    font-weight: 1000 !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,.16) !important;
+    backdrop-filter: blur(6px);
+    z-index: 10 !important;
+}
+
+@media (max-width: 768px) {
+    .minimal-clean-card {
+        border-radius: 22px !important;
+    }
+
+    .minimal-clean-card .product-image {
+        height: 205px !important;
+        border-radius: 22px 22px 0 0 !important;
+    }
+
+    .minimal-clean-card .minimal-details {
+        padding: .9rem .9rem 0 !important;
+        gap: .5rem !important;
+    }
+
+    .minimal-clean-card .product-name {
+        font-size: 1rem !important;
+    }
+
+    .minimal-clean-card .product-meta {
+        font-size: .78rem !important;
+        padding: .34rem .68rem !important;
+    }
+
+    .minimal-clean-card .current-price strong {
+        font-size: 1.9rem !important;
+    }
+
+    .minimal-clean-card .current-price span {
+        font-size: .9rem !important;
+    }
+
+    .minimal-clean-card .old-price {
+        font-size: .88rem !important;
+    }
+
+    .minimal-clean-card .minimal-cart-btn {
+        width: calc(100% - 1.6rem) !important;
+        margin: .95rem .8rem 0 !important;
+        min-height: 46px !important;
+        border-radius: 15px !important;
+        font-size: .9rem !important;
+    }
+
+    .minimal-clean-card .discount-corner {
+        top: 12px !important;
+        right: 12px !important;
+        min-width: 66px;
+        height: 34px !important;
+        font-size: .92rem !important;
+        padding: 0 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .minimal-clean-card .product-image {
+        height: 190px !important;
+    }
+
+    .minimal-clean-card .product-name {
+        font-size: .96rem !important;
+        line-height: 1.32 !important;
+    }
+
+    .minimal-clean-card .current-price strong {
+        font-size: 1.78rem !important;
+    }
+
+    .minimal-clean-card .current-price span {
+        font-size: .86rem !important;
+    }
+}
