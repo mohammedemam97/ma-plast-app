@@ -1,5 +1,5 @@
 // ===== MA PLAST GROUP - Service Worker with Local Notifications =====
-const CACHE_NAME = 'ma-plast-formsubmit-iframe-v1';
+const CACHE_NAME = 'ma-plast-pdf-products-logo-email-v1';
 const STATIC_ASSETS = [
     '/',
     '/index.html',

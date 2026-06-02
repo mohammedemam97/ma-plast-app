@@ -1,35 +1,35 @@
 // ===== Products =====
 const products = [
-    { id: 1, name: "PVC Pipe 1/2 Inch", price: 25.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop", discount: 10 },
-    { id: 2, name: "PVC Pipe 3/4 Inch", price: 35.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop", discount: 15 },
-    { id: 3, name: "PVC Pipe 1 Inch", price: 48.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop", discount: 20 },
-    { id: 4, name: "PVC Elbow Fitting", price: 18.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop", discount: 12 },
-    { id: 5, name: "PVC Tee Fitting", price: 22.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop", discount: 18 },
-    { id: 6, name: "PVC Coupling", price: 16.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop", discount: 8 },
-    { id: 7, name: "Brass Faucet Mixer", price: 185.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop", discount: 22 },
-    { id: 8, name: "Kitchen Faucet", price: 240.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop", discount: 25 },
-    { id: 9, name: "Bathroom Faucet", price: 210.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop", discount: 17 },
-    { id: 10, name: "Shower Mixer", price: 320.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop", discount: 30 },
-    { id: 11, name: "Shower Head Set", price: 275.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop", discount: 14 },
-    { id: 12, name: "Sink Drain Pipe", price: 45.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop", discount: 11 },
-    { id: 13, name: "Flexible Hose 60cm", price: 38.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop", discount: 9 },
-    { id: 14, name: "Angle Valve", price: 55.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop", discount: 16 },
-    { id: 15, name: "Ball Valve 1/2 Inch", price: 75.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop", discount: 21 },
-    { id: 16, name: "Gate Valve 1 Inch", price: 145.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop", discount: 13 },
-    { id: 17, name: "Water Heater 30L", price: 950.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop", discount: 24 },
-    { id: 18, name: "Water Heater 50L", price: 1200.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop", discount: 19 },
-    { id: 19, name: "Water Heater 80L", price: 1650.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop", discount: 26 },
-    { id: 20, name: "Water Pump 0.5HP", price: 620.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop", discount: 15 },
-    { id: 21, name: "Water Pump 1HP", price: 850.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop", discount: 12 },
-    { id: 22, name: "Pressure Pump", price: 1350.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop", discount: 20 },
-    { id: 23, name: "Toilet Seat Ceramic", price: 450.00, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop", discount: 18 },
-    { id: 24, name: "Basin Mixer", price: 260.00, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop", discount: 10 },
-    { id: 25, name: "Floor Drain", price: 65.00, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop", discount: 23 },
-    { id: 26, name: "Pipe Wrench 12 Inch", price: 95.00, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop", discount: 14 },
-    { id: 27, name: "Pipe Wrench 18 Inch", price: 145.00, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop", discount: 17 },
-    { id: 28, name: "Plumber Tape", price: 12.00, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop", discount: 8 },
-    { id: 29, name: "Thread Seal Tape Pack", price: 35.00, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop", discount: 15 },
-    { id: 30, name: "Silicone Sealant", price: 68.00, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop", discount: 25 }
+    { id: 1, name: "فيز 1/2\"", price: 15.60, category: "لسته اسعار الفيز", package: 100, discount: 10, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
+    { id: 2, name: "فيز 3/4\"", price: 15.80, category: "لسته اسعار الفيز", package: 100, discount: 12, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
+    { id: 3, name: "فيز 1\"", price: 16.10, category: "لسته اسعار الفيز", package: 100, discount: 11, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
+    { id: 4, name: "فيز 1 1/4\" - 40 mm", price: 18.00, category: "لسته اسعار الفيز", package: 100, discount: 15, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
+    { id: 5, name: "فيز 1 1/2\"", price: 20.00, category: "لسته اسعار الفيز", package: 80, discount: 10, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
+    { id: 6, name: "فيز 2\"", price: 20.80, category: "لسته اسعار الفيز", package: 80, discount: 12, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
+    { id: 7, name: "فيز 2 1/2\" - 75 mm", price: 39.50, category: "لسته اسعار الفيز", package: 60, discount: 18, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
+    { id: 8, name: "فيز 3\" - 90 mm", price: 40.00, category: "لسته اسعار الفيز", package: 60, discount: 16, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
+    { id: 9, name: "فيز 4\" - 110/114 mm", price: 43.00, category: "لسته اسعار الفيز", package: 40, discount: 14, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
+    { id: 10, name: "فيز 6\" - 160 mm", price: 55.00, category: "لسته اسعار الفيز", package: 30, discount: 20, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
+    { id: 11, name: "مسمار حوض لوكس", price: 18.70, category: "لسته اسعار المسامير", package: 100, discount: 13, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
+    { id: 12, name: "مسمار سخان لوكس", price: 16.70, category: "لسته اسعار المسامير", package: 100, discount: 10, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
+    { id: 13, name: "مسمار قاعدة لوكس 4 مسمار", price: 16.40, category: "لسته اسعار المسامير", package: 100, discount: 12, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
+    { id: 14, name: "مسمار قاعدة لوكس 2 مسمار", price: 12.00, category: "لسته اسعار المسامير", package: 100, discount: 8, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
+    { id: 15, name: "طقم مسمار اكسسوار 12 مسمار", price: 20.00, category: "لسته اسعار المسامير", package: 100, discount: 15, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
+    { id: 16, name: "طقم مسمار اكسسوار 2 مسمار رف", price: 23.00, category: "لسته اسعار المسامير", package: 100, discount: 18, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
+    { id: 17, name: "مسمار كيلوباترا", price: 18.25, category: "لسته اسعار المسامير", package: 200, discount: 11, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
+    { id: 18, name: "مسمار سديلي مجره", price: 8.00, category: "لسته اسعار المسامير", package: 250, discount: 9, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
+    { id: 19, name: "مسمار سديلي ديورافيت", price: 15.00, category: "لسته اسعار المسامير", package: 250, discount: 14, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
+    { id: 20, name: "وصلة استالس 304 مقاس 30 cm", price: 58.00, category: "وصلات استالس 1/2 × 1/2 304", package: 100, discount: 15, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
+    { id: 21, name: "وصلة استالس 304 مقاس 40 cm", price: 61.00, category: "وصلات استالس 1/2 × 1/2 304", package: 100, discount: 12, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
+    { id: 22, name: "وصلة استالس 304 مقاس 50 cm", price: 65.00, category: "وصلات استالس 1/2 × 1/2 304", package: 100, discount: 14, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" },
+    { id: 23, name: "وصلة استالس 304 مقاس 60 cm", price: 69.00, category: "وصلات استالس 1/2 × 1/2 304", package: 100, discount: 16, image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" },
+    { id: 24, name: "وصلة استالس 304 مقاس 70 cm", price: 75.00, category: "وصلات استالس 1/2 × 1/2 304", package: 50, discount: 10, image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop" },
+    { id: 25, name: "وصلة استالس 304 مقاس 80 cm", price: 84.00, category: "وصلات استالس 1/2 × 1/2 304", package: 50, discount: 13, image: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&h=300&fit=crop" },
+    { id: 26, name: "وصلة استالس 304 مقاس 100 cm", price: 89.00, category: "وصلات استالس 1/2 × 1/2 304", package: 50, discount: 18, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop" },
+    { id: 27, name: "وصلة شجرة استالس 304 مقاس 40 cm", price: 55.00, category: "وصلات شجرة استالس 304", package: 100, discount: 10, image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
+    { id: 28, name: "وصلة شجرة استالس 304 مقاس 50 cm", price: 61.00, category: "وصلات شجرة استالس 304", package: 100, discount: 12, image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" },
+    { id: 29, name: "وصلة شجرة استالس 304 مقاس 60 cm", price: 65.00, category: "وصلات شجرة استالس 304", package: 100, discount: 15, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
+    { id: 30, name: "شطاف اوتوماتيك", price: 162.00, category: "شطاف اوتوماتيك", package: 1, discount: 20, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" }
 ];
 
 let cart = JSON.parse(localStorage.getItem('ma_plast_cart_v1')) || [];
@@ -185,16 +185,31 @@ function renderProducts(page = currentPage) {
     const visibleProducts = products.slice(start, end);
 
     productsGrid.innerHTML = visibleProducts.map((p, i) => `
-        <div class="product-card" style="animation-delay: ${i * 0.07}s">
-            <div class="product-discount-badge">-${p.discount || 0}%</div>
+        <div class="product-card modern-product-card" style="animation-delay: ${i * 0.07}s">
+            <div class="product-badges">
+                <div class="product-discount-badge">
+                    <span class="discount-label">Save</span>
+                    <span class="discount-value">${p.discount || 0}%</span>
+                </div>
+                <div class="product-offer-chip"><i class="fas fa-sparkles"></i> Special Offer</div>
+            </div>
             <div class="product-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>
             <div class="product-info">
+                <div class="product-category">${p.category || 'MA PLAST'}</div>
                 <h3 class="product-name">${p.name}</h3>
-                <div class="product-pricing">
-                    <span class="product-old-price">${getOldPrice(p).toFixed(2)} EGP</span>
-                    <span class="product-price">${p.price.toFixed(2)} EGP</span>
+                <div class="product-meta"><i class="fas fa-box"></i> العبوة: ${p.package || 1}</div>
+                <div class="product-pricing-card">
+                    <div class="pricing-current">
+                        <span class="pricing-caption">Now</span>
+                        <span class="product-price">${p.price.toFixed(2)} <small>EGP</small></span>
+                    </div>
+                    <div class="pricing-divider"></div>
+                    <div class="pricing-before">
+                        <span class="pricing-caption muted">Before</span>
+                        <span class="product-old-price">${getOldPrice(p).toFixed(2)} EGP</span>
+                    </div>
                 </div>
-                <div class="product-saving">Save ${(getOldPrice(p) - p.price).toFixed(2)} EGP</div>
+                <div class="product-saving"><i class="fas fa-badge-percent"></i> You save ${(getOldPrice(p) - p.price).toFixed(2)} EGP</div>
                 <button class="add-to-cart" onclick="addToCart(${p.id})">
                     <i class="fas fa-cart-plus"></i> Add to Cart
                 </button>
@@ -1195,7 +1210,9 @@ window.addEventListener('resize', () => {
 
 
 
-// ===== Real Footer Email Subscription via FormSubmit hidden iframe =====
+
+
+// ===== Footer Email Subscription - direct FormSubmit with welcome autoresponse =====
 function initNewsletterForm() {
     const form = document.getElementById('newsletterForm');
     const emailInput = document.getElementById('newsletterEmail');
@@ -1207,14 +1224,12 @@ function initNewsletterForm() {
         if (!email) return;
 
         localStorage.setItem('ma_plast_newsletter_email', email);
-        status.textContent = 'Submitting... If this is the first time, confirm FormSubmit from the owner Gmail inbox.';
+        status.textContent = 'Submitting...';
         status.className = 'newsletter-status is-loading';
 
         setTimeout(() => {
-            status.textContent = 'Subscribed. A welcome email will be sent after FormSubmit is confirmed.';
+            status.textContent = 'If this is the first time, confirm FormSubmit from Gmail. After confirmation, welcome emails will be sent automatically.';
             status.className = 'newsletter-status is-success';
-            form.reset();
-            showToastSafe('Subscribed successfully');
-        }, 1800);
+        }, 1000);
     });
 }
