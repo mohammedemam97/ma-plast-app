@@ -43,8 +43,9 @@
                 <li><a href="contact.html" class="">تواصل معنا</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="index.html#products" class="cart-toggle" title="Shop">
+                <a href="index.html#products" class="cart-toggle" title="السلة" aria-label="فتح السلة" onclick="handleCartButton(event)">
                     <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
                 </a>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
                     <i class="fas fa-bars"></i>

@@ -59,6 +59,29 @@ function getProductsPerPage() {
 }
 const mobileMenuIcon = document.querySelector('.mobile-menu-btn i');
 
+
+
+// ===== Mobile menu mounting =====
+// On mobile the menu is moved to <body> so it can be perfectly centered
+// and never get trapped inside the navbar layout.
+let navLinksPlaceholder = null;
+function syncMobileMenuMount() {
+    if (!navLinks) return;
+    if (!navLinksPlaceholder) {
+        navLinksPlaceholder = document.createComment('nav-links-original-position');
+        if (navLinks.parentNode) navLinks.parentNode.insertBefore(navLinksPlaceholder, navLinks);
+    }
+    if (window.innerWidth <= 768) {
+        if (navLinks.parentNode !== document.body) document.body.appendChild(navLinks);
+    } else if (navLinks.parentNode === document.body && navLinksPlaceholder.parentNode) {
+        navLinksPlaceholder.parentNode.insertBefore(navLinks, navLinksPlaceholder.nextSibling);
+        navLinks.classList.remove('active');
+        if (mobileOverlay) mobileOverlay.classList.remove('active');
+        setMobileMenuIcon(false);
+        document.body.style.overflow = '';
+    }
+}
+
 function setMobileMenuIcon(isOpen) {
     if (!mobileMenuIcon) return;
     mobileMenuIcon.classList.toggle('fa-bars', !isOpen);
@@ -68,6 +91,7 @@ function setMobileMenuIcon(isOpen) {
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
+    syncMobileMenuMount();
     renderProducts();
     renderCart();
     initScroll();
@@ -312,11 +336,11 @@ function saveCart() {
 
 // ===== Render Cart =====
 function renderCart() {
-    if (!cartCountEl || !totalPriceEl || !cartItems || !whatsappBtn) return;
+    if (!totalPriceEl || !cartItems || !whatsappBtn) return;
     const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
-    cartCountEl.textContent = totalItems;
+    if (cartCountEl) cartCountEl.textContent = totalItems;
     totalPriceEl.textContent = total.toFixed(2) + ' جنيه';
     whatsappBtn.disabled = cart.length === 0;
 
@@ -347,19 +371,45 @@ function renderCart() {
     `).join('');
 }
 
-// ===== Cart Toggle =====
-function toggleCart() {
-    if (navLinks.classList.contains('active')) {
+// ===== Cart Button =====
+function handleCartButton(event) {
+    if (event) event.preventDefault();
+
+    if (cartSidebar && cartOverlay) {
+        openCart();
+        return;
+    }
+
+    window.location.href = 'index.html#products';
+}
+
+function openCart() {
+    if (!cartSidebar || !cartOverlay) return;
+
+    if (navLinks && navLinks.classList.contains('active')) {
         navLinks.classList.remove('active');
-        mobileOverlay.classList.remove('active');
+        if (mobileOverlay) mobileOverlay.classList.remove('active');
         setMobileMenuIcon(false);
     }
-    cartSidebar.classList.toggle('active');
-    cartOverlay.classList.toggle('active');
-    document.body.style.overflow = cartSidebar.classList.contains('active') ? 'hidden' : '';
+
+    cartSidebar.classList.add('active');
+    cartOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+// ===== Cart Toggle =====
+function toggleCart() {
+    if (!cartSidebar || !cartOverlay) return;
+
+    if (cartSidebar.classList.contains('active')) {
+        closeCart();
+    } else {
+        openCart();
+    }
 }
 
 function closeCart() {
+    if (!cartSidebar || !cartOverlay) return;
     cartSidebar.classList.remove('active');
     cartOverlay.classList.remove('active');
     document.body.style.overflow = '';
@@ -400,11 +450,12 @@ document.addEventListener('keydown', e => {
 
 // ===== Resize =====
 window.addEventListener('resize', () => {
+    syncMobileMenuMount();
     if (window.innerWidth > 768) {
         navLinks.classList.remove('active');
         mobileOverlay.classList.remove('active');
         setMobileMenuIcon(false);
-        if (!cartSidebar.classList.contains('active')) document.body.style.overflow = '';
+        if (!cartSidebar || !cartSidebar.classList.contains('active')) document.body.style.overflow = '';
     }
 });
 

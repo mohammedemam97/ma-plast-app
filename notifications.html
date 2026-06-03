@@ -42,8 +42,9 @@
                 <li><a href="contact.html" class="">تواصل معنا</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="index.html#products" class="cart-toggle" title="Shop">
+                <a href="index.html#products" class="cart-toggle" title="السلة" aria-label="فتح السلة" onclick="handleCartButton(event)">
                     <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
                 </a>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
                     <i class="fas fa-bars"></i>
@@ -152,6 +153,27 @@
         const previewBody = document.getElementById('previewBody');
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
+
+
+        let navLinksPlaceholder = null;
+        function syncMobileMenuMount() {
+            if (!navLinks) return;
+            if (!navLinksPlaceholder) {
+                navLinksPlaceholder = document.createComment('nav-links-original-position');
+                if (navLinks.parentNode) navLinks.parentNode.insertBefore(navLinksPlaceholder, navLinks);
+            }
+            if (window.innerWidth <= 768) {
+                if (navLinks.parentNode !== document.body) document.body.appendChild(navLinks);
+            } else if (navLinks.parentNode === document.body && navLinksPlaceholder.parentNode) {
+                navLinksPlaceholder.parentNode.insertBefore(navLinks, navLinksPlaceholder.nextSibling);
+                navLinks.classList.remove('active');
+                if (mobileOverlay) mobileOverlay.classList.remove('active');
+                setMobileMenuIcon(false);
+                document.body.style.overflow = '';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', syncMobileMenuMount);
+        window.addEventListener('resize', syncMobileMenuMount);
 
         function setMobileMenuIcon(isOpen) {
             if (!mobileMenuIcon) return;
