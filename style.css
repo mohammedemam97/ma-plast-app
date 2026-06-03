@@ -5903,3 +5903,140 @@ html[lang="ar"] .cart-total span:last-child { font-weight: 900; }
 .minimal-clean-card .minimal-cart-btn { width: calc(100% - 2rem) !important; min-height: 48px !important; margin: .95rem 1rem 0 !important; border-radius: 16px !important; background: linear-gradient(180deg, #171717, #000) !important; color: #fff !important; border: 1px solid #000 !important; font-weight: 900 !important; }
 @media (max-width: 768px) { .navbar { top: .75rem !important; left: .75rem !important; right: .75rem !important; width: auto !important; transform: none !important; } .nav-glass { min-height: 58px !important; height: 58px !important; padding: .45rem .6rem !important; gap: .55rem !important; } .logo-plate { width: 40px !important; height: 40px !important; min-width: 40px !important; } .logo.brand-logo > span:last-child { display: none !important; } .mobile-menu-btn { display: flex !important; } .nav-links { position: fixed !important; top: 5.1rem !important; right: -110% !important; left: auto !important; width: min(292px, calc(100vw - 1.5rem)) !important; max-height: calc(100dvh - 6rem) !important; overflow-y: auto !important; display: flex !important; flex-direction: column !important; gap: .6rem !important; padding: 1rem !important; border-radius: 28px !important; background: rgba(255,255,255,.9) !important; border: 1px solid rgba(0,0,0,.08) !important; box-shadow: 0 20px 60px rgba(0,0,0,.18) !important; opacity: 0 !important; pointer-events: none !important; transform: translateY(-8px) scale(.98) !important; transition: right .35s cubic-bezier(.4,0,.2,1), opacity .25s ease, transform .35s cubic-bezier(.4,0,.2,1) !important; z-index: 3001 !important; } .nav-links.active { right: .75rem !important; opacity: 1 !important; pointer-events: auto !important; transform: translateY(0) scale(1) !important; } .nav-links a { width: 100% !important; justify-content: space-between !important; padding: .85rem 1rem !important; border-radius: 18px !important; color: rgba(0,0,0,.72) !important; background: rgba(0,0,0,.04) !important; border: 1px solid rgba(0,0,0,.05) !important; } .nav-links a:hover, .nav-links a.active { color: #000 !important; background: rgba(0,0,0,.08) !important; } .minimal-clean-card .product-image { height: 205px !important; } .minimal-clean-card .discount-corner { top: 10px !important; right: 10px !important; min-width: 62px !important; height: 32px !important; font-size: .84rem !important; } }
 @media (max-width: 480px) { .minimal-clean-card .product-image { height: 190px !important; } .page-card, .privacy-card, .notification-admin-card, .thank-you-box { padding: 1.35rem !important; border-radius: 24px !important; } }
+
+
+/* ============================================================
+   MOBILE MENU GLASS + WIDE NAVBAR LOGO FINAL PATCH
+   ============================================================ */
+.navbar .logo-plate {
+    width: 94px !important;
+    height: 42px !important;
+    min-width: 94px !important;
+    padding: 4px 8px !important;
+    border-radius: 14px !important;
+    background: linear-gradient(180deg, rgba(255,255,255,1), rgba(249,249,249,1)) !important;
+    border: 1px solid rgba(255,255,255,.75) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12) !important;
+}
+
+.navbar .logo-plate img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+.navbar .brand-logo {
+    gap: .7rem !important;
+}
+
+.navbar .brand-logo > span:not(.logo-plate) {
+    font-size: .92rem !important;
+    letter-spacing: .02em !important;
+}
+
+.mobile-overlay {
+    background: rgba(7, 7, 10, .34) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.mobile-overlay.active {
+    opacity: 1 !important;
+}
+
+@media (max-width: 768px) {
+    .navbar .logo-plate {
+        width: 84px !important;
+        height: 38px !important;
+        min-width: 84px !important;
+        border-radius: 12px !important;
+        padding: 4px 7px !important;
+    }
+
+    .nav-glass {
+        background: linear-gradient(180deg, rgba(17,17,17,.78), rgba(8,8,8,.62)) !important;
+        border-color: rgba(255,255,255,.16) !important;
+        box-shadow: 0 16px 34px rgba(0,0,0,.20) !important;
+    }
+
+    .nav-links {
+        left: 50% !important;
+        right: auto !important;
+        top: 5.35rem !important;
+        width: min(320px, calc(100vw - 2rem)) !important;
+        padding: 1.1rem !important;
+        gap: .8rem !important;
+        border-radius: 30px !important;
+        background: linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,.10)) !important;
+        border: 1px solid rgba(255,255,255,.22) !important;
+        box-shadow: 0 24px 64px rgba(0,0,0,.24) !important;
+        backdrop-filter: blur(28px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+        transform: translate(-50%, -10px) scale(.96) !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    .nav-links::before {
+        content: '' !important;
+        position: absolute !important;
+        inset: 0 !important;
+        border-radius: inherit !important;
+        background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.04)) !important;
+        pointer-events: none !important;
+    }
+
+    .nav-links.active {
+        left: 50% !important;
+        right: auto !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: translate(-50%, 0) scale(1) !important;
+    }
+
+    .nav-links li {
+        position: relative !important;
+        z-index: 1 !important;
+        width: 100% !important;
+    }
+
+    .nav-links a {
+        width: 100% !important;
+        min-height: 52px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: .9rem 1rem !important;
+        border-radius: 18px !important;
+        color: #fff !important;
+        font-size: .98rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0 !important;
+        background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08)) !important;
+        border: 1px solid rgba(255,255,255,.18) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 10px 18px rgba(0,0,0,.08) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        transition: transform .25s ease, background .25s ease, box-shadow .25s ease !important;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: #fff !important;
+        background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.12)) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 14px 24px rgba(0,0,0,.12) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    .mobile-menu-btn,
+    .cart-toggle {
+        background: rgba(255,255,255,.10) !important;
+        border: 1px solid rgba(255,255,255,.14) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.12) !important;
+    }
+
+    .mobile-menu-btn i,
+    .cart-toggle i {
+        font-size: 1rem !important;
+    }
+}
