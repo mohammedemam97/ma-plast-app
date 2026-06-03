@@ -6604,3 +6604,237 @@ html[lang="ar"] .cart-total span:last-child { font-weight: 900; }
         font-size: .95rem !important;
     }
 }
+
+
+/* ============================================================
+   FULL WIDTH MOBILE GLASS MENU UPDATE
+   ============================================================ */
+@media (max-width: 768px) {
+    body > .nav-links,
+    .nav-links {
+        top: calc(.75rem + 58px + 8px) !important;
+        left: .45rem !important;
+        right: .45rem !important;
+        width: calc(100vw - .9rem) !important;
+        min-width: calc(100vw - .9rem) !important;
+        max-width: calc(100vw - .9rem) !important;
+        padding: .9rem !important;
+        border-radius: 26px !important;
+        box-sizing: border-box !important;
+        align-items: stretch !important;
+    }
+
+    body > .nav-links li,
+    .nav-links li {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        flex: 0 0 auto !important;
+    }
+
+    body > .nav-links a,
+    .nav-links a {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        justify-content: center !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body > .nav-links,
+    .nav-links {
+        left: .35rem !important;
+        right: .35rem !important;
+        width: calc(100vw - .7rem) !important;
+        min-width: calc(100vw - .7rem) !important;
+        max-width: calc(100vw - .7rem) !important;
+        padding: .82rem !important;
+        border-radius: 24px !important;
+    }
+}
+
+
+/* ============================================================
+   EMERGENCY FIX: TRUE FULL WIDTH MENU - NO SIDE SHIFT
+   ============================================================ */
+@media (max-width: 768px) {
+    body > ul.nav-links,
+    ul.nav-links,
+    #navLinks {
+        position: fixed !important;
+        top: calc(.75rem + 58px + 8px) !important;
+        left: 8px !important;
+        right: 8px !important;
+        bottom: auto !important;
+        width: calc(100vw - 16px) !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: auto !important;
+        max-height: calc(100dvh - 6.5rem) !important;
+        margin: 0 !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        gap: 12px !important;
+        list-style: none !important;
+        border-radius: 26px !important;
+        z-index: 3002 !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform: translate3d(0, -8px, 0) scale(.99) !important;
+        transform-origin: top center !important;
+        transition: opacity .22s ease, transform .25s ease, visibility .22s ease !important;
+        background: rgba(18,18,18,.42) !important;
+        border: 1px solid rgba(255,255,255,.18) !important;
+        box-shadow: 0 22px 55px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12) !important;
+        backdrop-filter: blur(40px) saturate(140%) !important;
+        -webkit-backdrop-filter: blur(40px) saturate(140%) !important;
+    }
+
+    body > ul.nav-links.active,
+    ul.nav-links.active,
+    #navLinks.active {
+        left: 8px !important;
+        right: 8px !important;
+        width: calc(100vw - 16px) !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translate3d(0, 0, 0) scale(1) !important;
+    }
+
+    body > ul.nav-links li,
+    ul.nav-links li,
+    #navLinks li {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        display: block !important;
+        flex: 0 0 auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    body > ul.nav-links a,
+    ul.nav-links a,
+    #navLinks a {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        min-height: 54px !important;
+        margin: 0 !important;
+        padding: 0 16px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        border-radius: 18px !important;
+        color: rgba(255,255,255,.96) !important;
+        background: rgba(255,255,255,.07) !important;
+        border: 1px solid rgba(255,255,255,.14) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.12) !important;
+        font-size: .98rem !important;
+        font-weight: 800 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        backdrop-filter: blur(40px) !important;
+        -webkit-backdrop-filter: blur(40px) !important;
+    }
+
+    body > ul.nav-links a::before,
+    body > ul.nav-links a::after,
+    ul.nav-links a::before,
+    ul.nav-links a::after,
+    #navLinks a::before,
+    #navLinks a::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    body > ul.nav-links a:hover,
+    body > ul.nav-links a.active,
+    ul.nav-links a:hover,
+    ul.nav-links a.active,
+    #navLinks a:hover,
+    #navLinks a.active {
+        color: #fff !important;
+        background: rgba(255,255,255,.11) !important;
+        border-color: rgba(255,255,255,.18) !important;
+        transform: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body > ul.nav-links,
+    ul.nav-links,
+    #navLinks,
+    body > ul.nav-links.active,
+    ul.nav-links.active,
+    #navLinks.active {
+        left: 6px !important;
+        right: 6px !important;
+        width: calc(100vw - 12px) !important;
+        padding: 10px !important;
+        border-radius: 24px !important;
+    }
+}
+
+
+/* ============================================================
+   APP SPLASH LOADING SCREEN
+   ============================================================ */
+.app-splash {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #050608;
+    overflow: hidden;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .55s ease, visibility .55s ease;
+}
+
+.app-splash img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.app-splash.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+body.splash-lock {
+    overflow: hidden;
+}
+
+@media (max-width: 480px) {
+    .app-splash img {
+        object-fit: cover;
+        object-position: center;
+    }
+}

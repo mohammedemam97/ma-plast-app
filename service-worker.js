@@ -1,5 +1,5 @@
 // ===== MA PLAST GROUP - Service Worker with Local Notifications =====
-const CACHE_NAME = 'ma-plast-unified-nav-v4';
+const CACHE_NAME = 'ma-plast-splash-v1';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -14,7 +14,8 @@ const STATIC_ASSETS = [
     '/icon-192.png',
     '/icon-512.png',
     '/screenshot-wide.png',
-    '/screenshot-mobile.png'
+    '/screenshot-mobile.png',
+    '/app-splash.png'
 ];
 
 self.addEventListener('install', (event) => {

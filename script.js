@@ -91,6 +91,7 @@ function setMobileMenuIcon(isOpen) {
 
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
+    initAppSplash();
     syncMobileMenuMount();
     renderProducts();
     renderCart();
@@ -1288,4 +1289,37 @@ function initNewsletterForm() {
             status.className = 'newsletter-status is-success';
         }, 1000);
     });
+}
+
+
+// ===== App Splash Screen =====
+function initAppSplash() {
+    const splash = document.getElementById('appSplash');
+    if (!splash) return;
+
+    document.body.classList.add('splash-lock');
+
+    const hideSplash = () => {
+        splash.classList.add('is-hidden');
+        document.body.classList.remove('splash-lock');
+        setTimeout(() => splash.remove(), 700);
+    };
+
+    const image = splash.querySelector('img');
+    const minimumSplashTime = 1800;
+    const startedAt = Date.now();
+
+    const scheduleHide = () => {
+        const elapsed = Date.now() - startedAt;
+        setTimeout(hideSplash, Math.max(0, minimumSplashTime - elapsed));
+    };
+
+    if (image && !image.complete) {
+        image.addEventListener('load', scheduleHide, { once: true });
+        image.addEventListener('error', scheduleHide, { once: true });
+    } else {
+        scheduleHide();
+    }
+
+    setTimeout(hideSplash, 3500);
 }
