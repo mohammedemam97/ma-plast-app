@@ -31,8 +31,6 @@ const products = [
     { id: 29, name: "وصلة شجرة استالس 304 مقاس 60 cm", price: 65.00, category: "وصلات شجرة استالس 304", package: 100, discount: 15, image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&h=300&fit=crop" },
     { id: 30, name: "شطاف اوتوماتيك", price: 162.00, category: "شطاف اوتوماتيك", package: 1, discount: 20, image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&fit=crop" }
 ];
-window.products = products;
-
 
 let cart = JSON.parse(localStorage.getItem('ma_plast_cart_v1')) || [];
 
@@ -216,7 +214,7 @@ function renderProducts(page = currentPage) {
                     </div>
                 </div>
 
-                <button class="add-to-cart compact-cart-btn minimal-cart-btn" onclick="addToCartFinal(${p.id})">
+                <button class="add-to-cart compact-cart-btn minimal-cart-btn" onclick="addToCart(${p.id})">
                     <i class="fas fa-cart-plus"></i> أضف إلى السلة
                 </button>
             </div>
@@ -313,16 +311,9 @@ function saveCart() {
 }
 
 // ===== Render Cart =====
-function updateCartCounters(totalItems) {
-    document.querySelectorAll('#cartCount, .cart-count').forEach(el => {
-        el.textContent = totalItems;
-    });
-}
-
 function renderCart() {
+    if (!cartCountEl || !totalPriceEl || !cartItems || !whatsappBtn) return;
     const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
-    updateCartCounters(totalItems);
-    if (!totalPriceEl || !cartItems || !whatsappBtn) return;
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
     cartCountEl.textContent = totalItems;
@@ -369,7 +360,6 @@ function toggleCart() {
 }
 
 function closeCart() {
-    if (!cartSidebar || !cartOverlay) return;
     cartSidebar.classList.remove('active');
     cartOverlay.classList.remove('active');
     document.body.style.overflow = '';
@@ -1248,236 +1238,3 @@ function initNewsletterForm() {
         }, 1000);
     });
 }
-
-
-/* ============================================================
-   VERIFIED SINGLE CART ENGINE - no reset/no conflicts
-   ============================================================ */
-(function () {
-    const CART_KEY = 'ma_plast_cart_verified_v1';
-
-    function getProducts() {
-        if (Array.isArray(window.products)) return window.products;
-        try {
-            if (typeof products !== 'undefined' && Array.isArray(products)) return products;
-        } catch (e) {}
-        return [];
-    }
-
-    function loadCart() {
-        try {
-            const value = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-            return Array.isArray(value) ? value : [];
-        } catch (e) {
-            return [];
-        }
-    }
-
-    function saveCart(cart) {
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
-        window.cart = cart;
-    }
-
-    function getEls() {
-        return {
-            sidebar: document.getElementById('cartSidebar') || document.querySelector('.cart-sidebar'),
-            overlay: document.getElementById('cartOverlay') || document.querySelector('.cart-overlay'),
-            items: document.getElementById('cartItems') || document.querySelector('.cart-items'),
-            total: document.getElementById('totalPrice') || document.querySelector('.cart-total span:last-child'),
-            whatsapp: document.getElementById('whatsappBtn') || document.querySelector('.whatsapp-order'),
-            navLinks: document.getElementById('navLinks'),
-            mobileOverlay: document.getElementById('mobileOverlay')
-        };
-    }
-
-    function setCounters(cart) {
-        const qty = cart.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-        document.querySelectorAll('#cartCountNav, #cartCount, .cart-count').forEach(el => {
-            el.textContent = String(qty);
-            el.style.display = qty > 0 ? 'flex' : 'none';
-        });
-    }
-
-    function renderCartFinal() {
-        const cart = loadCart();
-        window.cart = cart;
-        setCounters(cart);
-
-        const els = getEls();
-        const total = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
-
-        if (els.total) els.total.textContent = total.toFixed(2) + ' جنيه';
-
-        if (els.whatsapp) {
-            els.whatsapp.disabled = cart.length === 0;
-            els.whatsapp.style.opacity = cart.length ? '1' : '.45';
-            els.whatsapp.style.pointerEvents = cart.length ? 'auto' : 'none';
-            els.whatsapp.onclick = function (event) {
-                event.preventDefault();
-                sendWhatsAppOrderFinal();
-            };
-        }
-
-        if (!els.items) return;
-
-        if (!cart.length) {
-            els.items.innerHTML = `
-                <div class="cart-empty">
-                    <i class="fas fa-shopping-cart"></i>
-                    <p>السلة فارغة</p>
-                    <button class="btn btn-primary" onclick="closeCartFinal(event); document.getElementById('products')?.scrollIntoView({behavior:'smooth'});">ابدأ التسوق</button>
-                </div>`;
-            return;
-        }
-
-        els.items.innerHTML = cart.map(item => `
-            <div class="cart-item">
-                <img src="${item.image || ''}" alt="${item.name || ''}">
-                <div class="cart-item-info">
-                    <h4>${item.name || ''}</h4>
-                    <div class="cart-item-price">${(Number(item.price || 0) * Number(item.quantity || 0)).toFixed(2)} جنيه</div>
-                    <div class="qty-row">
-                        <button type="button" onclick="changeCartQtyFinal(${Number(item.id)}, -1)">-</button>
-                        <span>${Number(item.quantity || 0)}</span>
-                        <button type="button" onclick="changeCartQtyFinal(${Number(item.id)}, 1)">+</button>
-                    </div>
-                </div>
-                <button type="button" class="remove-cart-item" onclick="removeCartItemFinal(${Number(item.id)})" aria-label="Remove item">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>`).join('');
-    }
-
-    function toast(message) {
-        const toastEl = document.getElementById('toast');
-        const textEl = document.getElementById('toastMessage') || document.getElementById('toastText');
-        if (!toastEl || !textEl) return;
-        textEl.textContent = message;
-        toastEl.classList.add('show');
-        setTimeout(() => toastEl.classList.remove('show'), 1800);
-    }
-
-    window.addToCartFinal = function (id) {
-        const product = getProducts().find(p => Number(p.id) === Number(id));
-        if (!product) {
-            toast('المنتج غير موجود');
-            return;
-        }
-
-        const cart = loadCart();
-        const item = cart.find(i => Number(i.id) === Number(id));
-
-        if (item) {
-            item.quantity = Number(item.quantity || 0) + 1;
-        } else {
-            cart.push({
-                id: Number(product.id),
-                name: product.name || '',
-                price: Number(product.price || 0),
-                image: product.image || '',
-                quantity: 1
-            });
-        }
-
-        saveCart(cart);
-        renderCartFinal();
-        toast('تمت الإضافة إلى السلة');
-    };
-
-    // Compatibility for any old onclick still using addToCart
-    window.addToCart = window.addToCartFinal;
-
-    window.changeCartQtyFinal = function (id, delta) {
-        const cart = loadCart();
-        const item = cart.find(i => Number(i.id) === Number(id));
-        if (!item) return;
-
-        item.quantity = Number(item.quantity || 0) + Number(delta || 0);
-        saveCart(cart.filter(i => Number(i.quantity || 0) > 0));
-        renderCartFinal();
-    };
-
-    window.removeCartItemFinal = function (id) {
-        saveCart(loadCart().filter(i => Number(i.id) !== Number(id)));
-        renderCartFinal();
-        toast('تم حذف المنتج');
-    };
-
-    window.openCartFinal = function (event) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        const els = getEls();
-        if (els.navLinks) els.navLinks.classList.remove('active');
-        if (els.mobileOverlay) els.mobileOverlay.classList.remove('active');
-
-        renderCartFinal();
-
-        if (!els.sidebar) return false;
-
-        els.sidebar.classList.add('active');
-        if (els.overlay) els.overlay.classList.add('active');
-        document.body.classList.add('cart-open');
-        document.body.style.overflow = 'hidden';
-        return false;
-    };
-
-    window.closeCartFinal = function (event) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        const els = getEls();
-        if (els.sidebar) els.sidebar.classList.remove('active');
-        if (els.overlay) els.overlay.classList.remove('active');
-        document.body.classList.remove('cart-open');
-        document.body.style.overflow = '';
-        return false;
-    };
-
-    // Compatibility with old names
-    window.openCart = window.openCartFinal;
-    window.closeCart = window.closeCartFinal;
-    window.renderCart = renderCartFinal;
-
-    window.sendWhatsAppOrderFinal = function () {
-        const cart = loadCart();
-        if (!cart.length) {
-            toast('السلة فارغة');
-            return;
-        }
-
-        let text = '*MA PLAST GROUP - طلب جديد*\n\n';
-        let total = 0;
-
-        cart.forEach(item => {
-            const line = Number(item.price || 0) * Number(item.quantity || 0);
-            total += line;
-            text += `• ${item.name}\n`;
-            text += `الكمية: ${item.quantity}\n`;
-            text += `السعر: ${Number(item.price || 0).toFixed(2)} جنيه\n`;
-            text += `الإجمالي: ${line.toFixed(2)} جنيه\n\n`;
-        });
-
-        text += `*الإجمالي الكلي: ${total.toFixed(2)} جنيه*\n\nبرجاء تأكيد الطلب.`;
-        window.open('https://wa.me/201225588521?text=' + encodeURIComponent(text), '_blank');
-    };
-
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.cart-toggle').forEach(button => {
-            button.removeAttribute('href');
-            button.addEventListener('click', window.openCartFinal, true);
-        });
-
-        document.querySelectorAll('#cartOverlay, .cart-overlay').forEach(overlay => {
-            overlay.addEventListener('click', window.closeCartFinal, true);
-        });
-
-        renderCartFinal();
-    });
-
-    window.addEventListener('storage', renderCartFinal);
-})();
