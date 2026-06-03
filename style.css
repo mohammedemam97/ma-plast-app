@@ -6592,3 +6592,269 @@ html[lang="ar"] .cart-total span:last-child { font-weight: 900; }
         right: 0px !important;
     }
 }
+
+
+/* ============================================================
+   EMERGENCY LAYOUT FIX: restore app sections/products visibility
+   ============================================================ */
+
+/* Stop fixed navbar from covering/cutting page content */
+body {
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+}
+
+/* Products section must keep normal document flow */
+.products-section,
+#products,
+section.products-section {
+    position: relative !important;
+    display: block !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+    overflow: visible !important;
+    background: #f5f5f5 !important;
+    z-index: 1 !important;
+}
+
+/* Product grid must be visible and not clipped */
+.products-grid,
+#productsGrid {
+    position: relative !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 1.6rem !important;
+    align-items: stretch !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding-top: 0 !important;
+    margin-top: 1.5rem !important;
+    z-index: 2 !important;
+}
+
+/* Cards should not be pushed behind the navbar or clipped */
+.product-card,
+.minimal-clean-card {
+    position: relative !important;
+    top: auto !important;
+    transform: none;
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: hidden !important;
+    z-index: 2 !important;
+}
+
+/* Pagination should stay under products, not over navbar */
+.pagination,
+.pagination-controls,
+.products-pagination,
+#pagination,
+#paginationControls {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    margin: 2rem auto 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: .7rem !important;
+    z-index: 3 !important;
+    direction: ltr !important;
+}
+
+/* Restore sections after products */
+.about-section,
+.how-it-works,
+.location-section,
+.footer,
+section[id="about"],
+section[id="location"] {
+    position: relative !important;
+    display: block !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    z-index: 1 !important;
+}
+
+/* Fixed install button only, not content */
+.install-btn {
+    z-index: 1000 !important;
+}
+
+/* Navbar stays fixed but does not reserve giant blank area */
+.navbar {
+    position: fixed !important;
+    z-index: 3000 !important;
+}
+
+/* Desktop layout */
+@media (min-width: 1025px) {
+    .products-grid,
+    #productsGrid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    .products-section,
+    #products {
+        padding-top: 5.5rem !important;
+    }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .products-grid,
+    #productsGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+
+/* Mobile: 6 per page remains controlled by JS, layout is 1 column */
+@media (max-width: 768px) {
+    .products-grid,
+    #productsGrid {
+        grid-template-columns: 1fr !important;
+        gap: 1.15rem !important;
+        margin-top: 1.2rem !important;
+    }
+
+    .products-section,
+    #products {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+    }
+
+    .pagination,
+    .pagination-controls,
+    .products-pagination,
+    #pagination,
+    #paginationControls {
+        gap: .55rem !important;
+        flex-wrap: wrap !important;
+    }
+}
+
+
+/* ============================================================
+   FINAL PATCH: remove mobile white line + swap cart/menu order
+   ============================================================ */
+
+/* Remove the white vertical line / mobile horizontal overflow */
+html,
+body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    background: #000 !important;
+}
+
+body {
+    position: relative !important;
+}
+
+.hero,
+.hero-bg,
+.hero-bg img,
+main,
+section,
+.navbar,
+.nav-glass,
+.footer {
+    max-width: 100vw !important;
+}
+
+/* Hide the thin browser scrollbar on mobile app view */
+@media (max-width: 768px) {
+    html,
+    body {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        width: 0 !important;
+        height: 0 !important;
+        display: none !important;
+    }
+
+    /* Prevent any fixed element from creating a right white strip */
+    .navbar {
+        left: .75rem !important;
+        right: .75rem !important;
+        width: auto !important;
+        max-width: calc(100vw - 1.5rem) !important;
+        overflow: visible !important;
+    }
+
+    .nav-glass {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+    }
+
+    .hero {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        overflow: hidden !important;
+    }
+
+    .hero-bg,
+    .hero-bg img,
+    .hero-overlay {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Swap hamburger menu with cart in navbar */
+    .nav-actions {
+        display: flex !important;
+        align-items: center !important;
+        flex-direction: row-reverse !important;
+        gap: .55rem !important;
+    }
+
+    .mobile-menu-btn {
+        order: 1 !important;
+    }
+
+    .cart-toggle {
+        order: 2 !important;
+    }
+}
+
+/* Make both icons visually balanced after swap */
+@media (max-width: 768px) {
+    .mobile-menu-btn,
+    .cart-toggle {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .cart-toggle {
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .mobile-menu-btn {
+        background: rgba(255,255,255,.10) !important;
+        border: 1px solid rgba(255,255,255,.14) !important;
+    }
+}
