@@ -5,36 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>بدون اتصال — MA PLAST GROUP</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-
-    <!-- OneSignal Web Push SDK - custom pre-prompt mode -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "a4aee757-dd1f-4247-8ac7-ad5eaee17ea5",
-          serviceWorkerPath: "OneSignalSDKWorker.js",
-          serviceWorkerUpdaterPath: "OneSignalSDKUpdaterWorker.js",
-          serviceWorkerParam: { scope: "/" },
-          notifyButton: { enable: false },
-          autoResubscribe: true
-        });
-      });
-    </script>
-
 </head>
-<body style="background:#f5f5f5;">
-  <main style="min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;">
-    <div class="reveal visible" style="max-width:400px;">
-      <div style="width:80px;height:80px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
-        <i class="fas fa-wifi" style="font-size:1.8rem;color:#fff;"></i>
-      </div>
-      <h1 style="font-size:2rem;margin-bottom:0.75rem;color:#000;">You are offline</h1>
-      <p style="margin-bottom:1.5rem;color:#666;line-height:1.6;">Please check your internet connection and try again. Your cart and saved items will be here when you return.</p>
-      <a class="btn btn-primary" href="index.html" style="width:auto;padding:0.875rem 2rem;">Back to الرئيسية</a>
-    </div>
-  </main>
-</body>
-</html>
+<body class="inner-page">
+    <!-- Liquid Glass Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-glass">
+            <a href="index.html#home" class="logo brand-logo"><span class="logo-plate"><img src="ma-plast-logo.png" alt="MA PLAST GROUP"></span><span>MA PLAST GROUP</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#home" class="">الرئيسية</a></li>
+                <li><a href="index.html#products" class="">المنتجات</a></li>
+                <li><a href="about.html" class="">من نحن</a></li>
+                <li><a href="index.html#location" class="">الموقع</a></li>
+                <li><a href="contact.html" class="">تواصل معنا</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="index.html#products" class="cart-toggle" title="Shop">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+  <section class="page-hero compact-page-hero"><div class="page-hero-content"><span class="hero-tag">Offline</span><h1>أنت غير متصل</h1><p>يرجى فحص الاتصال بالإنترنت والمحاولة مرة أخرى.</p></div></section>
+  <section class="page-section"><div class="container single-page-card"><div class="page-card thank-you-box"><div class="offline-icon"><i class="fas fa-wifi"></i></div><h2>لا يوجد اتصال بالإنترنت</h2><p>السلة والبيانات المحفوظة ستظل موجودة عند عودة الاتصال.</p><a class="btn btn-primary" href="index.html">العودة إلى الرئيسية</a></div></div></section>
+  <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div><script src="script.js"></script>
+</body></html>

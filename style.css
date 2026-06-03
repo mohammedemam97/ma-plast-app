@@ -5853,3 +5853,53 @@ html[lang="ar"] .cart-total span:last-child { font-weight: 900; }
     font-size: 1.76rem !important;
   }
 }
+
+
+/* ============================================================
+   FINAL OVERRIDE: Unified navbar + consistent standalone pages
+   ============================================================ */
+:root { --nav-height: 64px; --nav-max-width: 1080px; }
+.navbar { position: fixed !important; top: 1rem !important; left: 50% !important; right: auto !important; transform: translateX(-50%) !important; z-index: 3000 !important; width: min(var(--nav-max-width), calc(100vw - 2rem)) !important; min-width: 0 !important; }
+.nav-glass { width: 100% !important; min-height: var(--nav-height) !important; height: var(--nav-height) !important; padding: .55rem .8rem !important; border-radius: 999px !important; display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 1rem !important; background: rgba(0,0,0,.42) !important; border: 1px solid rgba(255,255,255,.22) !important; backdrop-filter: blur(24px) saturate(180%) !important; -webkit-backdrop-filter: blur(24px) saturate(180%) !important; box-shadow: 0 18px 55px rgba(0,0,0,.20) !important; }
+.navbar.scrolled .nav-glass { background: rgba(255,255,255,.88) !important; border-color: rgba(0,0,0,.08) !important; box-shadow: 0 14px 40px rgba(0,0,0,.10) !important; }
+.logo.brand-logo { min-width: 0 !important; flex: 0 0 auto !important; color: #fff !important; font-size: .9rem !important; font-weight: 900 !important; gap: .55rem !important; }
+.navbar.scrolled .logo.brand-logo { color: #000 !important; }
+.logo-plate { width: 46px !important; height: 46px !important; min-width: 46px !important; border-radius: 50% !important; display: flex !important; align-items: center !important; justify-content: center !important; background: #fff !important; overflow: hidden !important; border: 1px solid rgba(255,255,255,.65) !important; padding: 4px !important; }
+.logo-plate img { width: 100% !important; height: 100% !important; object-fit: contain !important; }
+.nav-links { display: flex !important; align-items: center !important; justify-content: center !important; gap: 1.15rem !important; flex: 1 1 auto !important; }
+.nav-links a { color: rgba(255,255,255,.76) !important; font-size: .82rem !important; font-weight: 650 !important; white-space: nowrap !important; padding: .35rem 0 !important; }
+.nav-links a:hover, .nav-links a.active { color: #fff !important; }
+.navbar.scrolled .nav-links a { color: rgba(0,0,0,.62) !important; }
+.navbar.scrolled .nav-links a:hover, .navbar.scrolled .nav-links a.active { color: #000 !important; }
+.nav-actions { flex: 0 0 auto !important; gap: .7rem !important; }
+.cart-toggle, .mobile-menu-btn { width: 40px !important; height: 40px !important; display: flex !important; align-items: center !important; justify-content: center !important; border-radius: 50% !important; color: #fff !important; }
+.mobile-menu-btn { background: rgba(255,255,255,.12) !important; border: 1px solid rgba(255,255,255,.14) !important; }
+.navbar.scrolled .cart-toggle, .navbar.scrolled .mobile-menu-btn { color: #000 !important; }
+.navbar.scrolled .mobile-menu-btn { background: rgba(0,0,0,.06) !important; border-color: rgba(0,0,0,.08) !important; }
+.inner-page .page-hero, .inner-page .privacy-hero { min-height: 48vh !important; background: #000 !important; display: flex !important; align-items: center !important; justify-content: center !important; text-align: center !important; color: #fff !important; }
+.inner-page .compact-page-hero { min-height: 42vh !important; }
+.inner-page .page-hero-content, .inner-page .privacy-hero-content { padding: 8rem 1.5rem 3rem !important; max-width: 760px !important; margin: 0 auto !important; }
+.inner-page .page-hero h1, .inner-page .privacy-hero h1 { font-size: clamp(2.4rem, 6vw, 3.5rem) !important; line-height: 1.05 !important; font-weight: 900 !important; color: #fff !important; letter-spacing: -2px !important; }
+.inner-page .page-hero p, .inner-page .privacy-hero p { color: rgba(255,255,255,.68) !important; font-size: 1.02rem !important; }
+.page-section, .privacy-body, .notification-admin-section { padding: 5rem 0 !important; background: #f5f5f5 !important; }
+.page-card, .privacy-card, .notification-admin-card, .thank-you-box { background: #fff !important; border: 1px solid #e5e5e5 !important; border-radius: 28px !important; box-shadow: 0 20px 60px rgba(0,0,0,.055) !important; }
+.single-page-card { max-width: 680px !important; margin: 0 auto !important; text-align: center !important; }
+.thank-you-logo { max-width: 210px !important; margin: 0 auto 1.2rem !important; }
+.offline-icon { width: 82px !important; height: 82px !important; background: #000 !important; color: #fff !important; border-radius: 50% !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto 1.25rem !important; font-size: 1.7rem !important; }
+.minimal-clean-card, .product-card.minimal-clean-card.compact-premium-card { position: relative !important; padding: 0 !important; background: #fff !important; border: 1px solid #e7e7e7 !important; border-radius: 24px !important; overflow: hidden !important; box-shadow: 0 18px 40px rgba(0,0,0,.075) !important; }
+.minimal-clean-card::before, .minimal-clean-card::after { display: none !important; }
+.minimal-clean-card .minimal-card-shell { padding: 0 0 1rem !important; }
+.minimal-clean-card .minimal-main-row { display: block !important; }
+.minimal-clean-card .minimal-image-wrap { width: 100% !important; margin: 0 !important; }
+.minimal-clean-card .product-image { width: 100% !important; height: 235px !important; margin: 0 !important; padding: 0 !important; border-radius: 24px 24px 0 0 !important; overflow: hidden !important; background: #ececec !important; line-height: 0 !important; }
+.minimal-clean-card .product-image img { width: 100% !important; height: 100% !important; object-fit: cover !important; display: block !important; margin: 0 !important; transform: none !important; filter: none !important; }
+.minimal-clean-card:hover .product-image img { transform: scale(1.025) !important; }
+.minimal-clean-card .discount-corner { position: absolute !important; top: 12px !important; right: 12px !important; left: auto !important; z-index: 10 !important; width: auto !important; min-width: 66px !important; height: 34px !important; padding: 0 12px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 999px !important; background: rgba(0,0,0,.94) !important; color: #fff !important; font-size: .9rem !important; line-height: 1 !important; font-weight: 900 !important; white-space: nowrap !important; overflow: hidden !important; box-shadow: 0 10px 22px rgba(0,0,0,.18) !important; }
+.minimal-clean-card .minimal-details { padding: .95rem 1rem 0 !important; align-items: flex-start !important; text-align: right !important; gap: .55rem !important; }
+.minimal-clean-card .product-name { font-size: 1.02rem !important; line-height: 1.35 !important; font-weight: 900 !important; color: #000 !important; margin: 0 !important; }
+.minimal-clean-card .product-meta { background: #f6f6f6 !important; border: 1px solid #ececec !important; border-radius: 999px !important; padding: .34rem .7rem !important; font-size: .78rem !important; font-weight: 800 !important; }
+.minimal-clean-card .current-price strong { font-size: 1.9rem !important; color: #000 !important; }
+.minimal-clean-card .current-price span, .minimal-clean-card .old-price { color: #666 !important; }
+.minimal-clean-card .minimal-cart-btn { width: calc(100% - 2rem) !important; min-height: 48px !important; margin: .95rem 1rem 0 !important; border-radius: 16px !important; background: linear-gradient(180deg, #171717, #000) !important; color: #fff !important; border: 1px solid #000 !important; font-weight: 900 !important; }
+@media (max-width: 768px) { .navbar { top: .75rem !important; left: .75rem !important; right: .75rem !important; width: auto !important; transform: none !important; } .nav-glass { min-height: 58px !important; height: 58px !important; padding: .45rem .6rem !important; gap: .55rem !important; } .logo-plate { width: 40px !important; height: 40px !important; min-width: 40px !important; } .logo.brand-logo > span:last-child { display: none !important; } .mobile-menu-btn { display: flex !important; } .nav-links { position: fixed !important; top: 5.1rem !important; right: -110% !important; left: auto !important; width: min(292px, calc(100vw - 1.5rem)) !important; max-height: calc(100dvh - 6rem) !important; overflow-y: auto !important; display: flex !important; flex-direction: column !important; gap: .6rem !important; padding: 1rem !important; border-radius: 28px !important; background: rgba(255,255,255,.9) !important; border: 1px solid rgba(0,0,0,.08) !important; box-shadow: 0 20px 60px rgba(0,0,0,.18) !important; opacity: 0 !important; pointer-events: none !important; transform: translateY(-8px) scale(.98) !important; transition: right .35s cubic-bezier(.4,0,.2,1), opacity .25s ease, transform .35s cubic-bezier(.4,0,.2,1) !important; z-index: 3001 !important; } .nav-links.active { right: .75rem !important; opacity: 1 !important; pointer-events: auto !important; transform: translateY(0) scale(1) !important; } .nav-links a { width: 100% !important; justify-content: space-between !important; padding: .85rem 1rem !important; border-radius: 18px !important; color: rgba(0,0,0,.72) !important; background: rgba(0,0,0,.04) !important; border: 1px solid rgba(0,0,0,.05) !important; } .nav-links a:hover, .nav-links a.active { color: #000 !important; background: rgba(0,0,0,.08) !important; } .minimal-clean-card .product-image { height: 205px !important; } .minimal-clean-card .discount-corner { top: 10px !important; right: 10px !important; min-width: 62px !important; height: 32px !important; font-size: .84rem !important; } }
+@media (max-width: 480px) { .minimal-clean-card .product-image { height: 190px !important; } .page-card, .privacy-card, .notification-admin-card, .thank-you-box { padding: 1.35rem !important; border-radius: 24px !important; } }

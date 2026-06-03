@@ -156,12 +156,13 @@ function toggleMobileMenu() {
     navLinks.classList.toggle('active');
     mobileOverlay.classList.toggle('active');
     setMobileMenuIcon(navLinks.classList.contains('active'));
-    if (cartSidebar.classList.contains('active')) closeCart();
+    if (cartSidebar && cartSidebar.classList.contains('active')) closeCart();
     document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
 }
 
 // ===== Toast =====
 function showToast(msg) {
+    if (!toastMessage || !toast) return;
     toastMessage.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2000);
@@ -311,6 +312,7 @@ function saveCart() {
 
 // ===== Render Cart =====
 function renderCart() {
+    if (!cartCountEl || !totalPriceEl || !cartItems || !whatsappBtn) return;
     const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
@@ -385,7 +387,7 @@ function sendWhatsAppOrder() {
 // ===== Escape =====
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-        if (cartSidebar.classList.contains('active')) closeCart();
+        if (cartSidebar && cartSidebar.classList.contains('active')) closeCart();
         if (typeof notificationPanel !== 'undefined' && notificationPanel && notificationPanel.classList.contains('active')) toggleNotificationPanel();
         if (navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
@@ -635,7 +637,7 @@ function toggleNotificationPanel() {
     const isActive = notificationPanel.classList.contains('active');
 
     if (!isActive) {
-        if (cartSidebar.classList.contains('active')) closeCart();
+        if (cartSidebar && cartSidebar.classList.contains('active')) closeCart();
         if (navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
             mobileOverlay.classList.remove('active');

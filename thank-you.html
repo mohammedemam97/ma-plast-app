@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تم الاشتراك | MA PLAST GROUP</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="robots" content="noindex,nofollow">
-</head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>تم الاشتراك | MA PLAST GROUP</title><link rel="stylesheet" href="style.css"><link rel="manifest" href="manifest.json"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#000000"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
 <body class="inner-page">
-    <section class="page-hero">
-        <div class="container">
-            <div class="thank-you-box">
-                <img src="ma-plast-logo.png" alt="MA PLAST GROUP" class="thank-you-logo">
-                <h1>شكرًا لاشتراكك</h1>
-                <p>تم استلام اشتراكك. سيتم إرسال رسالة ترحيب بعد تأكيد FormSubmit للبريد hammedmo504@gmail.com.</p>
-                <a href="index.html" class="btn btn-primary">العودة إلى الرئيسية</a>
+    <!-- Liquid Glass Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-glass">
+            <a href="index.html#home" class="logo brand-logo"><span class="logo-plate"><img src="ma-plast-logo.png" alt="MA PLAST GROUP"></span><span>MA PLAST GROUP</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#home" class="">الرئيسية</a></li>
+                <li><a href="index.html#products" class="">المنتجات</a></li>
+                <li><a href="about.html" class="">من نحن</a></li>
+                <li><a href="index.html#location" class="">الموقع</a></li>
+                <li><a href="contact.html" class="">تواصل معنا</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="index.html#products" class="cart-toggle" title="Shop">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
-    </section>
-</body>
-</html>
+    </nav>
+
+  <section class="page-hero compact-page-hero"><div class="page-hero-content"><span class="hero-tag">MA PLAST GROUP</span><h1>شكرًا لاشتراكك</h1><p>تم استلام اشتراكك بنجاح.</p></div></section>
+  <section class="page-section"><div class="container single-page-card"><div class="page-card thank-you-box"><img src="ma-plast-logo.png" alt="MA PLAST GROUP" class="thank-you-logo"><h2>شكرًا لاشتراكك</h2><p>سيتم إرسال رسالة ترحيب بعد تأكيد FormSubmit للبريد hammedmo504@gmail.com.</p><a href="index.html" class="btn btn-primary">العودة إلى الرئيسية</a></div></div></section>
+  <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div><script src="script.js"></script>
+</body></html>
