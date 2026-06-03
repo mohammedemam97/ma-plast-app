@@ -1,5 +1,5 @@
 // ===== MA PLAST GROUP - Service Worker with Local Notifications =====
-const CACHE_NAME = 'ma-plast-mobile-menu-glass-v2';
+const CACHE_NAME = 'ma-plast-cart-menu-button-fix-v1';
 const STATIC_ASSETS = [
     '/',
     '/index.html',

@@ -311,9 +311,16 @@ function saveCart() {
 }
 
 // ===== Render Cart =====
+function updateCartCounters(totalItems) {
+    document.querySelectorAll('#cartCount, .cart-count').forEach(el => {
+        el.textContent = totalItems;
+    });
+}
+
 function renderCart() {
-    if (!cartCountEl || !totalPriceEl || !cartItems || !whatsappBtn) return;
     const totalItems = cart.reduce((s, i) => s + i.quantity, 0);
+    updateCartCounters(totalItems);
+    if (!totalPriceEl || !cartItems || !whatsappBtn) return;
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
     cartCountEl.textContent = totalItems;
@@ -360,6 +367,7 @@ function toggleCart() {
 }
 
 function closeCart() {
+    if (!cartSidebar || !cartOverlay) return;
     cartSidebar.classList.remove('active');
     cartOverlay.classList.remove('active');
     document.body.style.overflow = '';
