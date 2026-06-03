@@ -1617,3 +1617,230 @@ setInterval(syncCartCountersFinal, 500);
 
     setInterval(renderCartFinal, 1200);
 })();
+
+
+/* ============================================================
+   REAL FINAL CART ENGINE - replaces broken cart behavior
+   ============================================================ */
+(function () {
+    const CART_KEY = 'ma_plast_real_cart_v1';
+
+    function safeProducts() {
+        try {
+            if (Array.isArray(window.products)) return window.products;
+            if (typeof products !== 'undefined' && Array.isArray(products)) return products;
+        } catch (e) {}
+        return [];
+    }
+
+    function loadCart() {
+        try {
+            const parsed = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        window.cart = cart;
+    }
+
+    function els() {
+        return {
+            sidebar: document.getElementById('cartSidebar') || document.querySelector('.cart-sidebar'),
+            overlay: document.getElementById('cartOverlay') || document.querySelector('.cart-overlay'),
+            items: document.getElementById('cartItems') || document.querySelector('.cart-items'),
+            total: document.getElementById('totalPrice') || document.querySelector('.cart-total span:last-child'),
+            whatsapp: document.getElementById('whatsappBtn') || document.querySelector('.whatsapp-order'),
+            mobileOverlay: document.getElementById('mobileOverlay'),
+            navLinks: document.getElementById('navLinks')
+        };
+    }
+
+    function counters(cart) {
+        const qty = cart.reduce((s, i) => s + Number(i.quantity || 0), 0);
+        document.querySelectorAll('#cartCount, #cartCountNav, .cart-count').forEach(el => {
+            el.textContent = qty;
+            el.style.display = qty > 0 ? 'flex' : 'none';
+        });
+    }
+
+    function render() {
+        const cart = loadCart();
+        saveCart(cart);
+        counters(cart);
+
+        const e = els();
+        const total = cart.reduce((s, i) => s + Number(i.price || 0) * Number(i.quantity || 0), 0);
+
+        if (e.total) e.total.textContent = total.toFixed(2) + ' جنيه';
+
+        if (e.whatsapp) {
+            e.whatsapp.disabled = cart.length === 0;
+            e.whatsapp.style.opacity = cart.length ? '1' : '.45';
+            e.whatsapp.style.pointerEvents = cart.length ? 'auto' : 'none';
+        }
+
+        if (!e.items) return;
+
+        if (!cart.length) {
+            e.items.innerHTML = `
+                <div class="cart-empty">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>السلة فارغة</p>
+                    <button class="btn btn-primary" onclick="closeCartDirect(event); document.getElementById('products')?.scrollIntoView({behavior:'smooth'});">ابدأ التسوق</button>
+                </div>`;
+            return;
+        }
+
+        e.items.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <img src="${item.image || ''}" alt="${item.name || ''}">
+                <div class="cart-item-info">
+                    <h4>${item.name || ''}</h4>
+                    <div class="cart-item-price">${(Number(item.price) * Number(item.quantity)).toFixed(2)} جنيه</div>
+                    <div class="qty-row">
+                        <button type="button" onclick="changeCartQtyReal(${item.id}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button type="button" onclick="changeCartQtyReal(${item.id}, 1)">+</button>
+                    </div>
+                </div>
+                <button type="button" class="remove-cart-item" onclick="removeCartItemReal(${item.id})"><i class="fas fa-trash"></i></button>
+            </div>`).join('');
+    }
+
+    function toast(msg) {
+        const t = document.getElementById('toast');
+        const m = document.getElementById('toastMessage') || document.getElementById('toastText');
+        if (!t || !m) return;
+        m.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 1800);
+    }
+
+    window.addToCart = function (id) {
+        const product = safeProducts().find(p => Number(p.id) === Number(id));
+        if (!product) {
+            toast('المنتج غير موجود');
+            return;
+        }
+
+        const cart = loadCart();
+        const item = cart.find(i => Number(i.id) === Number(id));
+
+        if (item) {
+            item.quantity = Number(item.quantity || 0) + 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: Number(product.price || 0),
+                image: product.image || '',
+                quantity: 1
+            });
+        }
+
+        saveCart(cart);
+        render();
+        toast('تمت الإضافة إلى السلة');
+    };
+
+    window.changeCartQtyReal = function (id, change) {
+        const cart = loadCart();
+        const item = cart.find(i => Number(i.id) === Number(id));
+        if (!item) return;
+        item.quantity = Number(item.quantity || 0) + Number(change || 0);
+        saveCart(cart.filter(i => Number(i.quantity || 0) > 0));
+        render();
+    };
+
+    window.removeCartItemReal = function (id) {
+        saveCart(loadCart().filter(i => Number(i.id) !== Number(id)));
+        render();
+        toast('تم حذف المنتج');
+    };
+
+    window.openCartDirect = function (event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        const e = els();
+        if (e.navLinks) e.navLinks.classList.remove('active');
+        if (e.mobileOverlay) e.mobileOverlay.classList.remove('active');
+
+        render();
+
+        if (!e.sidebar) return false;
+
+        e.sidebar.classList.add('active', 'open', 'show');
+        if (e.overlay) e.overlay.classList.add('active', 'open', 'show');
+        document.body.style.overflow = 'hidden';
+        return false;
+    };
+
+    window.closeCartDirect = function (event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        const e = els();
+        if (e.sidebar) e.sidebar.classList.remove('active', 'open', 'show');
+        if (e.overlay) e.overlay.classList.remove('active', 'open', 'show');
+        document.body.style.overflow = '';
+        return false;
+    };
+
+    window.openCart = window.openCartDirect;
+    window.closeCart = window.closeCartDirect;
+    window.renderCart = render;
+
+    window.sendWhatsAppOrderFinal = function () {
+        const cart = loadCart();
+        if (!cart.length) {
+            toast('السلة فارغة');
+            return;
+        }
+
+        let text = '*MA PLAST GROUP - طلب جديد*\\n\\n';
+        let total = 0;
+
+        cart.forEach(item => {
+            const line = Number(item.price || 0) * Number(item.quantity || 0);
+            total += line;
+            text += `• ${item.name}\\n`;
+            text += `الكمية: ${item.quantity}\\n`;
+            text += `السعر: ${Number(item.price || 0).toFixed(2)} جنيه\\n`;
+            text += `الإجمالي: ${line.toFixed(2)} جنيه\\n\\n`;
+        });
+
+        text += `*الإجمالي الكلي: ${total.toFixed(2)} جنيه*\\n\\nبرجاء تأكيد الطلب.`;
+        window.open('https://wa.me/201225588521?text=' + encodeURIComponent(text), '_blank');
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.cart-toggle').forEach(btn => {
+            btn.removeAttribute('href');
+            btn.addEventListener('click', window.openCartDirect, true);
+        });
+
+        document.querySelectorAll('#cartOverlay, .cart-overlay').forEach(o => {
+            o.addEventListener('click', window.closeCartDirect, true);
+        });
+
+        document.querySelectorAll('#whatsappBtn, .whatsapp-order').forEach(btn => {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                window.sendWhatsAppOrderFinal();
+            }, true);
+        });
+
+        render();
+    });
+
+    setInterval(render, 1000);
+})();
