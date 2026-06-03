@@ -6471,3 +6471,136 @@ html[lang="ar"] .cart-total span:last-child { font-weight: 900; }
         border-radius: 16px !important;
     }
 }
+
+
+/* ============================================================
+   FINAL DARK LIQUID GLASS UPDATE
+   ============================================================ */
+@media (max-width: 768px) {
+    :root {
+        --mobile-nav-gap: 8px;
+    }
+
+    body > .nav-links,
+    .nav-links {
+        position: fixed !important;
+        top: calc(.75rem + 58px + var(--mobile-nav-gap)) !important;
+        left: .55rem !important;
+        right: .55rem !important;
+        bottom: auto !important;
+        width: auto !important;
+        max-width: none !important;
+        max-height: calc(100dvh - 6.35rem) !important;
+        margin: 0 !important;
+        padding: .9rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: .75rem !important;
+        list-style: none !important;
+        border-radius: 26px !important;
+        z-index: 3002 !important;
+        overflow-y: auto !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform: translateY(-8px) scale(.985) !important;
+        transition: opacity .24s ease, transform .28s cubic-bezier(.22,.61,.36,1), visibility .24s ease !important;
+        background: rgba(18, 18, 18, 0.40) !important;
+        border: 1px solid rgba(255,255,255,.18) !important;
+        box-shadow: 0 22px 50px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.12) !important;
+        backdrop-filter: blur(40px) saturate(140%) !important;
+        -webkit-backdrop-filter: blur(40px) saturate(140%) !important;
+    }
+
+    body > .nav-links::before,
+    .nav-links::before {
+        content: '' !important;
+        position: absolute !important;
+        inset: 0 !important;
+        border-radius: inherit !important;
+        background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)) !important;
+        pointer-events: none !important;
+    }
+
+    body > .nav-links.active,
+    .nav-links.active {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translateY(0) scale(1) !important;
+    }
+
+    body > .nav-links li,
+    .nav-links li {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    body > .nav-links a,
+    .nav-links a {
+        width: 100% !important;
+        min-height: 54px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: .95rem 1rem !important;
+        margin: 0 !important;
+        border-radius: 18px !important;
+        color: rgba(255,255,255,.96) !important;
+        background: rgba(255,255,255,.07) !important;
+        border: 1px solid rgba(255,255,255,.14) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.12) !important;
+        font-size: .98rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0 !important;
+        text-shadow: none !important;
+        backdrop-filter: blur(40px) !important;
+        -webkit-backdrop-filter: blur(40px) !important;
+    }
+
+    body > .nav-links a::before,
+    body > .nav-links a::after,
+    .nav-links a::before,
+    .nav-links a::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    body > .nav-links a:hover,
+    body > .nav-links a.active,
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: #fff !important;
+        background: rgba(255,255,255,.11) !important;
+        border-color: rgba(255,255,255,.18) !important;
+        transform: none !important;
+    }
+
+    .mobile-overlay.active {
+        background: rgba(0,0,0,.24) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body > .nav-links,
+    .nav-links {
+        left: .45rem !important;
+        right: .45rem !important;
+        padding: .82rem !important;
+        border-radius: 24px !important;
+    }
+
+    body > .nav-links a,
+    .nav-links a {
+        min-height: 52px !important;
+        border-radius: 16px !important;
+        font-size: .95rem !important;
+    }
+}
