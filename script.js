@@ -1246,3 +1246,108 @@ function initNewsletterForm() {
         }, 1000);
     });
 }
+
+
+/* ===== FINAL CART OPEN FIX - robust and independent ===== */
+function getCartElementsFinal() {
+    return {
+        sidebar: document.getElementById('cartSidebar') || document.querySelector('.cart-sidebar, .cart-panel, aside[id*="cart" i]'),
+        overlay: document.getElementById('cartOverlay') || document.querySelector('.cart-overlay, .page-overlay, .overlay'),
+        mobileOverlayEl: document.getElementById('mobileOverlay'),
+        navLinksEl: document.getElementById('navLinks')
+    };
+}
+
+function forceOpenCart(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    const els = getCartElementsFinal();
+
+    if (els.navLinksEl) els.navLinksEl.classList.remove('active');
+    if (els.mobileOverlayEl) els.mobileOverlayEl.classList.remove('active');
+
+    if (!els.sidebar) {
+        window.location.hash = 'products';
+        return false;
+    }
+
+    els.sidebar.classList.add('active', 'open', 'show');
+    els.sidebar.style.right = '0';
+    els.sidebar.style.transform = 'translateX(0)';
+    els.sidebar.style.visibility = 'visible';
+    els.sidebar.style.opacity = '1';
+    els.sidebar.style.pointerEvents = 'auto';
+
+    if (els.overlay) {
+        els.overlay.classList.add('active', 'open', 'show');
+        els.overlay.style.opacity = '1';
+        els.overlay.style.pointerEvents = 'auto';
+        els.overlay.onclick = forceCloseCart;
+    }
+
+    document.body.style.overflow = 'hidden';
+    return false;
+}
+
+function forceCloseCart(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    const els = getCartElementsFinal();
+
+    if (els.sidebar) {
+        els.sidebar.classList.remove('active', 'open', 'show');
+        els.sidebar.style.right = '';
+        els.sidebar.style.transform = '';
+        els.sidebar.style.visibility = '';
+        els.sidebar.style.opacity = '';
+        els.sidebar.style.pointerEvents = '';
+    }
+
+    if (els.overlay) {
+        els.overlay.classList.remove('active', 'open', 'show');
+        els.overlay.style.opacity = '';
+        els.overlay.style.pointerEvents = '';
+    }
+
+    document.body.style.overflow = '';
+    return false;
+}
+
+// Override old functions safely if they existed.
+window.openCart = forceOpenCart;
+window.closeCart = forceCloseCart;
+
+// Keep every cart counter updated, including the new navbar counter.
+function syncCartCountersFinal() {
+    try {
+        const total = Array.isArray(window.cart)
+            ? window.cart.reduce((sum, item) => sum + Number(item.quantity || 0), 0)
+            : (Array.isArray(cart) ? cart.reduce((sum, item) => sum + Number(item.quantity || 0), 0) : 0);
+
+        document.querySelectorAll('#cartCount, #cartCountNav, .cart-count').forEach(el => {
+            el.textContent = total;
+        });
+    } catch (e) {}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.cart-toggle').forEach(btn => {
+        btn.removeAttribute('href');
+        btn.addEventListener('click', forceOpenCart, true);
+    });
+
+    const closeButtons = document.querySelectorAll(
+        '.cart-close, .close-cart, [onclick="closeCart()"], [onclick="forceCloseCart()"]'
+    );
+    closeButtons.forEach(btn => btn.addEventListener('click', forceCloseCart, true));
+
+    syncCartCountersFinal();
+});
+
+setInterval(syncCartCountersFinal, 500);
