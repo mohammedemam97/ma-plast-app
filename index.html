@@ -32,10 +32,13 @@
 </head>
 <body>
 
-    <!-- App Splash Screen -->
+
+    <!-- Entry Splash Screen - appears only on first app entry -->
     <div class="app-splash" id="appSplash" aria-label="MA PLAST GROUP loading screen">
-        <img src="app-splash.png" alt="MA PLAST GROUP جاري التحميل">
+        <img src="app-splash.png" alt="MA PLAST GROUP Loading">
     </div>
+
+
     <!-- Liquid Glass Navbar -->
     <nav class="navbar" id="navbar">
         <div class="nav-glass">
@@ -232,6 +235,10 @@
         </div>
         <div class="cart-footer">
             <div class="cart-total"><span>الإجمالي</span><span id="totalPrice">0.00 جنيه</span></div>
+            <button class="btn btn-instapay" onclick="openInstapayPayment()" id="instapayBtn" disabled>
+                <img src="instapay-logo.png" alt="InstaPay" class="instapay-btn-logo">
+                <span>ادفع عبر InstaPay</span>
+            </button>
             <button class="btn btn-whatsapp" onclick="sendWhatsAppOrder()" id="whatsappBtn" disabled>
                 <i class="fab fa-whatsapp"></i> إرسال الطلب
             </button>
@@ -239,6 +246,43 @@
     </aside>
 
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+    <!-- InstaPay Payment Modal -->
+    <div class="instapay-overlay" id="instapayOverlay" onclick="closeInstapayPayment()"></div>
+    <div class="instapay-modal" id="instapayModal" role="dialog" aria-modal="true" aria-labelledby="instapayTitle">
+        <button class="instapay-close" onclick="closeInstapayPayment()" aria-label="إغلاق"><i class="fas fa-times"></i></button>
+        <div class="instapay-brand-head">
+            <img src="instapay-logo.png" alt="InstaPay" class="instapay-modal-logo">
+        </div>
+        <h3 id="instapayTitle">الدفع الفوري عبر InstaPay</h3>
+        <p>انسخ بيانات الدفع، افتح InstaPay، حوّل المبلغ إلى عنوان الدفع اللحظي، ثم ارجع واضغط تم الدفع.</p>
+
+        <div class="instapay-summary-box">
+            <div class="instapay-data-row">
+                <span>إجمالي الطلب</span>
+                <strong id="instapayAmount">0.00 جنيه</strong>
+                <button type="button" onclick="copyInstapayAmount()"><i class="fas fa-copy"></i></button>
+            </div>
+            <div class="instapay-data-row">
+                <span>عنوان InstaPay</span>
+                <strong id="instapayIPA">mohamedemam9797@instapay</strong>
+                <button type="button" onclick="copyInstapayIPA()"><i class="fas fa-copy"></i></button>
+            </div>
+            <div class="instapay-data-row">
+                <span>رقم الطلب</span>
+                <strong id="instapayOrderId">MA-0000</strong>
+                <button type="button" onclick="copyInstapayOrderId()"><i class="fas fa-copy"></i></button>
+            </div>
+        </div>
+
+        <div class="instapay-actions">
+            <button class="btn btn-instapay-modal" onclick="copyInstapayPaymentData()"><i class="fas fa-copy"></i> نسخ بيانات الدفع</button>
+            <button class="btn btn-open-instapay" onclick="openInstapayApp()"><i class="fas fa-external-link-alt"></i> فتح InstaPay</button>
+            <button class="btn btn-paid-modal" onclick="confirmInstapayPayment()"><i class="fas fa-check-circle"></i> تم الدفع</button>
+        </div>
+        <small>لو لم يفتح InstaPay تلقائيًا، افتحه يدويًا واستخدم عنوان الدفع اللحظي الموضح.</small>
+    </div>
+
     <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMessage">تمت الإضافة!</span></div>
 

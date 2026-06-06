@@ -47,6 +47,9 @@ const mobileOverlay = document.getElementById('mobileOverlay');
 const toast = document.getElementById('toast');
 const toastMessage = document.getElementById('toastMessage');
 const whatsappBtn = document.getElementById('whatsappBtn');
+const instapayBtn = document.getElementById('instapayBtn');
+const INSTAPAY_IPA = 'mohamedemam9797@instapay';
+const INSTAPAY_PHONE = '01033298722';
 const paginationEl = document.getElementById('pagination');
 const productsCountEl = document.getElementById('productsCount');
 
@@ -215,7 +218,7 @@ function renderProducts(page = currentPage) {
         const hasDiscount = Number(p.discount || 0) > 0;
         return `
         <div class="product-card compact-premium-card minimal-clean-card" style="animation-delay: ${i * 0.06}s">
-            ${hasDiscount ? `<div class="discount-corner">-${p.discount}%</div>` : ''}
+            ${hasDiscount ? `<div class="discount-corner">خصم ${p.discount}%</div>` : ''}
 
             <div class="minimal-card-shell">
                 <div class="minimal-main-row">
@@ -274,13 +277,13 @@ function renderPagination(totalPages) {
 
     paginationEl.innerHTML = `
         <button class="page-btn page-arrow" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-            <i class="fas fa-chevron-left"></i>
+            <i class="fas fa-chevron-right"></i>
         </button>
         ${startPage > 1 ? '<button class="page-btn" onclick="goToPage(1)">1</button><span class="page-dots">...</span>' : ''}
         ${pages.join('')}
         ${endPage < totalPages ? `<span class="page-dots">...</span><button class="page-btn" onclick="goToPage(${totalPages})">${totalPages}</button>` : ''}
         <button class="page-btn page-arrow" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-            <i class="fas fa-chevron-right"></i>
+            <i class="fas fa-chevron-left"></i>
         </button>
     `;
 }
@@ -344,6 +347,7 @@ function renderCart() {
     if (cartCountEl) cartCountEl.textContent = totalItems;
     totalPriceEl.textContent = total.toFixed(2) + ' جنيه';
     whatsappBtn.disabled = cart.length === 0;
+    if (instapayBtn) instapayBtn.disabled = cart.length === 0;
 
     if (cart.length === 0) {
         cartItems.innerHTML = `
@@ -416,12 +420,128 @@ function closeCart() {
     document.body.style.overflow = '';
 }
 
-// ===== WhatsApp =====
-function sendWhatsAppOrder() {
+
+// ===== InstaPay Payment =====
+let currentInstapayOrderId = '';
+
+function getCartTotal() {
+    return cart.reduce((s, i) => s + i.price * i.quantity, 0);
+}
+
+function generateInstapayOrderId() {
+    const now = new Date();
+    const y = String(now.getFullYear()).slice(-2);
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const random = Math.floor(1000 + Math.random() * 9000);
+    return `MA-${y}${m}${d}-${random}`;
+}
+
+function openInstapayPayment() {
     if (cart.length === 0) { showToast('السلة فارغة'); return; }
+
+    const modal = document.getElementById('instapayModal');
+    const overlay = document.getElementById('instapayOverlay');
+    const amount = document.getElementById('instapayAmount');
+    const ipa = document.getElementById('instapayIPA');
+    const orderId = document.getElementById('instapayOrderId');
+
+    currentInstapayOrderId = currentInstapayOrderId || generateInstapayOrderId();
+
+    if (amount) amount.textContent = getCartTotal().toFixed(2) + ' جنيه';
+    if (ipa) ipa.textContent = INSTAPAY_IPA;
+    if (orderId) orderId.textContent = currentInstapayOrderId;
+
+    if (modal) modal.classList.add('active');
+    if (overlay) overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeInstapayPayment() {
+    const modal = document.getElementById('instapayModal');
+    const overlay = document.getElementById('instapayOverlay');
+    if (modal) modal.classList.remove('active');
+    if (overlay) overlay.classList.remove('active');
+    if (!cartSidebar || !cartSidebar.classList.contains('active')) document.body.style.overflow = '';
+}
+
+function getInstapayAmountText() {
+    return getCartTotal().toFixed(2) + ' جنيه';
+}
+
+async function writeClipboard(text, successMsg, fallbackMsg) {
+    try {
+        await navigator.clipboard.writeText(text);
+        showToast(successMsg);
+        return true;
+    } catch (e) {
+        showToast(fallbackMsg || text);
+        return false;
+    }
+}
+
+function copyInstapayIPA() {
+    return writeClipboard(INSTAPAY_IPA, 'تم نسخ عنوان InstaPay', 'عنوان InstaPay: ' + INSTAPAY_IPA);
+}
+
+function copyInstapayAmount() {
+    return writeClipboard(getCartTotal().toFixed(2), 'تم نسخ المبلغ', 'المبلغ: ' + getInstapayAmountText());
+}
+
+function copyInstapayOrderId() {
+    currentInstapayOrderId = currentInstapayOrderId || generateInstapayOrderId();
+    return writeClipboard(currentInstapayOrderId, 'تم نسخ رقم الطلب', 'رقم الطلب: ' + currentInstapayOrderId);
+}
+
+async function copyInstapayPaymentData() {
+    currentInstapayOrderId = currentInstapayOrderId || generateInstapayOrderId();
+    const data = `ادفع عبر InstaPay\nالمستفيد: ${INSTAPAY_IPA}\nالمبلغ: ${getCartTotal().toFixed(2)} جنيه\nرقم الطلب: ${currentInstapayOrderId}`;
+    return writeClipboard(data, 'تم نسخ بيانات الدفع', 'انسخ البيانات من نافذة الدفع');
+}
+
+function openInstapayApp() {
+    if (cart.length === 0) { showToast('السلة فارغة'); return; }
+
+    copyInstapayPaymentData();
+    showToast('تم نسخ بيانات الدفع.. جارٍ فتح InstaPay');
+
+    // Attempt to open InstaPay app. If the device/browser blocks custom schemes,
+    // the fallback message keeps the customer on the safe manual flow.
+    const startedAt = Date.now();
+    const fallbackTimer = setTimeout(() => {
+        if (Date.now() - startedAt < 2200) {
+            showToast('لو لم يفتح InstaPay، افتحه يدويًا واستخدم عنوان الدفع اللحظي');
+        }
+    }, 1400);
+
+    window.addEventListener('blur', () => clearTimeout(fallbackTimer), { once: true });
+    window.location.href = 'instapay://';
+}
+
+function confirmInstapayPayment() {
+    if (cart.length === 0) { showToast('السلة فارغة'); return; }
+    copyInstapayPaymentData();
+    showToast('تم تسجيل الدفع.. جارٍ فتح واتساب');
+    setTimeout(() => sendWhatsAppOrder(true), 350);
+}
+
+// Backward compatibility for old buttons if cached HTML exists.
+function copyInstapayNumber() {
+    return copyInstapayIPA();
+}
+
+// ===== WhatsApp =====
+function sendWhatsAppOrder(paidViaInstapay = false) {
+    if (cart.length === 0) { showToast('السلة فارغة'); return; }
+
+    currentInstapayOrderId = currentInstapayOrderId || generateInstapayOrderId();
 
     let msg = '*MA PLAST GROUP - طلب جديد*\n';
     msg += '==================\n\n';
+    msg += `رقم الطلب: ${currentInstapayOrderId}\n`;
+    if (paidViaInstapay) msg += 'حالة الدفع: تم الدفع عبر InstaPay - بانتظار مراجعة صورة التحويل\n';
+    msg += '\n';
+
     cart.forEach((item, i) => {
         msg += `${i + 1}. ${item.name}\n`;
         msg += `   ${item.quantity} x ${item.price.toFixed(2)} = ${(item.price * item.quantity).toFixed(2)} جنيه\n\n`;
@@ -429,9 +549,17 @@ function sendWhatsAppOrder() {
     const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
     msg += '==================\n';
     msg += `*الإجمالي: ${total.toFixed(2)} جنيه*\n\n`;
-    msg += 'برجاء تأكيد الطلب، شكرًا لك.';
+    msg += `الدفع عبر InstaPay على عنوان الدفع اللحظي:\n${INSTAPAY_IPA}\n`;
+    msg += `رقم الموبايل المرتبط: ${INSTAPAY_PHONE}\n`;
+    if (paidViaInstapay) {
+        msg += '\nتم الدفع. برجاء مراجعة التحويل، وسأرسل صورة التحويل الآن.\n';
+    } else {
+        msg += '\nلو تم الدفع، برجاء إرسال صورة التحويل مع الطلب.\n';
+    }
+    msg += '\nبرجاء تأكيد الطلب، شكرًا لك.';
 
     window.open(`https://wa.me/201225588521?text=${encodeURIComponent(msg)}`, '_blank');
+    closeInstapayPayment();
     showToast('جارٍ فتح واتساب');
 }
 
@@ -439,6 +567,7 @@ function sendWhatsAppOrder() {
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         if (cartSidebar && cartSidebar.classList.contains('active')) closeCart();
+        closeInstapayPayment();
         if (typeof notificationPanel !== 'undefined' && notificationPanel && notificationPanel.classList.contains('active')) toggleNotificationPanel();
         if (navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
@@ -690,6 +819,7 @@ function toggleNotificationPanel() {
 
     if (!isActive) {
         if (cartSidebar && cartSidebar.classList.contains('active')) closeCart();
+        closeInstapayPayment();
         if (navLinks.classList.contains('active')) {
             navLinks.classList.remove('active');
             mobileOverlay.classList.remove('active');
@@ -1297,29 +1427,33 @@ function initAppSplash() {
     const splash = document.getElementById('appSplash');
     if (!splash) return;
 
-    document.body.classList.add('splash-lock');
+    const storageKey = 'ma_plast_entry_splash_seen_v2';
+    const isHashNavigation = window.location.hash && window.location.hash.length > 1;
 
-    const hideSplash = () => {
-        splash.classList.add('is-hidden');
+    // Show only on first real entry to the app in the current tab/session.
+    if (isHashNavigation || sessionStorage.getItem(storageKey) === '1') {
+        splash.remove();
         document.body.classList.remove('splash-lock');
-        setTimeout(() => splash.remove(), 700);
-    };
-
-    const image = splash.querySelector('img');
-    const minimumSplashTime = 1800;
-    const startedAt = Date.now();
-
-    const scheduleHide = () => {
-        const elapsed = Date.now() - startedAt;
-        setTimeout(hideSplash, Math.max(0, minimumSplashTime - elapsed));
-    };
-
-    if (image && !image.complete) {
-        image.addEventListener('load', scheduleHide, { once: true });
-        image.addEventListener('error', scheduleHide, { once: true });
-    } else {
-        scheduleHide();
+        return;
     }
 
-    setTimeout(hideSplash, 3500);
+    sessionStorage.setItem(storageKey, '1');
+    document.body.classList.add('splash-lock');
+
+    let hidden = false;
+    const hideSplash = () => {
+        if (hidden) return;
+        hidden = true;
+        splash.classList.add('is-hidden');
+        document.body.classList.remove('splash-lock');
+        setTimeout(() => {
+            if (splash && splash.parentNode) splash.remove();
+        }, 650);
+    };
+
+    // Show the requested splash image for exactly 3 seconds on first app entry.
+    setTimeout(hideSplash, 3000);
+
+    // Extra safety fallback for slow devices/browsers, after the 3-second display.
+    setTimeout(hideSplash, 4500);
 }

@@ -1,5 +1,5 @@
 // ===== MA PLAST GROUP - Service Worker with Local Notifications =====
-const CACHE_NAME = 'ma-plast-splash-v1';
+const CACHE_NAME = 'ma-plast-instapay-v2';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -15,7 +15,9 @@ const STATIC_ASSETS = [
     '/icon-512.png',
     '/screenshot-wide.png',
     '/screenshot-mobile.png',
-    '/app-splash.png'
+    '/app-splash.png',
+    '/instapay-logo.png',
+    '/thank-you.html',
 ];
 
 self.addEventListener('install', (event) => {
