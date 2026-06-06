@@ -7650,3 +7650,129 @@ body.splash-lock {
         margin-inline-start: .25rem;
     }
 }
+
+/* ===== Simpler InstaPay checkout modal ===== */
+.instapay-modal.instapay-modal-simple {
+    width: min(390px, calc(100vw - 1.25rem));
+    border-radius: 26px;
+    padding: 1.1rem 1rem 1rem;
+    background: #fff;
+    box-shadow: 0 22px 70px rgba(0,0,0,.34);
+}
+
+.instapay-modal-simple .instapay-close {
+    top: .7rem;
+    left: .7rem;
+    width: 32px;
+    height: 32px;
+    background: #f4f4f4;
+}
+
+.instapay-modal-simple .instapay-modal-logo {
+    width: 88px;
+    margin: .3rem auto .7rem;
+}
+
+.instapay-modal-simple h3 {
+    font-size: 1.05rem;
+    margin-bottom: .25rem;
+}
+
+.instapay-modal-simple .instapay-note {
+    max-width: 300px;
+    margin: 0 auto .85rem;
+    font-size: .8rem;
+    color: #777;
+    line-height: 1.55;
+}
+
+.instapay-simple-card {
+    background: #f7f7f7;
+    border: 1px solid #ededed;
+    border-radius: 20px;
+    padding: .9rem .85rem;
+    display: grid;
+    gap: .28rem;
+    margin-bottom: .85rem;
+}
+
+.instapay-simple-card span {
+    color: #777;
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+.instapay-simple-card strong {
+    color: #000;
+    font-size: 1.05rem;
+    font-weight: 950;
+    direction: ltr;
+    unicode-bidi: plaintext;
+}
+
+.instapay-simple-card strong#instapayAmount {
+    font-size: 1.25rem;
+    margin-bottom: .25rem;
+}
+
+.instapay-simple-card small {
+    margin-top: .18rem;
+    color: #888;
+    font-size: .72rem;
+}
+
+.instapay-simple-card b {
+    color: #111;
+    direction: ltr;
+    unicode-bidi: plaintext;
+}
+
+.instapay-modal-simple .instapay-actions {
+    gap: .5rem;
+    margin-top: .6rem;
+}
+
+.instapay-modal-simple .btn-open-instapay,
+.instapay-modal-simple .btn-instapay-modal,
+.instapay-modal-simple .btn-paid-modal {
+    min-height: 43px;
+    border-radius: 16px;
+    font-size: .9rem;
+    box-shadow: none;
+}
+
+.instapay-modal-simple .btn-open-instapay {
+    background: #000;
+    color: #fff;
+}
+
+.instapay-modal-simple .btn-instapay-modal {
+    background: #f0f0f0;
+    color: #000;
+}
+
+.instapay-modal-simple .btn-paid-modal {
+    background: linear-gradient(135deg, #6e338c, #ee6b53);
+    color: #fff;
+}
+
+.instapay-modal-simple .instapay-fallback-text {
+    margin-top: .75rem;
+    color: #888;
+    font-size: .7rem;
+    line-height: 1.45;
+}
+
+@media (max-width: 480px) {
+    .instapay-modal.instapay-modal-simple {
+        width: min(360px, calc(100vw - 1rem));
+        border-radius: 23px;
+        padding: 1rem .85rem .9rem;
+    }
+
+    .instapay-modal-simple .instapay-modal-logo { width: 76px; }
+    .instapay-modal-simple .instapay-note { font-size: .76rem; }
+    .instapay-simple-card { border-radius: 17px; }
+    .instapay-simple-card strong { font-size: .95rem; }
+    .instapay-simple-card strong#instapayAmount { font-size: 1.15rem; }
+}

@@ -249,38 +249,27 @@
 
     <!-- InstaPay Payment Modal -->
     <div class="instapay-overlay" id="instapayOverlay" onclick="closeInstapayPayment()"></div>
-    <div class="instapay-modal" id="instapayModal" role="dialog" aria-modal="true" aria-labelledby="instapayTitle">
+    <div class="instapay-modal instapay-modal-simple" id="instapayModal" role="dialog" aria-modal="true" aria-labelledby="instapayTitle">
         <button class="instapay-close" onclick="closeInstapayPayment()" aria-label="إغلاق"><i class="fas fa-times"></i></button>
-        <div class="instapay-brand-head">
-            <img src="instapay-logo.png" alt="InstaPay" class="instapay-modal-logo">
-        </div>
-        <h3 id="instapayTitle">الدفع الفوري عبر InstaPay</h3>
-        <p>انسخ بيانات الدفع، افتح InstaPay، حوّل المبلغ إلى عنوان الدفع اللحظي، ثم ارجع واضغط تم الدفع.</p>
 
-        <div class="instapay-summary-box">
-            <div class="instapay-data-row">
-                <span>إجمالي الطلب</span>
-                <strong id="instapayAmount">0.00 جنيه</strong>
-                <button type="button" onclick="copyInstapayAmount()"><i class="fas fa-copy"></i></button>
-            </div>
-            <div class="instapay-data-row">
-                <span>عنوان InstaPay</span>
-                <strong id="instapayIPA">mohamedemam9797@instapay</strong>
-                <button type="button" onclick="copyInstapayIPA()"><i class="fas fa-copy"></i></button>
-            </div>
-            <div class="instapay-data-row">
-                <span>رقم الطلب</span>
-                <strong id="instapayOrderId">MA-0000</strong>
-                <button type="button" onclick="copyInstapayOrderId()"><i class="fas fa-copy"></i></button>
-            </div>
+        <img src="instapay-logo.png" alt="InstaPay" class="instapay-modal-logo">
+        <h3 id="instapayTitle">الدفع عبر InstaPay</h3>
+        <p class="instapay-note">اضغط فتح التطبيق، ثم حوّل المبلغ إلى عنوان InstaPay التالي.</p>
+
+        <div class="instapay-simple-card">
+            <span>المبلغ</span>
+            <strong id="instapayAmount">0.00 جنيه</strong>
+            <span>ادفع إلى</span>
+            <strong id="instapayIPA">mohamedemam9797@instapay</strong>
+            <small>رقم الطلب: <b id="instapayOrderId">MA-0000</b></small>
         </div>
 
         <div class="instapay-actions">
-            <button class="btn btn-instapay-modal" onclick="copyInstapayPaymentData()"><i class="fas fa-copy"></i> نسخ بيانات الدفع</button>
-            <button class="btn btn-open-instapay" onclick="openInstapayApp()"><i class="fas fa-external-link-alt"></i> فتح InstaPay</button>
+            <button class="btn btn-open-instapay" onclick="openInstapayApp()"><i class="fas fa-up-right-from-square"></i> فتح InstaPay</button>
+            <button class="btn btn-instapay-modal" onclick="copyInstapayPaymentData()"><i class="fas fa-copy"></i> نسخ البيانات</button>
             <button class="btn btn-paid-modal" onclick="confirmInstapayPayment()"><i class="fas fa-check-circle"></i> تم الدفع</button>
         </div>
-        <small>لو لم يفتح InstaPay تلقائيًا، افتحه يدويًا واستخدم عنوان الدفع اللحظي الموضح.</small>
+        <small class="instapay-fallback-text">لو التطبيق ما فتحش، افتح InstaPay يدويًا؛ بيانات الدفع اتنسخت تلقائيًا.</small>
     </div>
 
     <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>

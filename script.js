@@ -503,19 +503,36 @@ function openInstapayApp() {
     if (cart.length === 0) { showToast('السلة فارغة'); return; }
 
     copyInstapayPaymentData();
-    showToast('تم نسخ بيانات الدفع.. جارٍ فتح InstaPay');
+    showToast('تم نسخ بيانات الدفع.. افتح InstaPay وأكمل التحويل');
 
-    // Attempt to open InstaPay app. If the device/browser blocks custom schemes,
-    // the fallback message keeps the customer on the safe manual flow.
-    const startedAt = Date.now();
-    const fallbackTimer = setTimeout(() => {
-        if (Date.now() - startedAt < 2200) {
-            showToast('لو لم يفتح InstaPay، افتحه يدويًا واستخدم عنوان الدفع اللحظي');
-        }
-    }, 1400);
+    const ua = navigator.userAgent || '';
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.egyptianbanks.instapay';
+    const appStoreUrl = 'https://apps.apple.com/us/app/instapay-egypt/id1592108795';
+    const androidIntent = 'intent://open/#Intent;scheme=instapay;package=com.egyptianbanks.instapay;S.browser_fallback_url=' + encodeURIComponent(playStoreUrl) + ';end';
 
-    window.addEventListener('blur', () => clearTimeout(fallbackTimer), { once: true });
-    window.location.href = 'instapay://';
+    let appOpened = false;
+    const markOpened = () => { appOpened = true; };
+    window.addEventListener('blur', markOpened, { once: true });
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) appOpened = true;
+    }, { once: true });
+
+    if (isAndroid) {
+        window.location.href = androidIntent;
+    } else if (isIOS) {
+        window.location.href = 'instapay://';
+        setTimeout(() => {
+            if (!appOpened) window.location.href = appStoreUrl;
+        }, 1400);
+    } else {
+        window.open(playStoreUrl, '_blank');
+    }
+
+    setTimeout(() => {
+        if (!appOpened) showToast('لو InstaPay ما فتحش، افتحه يدويًا. بيانات الدفع منسوخة.');
+    }, 1700);
 }
 
 function confirmInstapayPayment() {
