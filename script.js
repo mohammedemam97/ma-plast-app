@@ -49,6 +49,7 @@ const toastMessage = document.getElementById('toastMessage');
 const whatsappBtn = document.getElementById('whatsappBtn');
 const instapayBtn = document.getElementById('instapayBtn');
 const INSTAPAY_IPA = 'mohamedemam9797@instapay';
+const INSTAPAY_PAYMENT_LINK = 'https://ipn.eg/S/mohamedemam9797/instapay/9FmpEn';
 const INSTAPAY_PHONE = '01033298722';
 const paginationEl = document.getElementById('pagination');
 const productsCountEl = document.getElementById('productsCount');
@@ -503,36 +504,13 @@ function openInstapayApp() {
     if (cart.length === 0) { showToast('السلة فارغة'); return; }
 
     copyInstapayPaymentData();
-    showToast('تم نسخ بيانات الدفع.. افتح InstaPay وأكمل التحويل');
+    showToast('تم نسخ المبلغ وبيانات الطلب. سيتم فتح رابط InstaPay الآن');
 
-    const ua = navigator.userAgent || '';
-    const isAndroid = /Android/i.test(ua);
-    const isIOS = /iPhone|iPad|iPod/i.test(ua);
-    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.egyptianbanks.instapay';
-    const appStoreUrl = 'https://apps.apple.com/us/app/instapay-egypt/id1592108795';
-    const androidIntent = 'intent://open/#Intent;scheme=instapay;package=com.egyptianbanks.instapay;S.browser_fallback_url=' + encodeURIComponent(playStoreUrl) + ';end';
-
-    let appOpened = false;
-    const markOpened = () => { appOpened = true; };
-    window.addEventListener('blur', markOpened, { once: true });
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) appOpened = true;
-    }, { once: true });
-
-    if (isAndroid) {
-        window.location.href = androidIntent;
-    } else if (isIOS) {
-        window.location.href = 'instapay://';
-        setTimeout(() => {
-            if (!appOpened) window.location.href = appStoreUrl;
-        }, 1400);
-    } else {
-        window.open(playStoreUrl, '_blank');
-    }
-
+    // Official InstaPay send-money link provided by the merchant.
+    // It opens the InstaPay/IPN payment flow directly to the saved IPA.
     setTimeout(() => {
-        if (!appOpened) showToast('لو InstaPay ما فتحش، افتحه يدويًا. بيانات الدفع منسوخة.');
-    }, 1700);
+        window.location.href = INSTAPAY_PAYMENT_LINK;
+    }, 250);
 }
 
 function confirmInstapayPayment() {

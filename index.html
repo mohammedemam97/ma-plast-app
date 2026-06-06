@@ -254,7 +254,7 @@
 
         <img src="instapay-logo.png" alt="InstaPay" class="instapay-modal-logo">
         <h3 id="instapayTitle">الدفع عبر InstaPay</h3>
-        <p class="instapay-note">اضغط فتح التطبيق، ثم حوّل المبلغ إلى عنوان InstaPay التالي.</p>
+        <p class="instapay-note">اضغط فتح InstaPay للانتقال مباشرة إلى رابط الدفع، والمبلغ سيتم نسخه تلقائيًا.</p>
 
         <div class="instapay-simple-card">
             <span>المبلغ</span>
@@ -265,11 +265,11 @@
         </div>
 
         <div class="instapay-actions">
-            <button class="btn btn-open-instapay" onclick="openInstapayApp()"><i class="fas fa-up-right-from-square"></i> فتح InstaPay</button>
+            <button class="btn btn-open-instapay" onclick="openInstapayApp()"><i class="fas fa-up-right-from-square"></i> ادفع الآن عبر InstaPay</button>
             <button class="btn btn-instapay-modal" onclick="copyInstapayPaymentData()"><i class="fas fa-copy"></i> نسخ البيانات</button>
             <button class="btn btn-paid-modal" onclick="confirmInstapayPayment()"><i class="fas fa-check-circle"></i> تم الدفع</button>
         </div>
-        <small class="instapay-fallback-text">لو التطبيق ما فتحش، افتح InstaPay يدويًا؛ بيانات الدفع اتنسخت تلقائيًا.</small>
+        <small class="instapay-fallback-text">لو الرابط لم يفتح تلقائيًا، اضغط الزر مرة أخرى أو افتح InstaPay يدويًا؛ بيانات الدفع اتنسخت.</small>
     </div>
 
     <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
